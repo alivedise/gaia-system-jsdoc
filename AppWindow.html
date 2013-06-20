@@ -47,18 +47,15 @@
     
     
     <div class="description">
-        AppWindow creates, contains, manages a mozbrowser iframe.
+        <p>AppWindow creates, contains, manages a mozbrowser iframe.
 AppWindow is directly managed by Window Manager,
-by call resize(), open(), close() on AppWindow.
-
-Basically AppWindow would manipulate all mozbrowser events
-fired from the mozbrowser iframe by itself and show relevant UI.
-
-AppWindow is also the parent class of ActivityWindow and PopupWindow.
+by call resize(), open(), close() on AppWindow.</p>
+<p>Basically AppWindow would manipulate all mozbrowser events
+fired from the mozbrowser iframe by itself and show relevant UI.</p>
+<p>AppWindow is also the parent class of ActivityWindow and PopupWindow.
 Mostly they do the same thing but is different at some points
-like the way transitioning.
-
-About creating an AppWindow,
+like the way transitioning.</p>
+<p>About creating an AppWindow,
 you need to provide at least the web app/page URL.
 If you have also provided the manifest,
 then you would get an AppWindow object which is a web app.
@@ -66,7 +63,7 @@ Otherwise you would get an AppWindow which is in 'Wrapper' type.
 The only one different thing between web app and web page is
 just the manifest URL.
 If you are a wrapper type AppWindow, there would be some
-navigation UI for a wrapper like goBack, goForward, refresh.
+navigation UI for a wrapper like goBack, goForward, refresh.</p>
     </div>
     
 
@@ -99,7 +96,7 @@ navigation UI for a wrapper like goBack, goForward, refresh.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="window.js.html">window.js</a>, <a href="window.js.html#line6">line 6</a>
+        window.js, line 6
     </li></ul></dd>
     
     
@@ -150,8 +147,11 @@ navigation UI for a wrapper like goBack, goForward, refresh.
 <dd>
     
     <div class="description">
-        Event prefix presents the object type
-when publishing an event from the element.
+        <p>Event prefix presents the object type
+when publishing an event from the element.</p>
+<p>For example, before an AppWindow instance is opened,
+it would publish 'appwillopen' event. But when an ActivityWindow instance
+is opened, it would publish 'activitywillopen' event.</p>
     </div>
     
     
@@ -190,7 +190,7 @@ when publishing an event from the element.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="window.js.html">window.js</a>, <a href="window.js.html#line364">line 364</a>
+        window.js, line 369
     </li></ul></dd>
     
     
@@ -215,7 +215,7 @@ when publishing an event from the element.
 <dd>
     
     <div class="description">
-        A temp variable to store current screenshot object URL.
+        <p>A temp variable to store current screenshot object URL.</p>
     </div>
     
     
@@ -244,7 +244,7 @@ when publishing an event from the element.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="window.js.html">window.js</a>, <a href="window.js.html#line169">line 169</a>
+        window.js, line 169
     </li></ul></dd>
     
     
@@ -269,12 +269,12 @@ when publishing an event from the element.
 <dd>
     
     <div class="description">
-        Represent the current visibility state,
+        <p>Represent the current visibility state,
 i.e. what is currently visible. Possible value:
 'frame': the actual app iframe
 'screenshot': the screenshot overlay,
               serve as a placeholder for visible but not active apps.
-'none': nothing is currently visible.
+'none': nothing is currently visible.</p>
     </div>
     
     
@@ -303,7 +303,7 @@ i.e. what is currently visible. Possible value:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="window.js.html">window.js</a>, <a href="window.js.html#line60">line 60</a>
+        window.js, line 60
     </li></ul></dd>
     
     
@@ -328,10 +328,10 @@ i.e. what is currently visible. Possible value:
 <dd>
     
     <div class="description">
-        Trace the current inline activity window opened by
+        <p>Trace the current inline activity window opened by
 this app window.
 Note: an inline activity window may also opens a
-new inline activity window.
+new inline activity window.</p>
     </div>
     
     
@@ -370,7 +370,7 @@ new inline activity window.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="window.js.html">window.js</a>, <a href="window.js.html#line312">line 312</a>
+        window.js, line 312
     </li></ul></dd>
     
     
@@ -395,9 +395,9 @@ new inline activity window.
 <dd>
     
     <div class="description">
-        A static timeout to make sure
+        <p>A static timeout to make sure
 the next event don't happen too late.
-(The same as WindowManager: kTransitionTimeout)
+(The same as WindowManager: kTransitionTimeout)</p>
     </div>
     
     
@@ -426,7 +426,7 @@ the next event don't happen too late.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="window.js.html">window.js</a>, <a href="window.js.html#line176">line 176</a>
+        window.js, line 176
     </li></ul></dd>
     
     
@@ -458,9 +458,9 @@ the next event don't happen too late.
     
     
     <div class="description">
-        _hideFrame will check |this._visibilityState|
+        <p>_hideFrame will check |this._visibilityState|
 and then turn off the frame visibility.
-So this shouldn't be invoked by others directly.
+So this shouldn't be invoked by others directly.</p>
     </div>
     
 
@@ -493,7 +493,7 @@ So this shouldn't be invoked by others directly.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="window.js.html">window.js</a>, <a href="window.js.html#line136">line 136</a>
+        window.js, line 136
     </li></ul></dd>
     
     
@@ -529,8 +529,8 @@ So this shouldn't be invoked by others directly.
     
     
     <div class="description">
-        Check if current visibility state is screenshot or not,
-to hide the screenshot overlay.
+        <p>Check if current visibility state is screenshot or not,
+to hide the screenshot overlay.</p>
     </div>
     
 
@@ -563,7 +563,7 @@ to hide the screenshot overlay.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="window.js.html">window.js</a>, <a href="window.js.html#line262">line 262</a>
+        window.js, line 262
     </li></ul></dd>
     
     
@@ -599,9 +599,9 @@ to hide the screenshot overlay.
     
     
     <div class="description">
-        _showFrame will check |this._visibilityState|
+        <p>_showFrame will check |this._visibilityState|
 and then turn on the frame visibility.
-So this shouldn't be invoked by others directly.
+So this shouldn't be invoked by others directly.</p>
     </div>
     
 
@@ -634,7 +634,7 @@ So this shouldn't be invoked by others directly.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="window.js.html">window.js</a>, <a href="window.js.html#line117">line 117</a>
+        window.js, line 117
     </li></ul></dd>
     
     
@@ -670,9 +670,9 @@ So this shouldn't be invoked by others directly.
     
     
     <div class="description">
-        Currently this happens to active app window when:
+        <p>Currently this happens to active app window when:
 Attentionscreen shows no matter it's fresh newly created
-or slide down from active-statusbar mode.
+or slide down from active-statusbar mode.</p>
     </div>
     
 
@@ -705,7 +705,7 @@ or slide down from active-statusbar mode.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="window.js.html">window.js</a>, <a href="window.js.html#line220">line 220</a>
+        window.js, line 220
     </li></ul></dd>
     
     
@@ -741,11 +741,11 @@ or slide down from active-statusbar mode.
     
     
     <div class="description">
-        Wait for a next paint event from mozbrowser iframe,
+        <p>Wait for a next paint event from mozbrowser iframe,
 The callback would be called in this.NEXTPAINT_TIMEOUT ms
 if the next paint event doesn't happen.
 The use case is for the moment just before we turn on
-the iframe visibility, so the TIMEOUT isn't too long.
+the iframe visibility, so the TIMEOUT isn't too long.</p>
     </div>
     
 
@@ -795,8 +795,8 @@ the iframe visibility, so the TIMEOUT isn't too long.
             
             
             
-            <td class="description last">The callback function to be invoked
-                            after we get next paint event.</td>
+            <td class="description last"><p>The callback function to be invoked
+                            after we get next paint event.</p></td>
         </tr>
 	
 	
@@ -827,7 +827,7 @@ the iframe visibility, so the TIMEOUT isn't too long.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="window.js.html">window.js</a>, <a href="window.js.html#line192">line 192</a>
+        window.js, line 192
     </li></ul></dd>
     
     
@@ -863,7 +863,7 @@ the iframe visibility, so the TIMEOUT isn't too long.
     
     
     <div class="description">
-        Remove the DOM and release the resource.
+        <p>Remove the DOM and release the resource.</p>
     </div>
     
 
@@ -896,7 +896,7 @@ the iframe visibility, so the TIMEOUT isn't too long.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="window.js.html">window.js</a>, <a href="window.js.html#line381">line 381</a>
+        window.js, line 386
     </li></ul></dd>
     
     
@@ -932,7 +932,7 @@ the iframe visibility, so the TIMEOUT isn't too long.
     
     
     <div class="description">
-        Get the configuration of this app window object.
+        <p>Get the configuration of this app window object.</p>
     </div>
     
 
@@ -982,7 +982,7 @@ the iframe visibility, so the TIMEOUT isn't too long.
             
             
             
-            <td class="description last">The key of configuration, e.g. "url".</td>
+            <td class="description last"><p>The key of configuration, e.g. &quot;url&quot;.</p></td>
         </tr>
 	
 	
@@ -1013,7 +1013,7 @@ the iframe visibility, so the TIMEOUT isn't too long.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="window.js.html">window.js</a>, <a href="window.js.html#line319">line 319</a>
+        window.js, line 319
     </li></ul></dd>
     
     
@@ -1038,7 +1038,7 @@ the iframe visibility, so the TIMEOUT isn't too long.
     
             
 <div class="param-desc">
-    The configuration value of specific key
+    <p>The configuration value of specific key</p>
 </div>
 
 
@@ -1077,7 +1077,7 @@ the iframe visibility, so the TIMEOUT isn't too long.
     
     
     <div class="description">
-        Go through this.inlineActivityWindow to find the latest window.
+        <p>Go through this.inlineActivityWindow to find the latest window.</p>
     </div>
     
 
@@ -1110,7 +1110,7 @@ the iframe visibility, so the TIMEOUT isn't too long.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="window.js.html">window.js</a>, <a href="window.js.html#line346">line 346</a>
+        window.js, line 346
     </li></ul></dd>
     
     
@@ -1135,7 +1135,7 @@ the iframe visibility, so the TIMEOUT isn't too long.
     
             
 <div class="param-desc">
-    The focused activity window.
+    <p>The focused activity window.</p>
 </div>
 
 
@@ -1168,7 +1168,7 @@ the iframe visibility, so the TIMEOUT isn't too long.
     
     
     <div class="description">
-        get the screenshot of mozbrowser iframe.
+        <p>get the screenshot of mozbrowser iframe.</p>
     </div>
     
 
@@ -1218,8 +1218,8 @@ the iframe visibility, so the TIMEOUT isn't too long.
             
             
             
-            <td class="description last">The callback function to be invoked
-                            after we get the screenshot.</td>
+            <td class="description last"><p>The callback function to be invoked
+                            after we get the screenshot.</p></td>
         </tr>
 	
 	
@@ -1250,7 +1250,7 @@ the iframe visibility, so the TIMEOUT isn't too long.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="window.js.html">window.js</a>, <a href="window.js.html#line274">line 274</a>
+        window.js, line 274
     </li></ul></dd>
     
     
@@ -1286,7 +1286,7 @@ the iframe visibility, so the TIMEOUT isn't too long.
     
     
     <div class="description">
-        Publish an event.
+        <p>Publish an event.</p>
     </div>
     
 
@@ -1336,7 +1336,7 @@ the iframe visibility, so the TIMEOUT isn't too long.
             
             
             
-            <td class="description last">Event name, without object type prefix.</td>
+            <td class="description last"><p>Event name, without object type prefix.</p></td>
         </tr>
 	
 	
@@ -1359,7 +1359,7 @@ the iframe visibility, so the TIMEOUT isn't too long.
             
             
             
-            <td class="description last">Parameters in JSON format.</td>
+            <td class="description last"><p>Parameters in JSON format.</p></td>
         </tr>
 	
 	
@@ -1390,7 +1390,7 @@ the iframe visibility, so the TIMEOUT isn't too long.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="window.js.html">window.js</a>, <a href="window.js.html#line371">line 371</a>
+        window.js, line 376
     </li></ul></dd>
     
     
@@ -1426,33 +1426,35 @@ the iframe visibility, so the TIMEOUT isn't too long.
     
     
     <div class="description">
-        In order to prevent flashing of unpainted frame/screenshot overlay
+        <p>In order to prevent flashing of unpainted frame/screenshot overlay
 during switching from one to another,
-many event listener & callbacks are employed.
-
-1. Switching from 'frame' to 'screenshot' state:
-  _showScreenshotOverlay() is called
-  get screenshot from frame
-  when getting the screenshot,
-  show the screenshot overlay and hide the frame
-
-2. Switching from 'screenshot' to 'frame' state:
-  _showFrame() is called
-  register next paint listener, and set the frame to visible
-  finally, when next painted, hide the screenshot
-
-3. Switching from 'none' to 'frame' state:
-  _showFrame() is called
-
-4. Switching from 'frame' to 'none' state:
-  _hideFrame() is called
-
-5. Switching from 'none' to 'screenshot' state:
-  get screenshot from frame
-  when getting the screenshot, show the screenshot overlay
-
-6. Switching from 'screenshot' to 'none' state:
-  _hideScreenshotOverlay is called
+many event listener &amp; callbacks are employed.</p>
+<ol>
+<li><p>Switching from 'frame' to 'screenshot' state:
+_showScreenshotOverlay() is called
+get screenshot from frame
+when getting the screenshot,
+show the screenshot overlay and hide the frame</p>
+</li>
+<li><p>Switching from 'screenshot' to 'frame' state:
+_showFrame() is called
+register next paint listener, and set the frame to visible
+finally, when next painted, hide the screenshot</p>
+</li>
+<li><p>Switching from 'none' to 'frame' state:
+_showFrame() is called</p>
+</li>
+<li><p>Switching from 'frame' to 'none' state:
+_hideFrame() is called</p>
+</li>
+<li><p>Switching from 'none' to 'screenshot' state:
+get screenshot from frame
+when getting the screenshot, show the screenshot overlay</p>
+</li>
+<li><p>Switching from 'screenshot' to 'none' state:
+_hideScreenshotOverlay is called</p>
+</li>
+</ol>
     </div>
     
 
@@ -1485,7 +1487,7 @@ many event listener & callbacks are employed.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="window.js.html">window.js</a>, <a href="window.js.html#line95">line 95</a>
+        window.js, line 95
     </li></ul></dd>
     
     
@@ -1521,11 +1523,11 @@ many event listener & callbacks are employed.
     
     
     <div class="description">
-        A public method used by Window Manager.
+        <p>A public method used by Window Manager.
 Currently we don't know who wants to open the inline activity,
 but since web activity could only be triggered by user action,
 we could assume that only the focused app could invoke inline activity.
-And Window Manager is the one who knows which app window is active now.
+And Window Manager is the one who knows which app window is active now.</p>
     </div>
     
 
@@ -1575,7 +1577,7 @@ And Window Manager is the one who knows which app window is active now.
             
             
             
-            <td class="description last">The configuration of the inline activity frame.</td>
+            <td class="description last"><p>The configuration of the inline activity frame.</p></td>
         </tr>
 	
 	
@@ -1606,7 +1608,7 @@ And Window Manager is the one who knows which app window is active now.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="window.js.html">window.js</a>, <a href="window.js.html#line331">line 331</a>
+        window.js, line 331
     </li></ul></dd>
     
     
@@ -1653,7 +1655,7 @@ And Window Manager is the one who knows which app window is active now.
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jun 20 2013 17:43:06 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jun 20 2013 17:55:28 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

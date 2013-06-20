@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: activity_window.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: activity_window.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>(function(window) {
+  // XXX: This function is borrowed from Window Manager.
+  // We should integrate and move this into BrowserFrame later.
+  function createFrame(origFrame, origin, url, name, manifest, manifestURL) {
+    var iframe = origFrame || document.createElement('iframe');
+    iframe.setAttribute('mozallowfullscreen', 'true');
+
+    var frame = document.createElement('div');
+    frame.appendChild(iframe);
+    frame.className = 'activityWindow';
+
+    iframe.dataset.frameOrigin = origin;
+    // Save original frame URL in order to restore it on frame load error
+    iframe.dataset.frameURL = url;
+
+    // Note that we don't set the frame size here.  That will happen
+    // when we display the app in setDisplayedApp()
+
+    // frames are began unloaded.
+    iframe.dataset.unloaded = true;
+
+    if (!manifestURL) {
+      frame.setAttribute('data-wrapper', 'true');
+      return frame;
+    }
+
+    // Most apps currently need to be hosted in a special 'mozbrowser' iframe.
+    // They also need to be marked as 'mozapp' to be recognized as apps by the
+    // platform.
+    iframe.setAttribute('mozbrowser', 'true');
+
+    // These apps currently have bugs preventing them from being
+    // run out of process. All other apps will be run OOP.
+    //
+    var host = document.location.host;
+    var domain = host.replace(/(^[\w\d]+\.)?([\w\d]+\.[a-z]+)/, '$2');
+    var protocol = document.location.protocol + '//';
+    var browserManifestUrl =
+      protocol + 'browser.' + domain + '/manifest.webapp';
+    var outOfProcessBlackList = [
+      browserManifestUrl
+      // Requires nested content processes (bug 761935).  This is not
+      // on the schedule for v1.
+    ];
+
+    if (outOfProcessBlackList.indexOf(manifestURL) === -1) {
+      // FIXME: content shouldn't control this directly
+      iframe.setAttribute('remote', 'true');
+    }
+
+    iframe.setAttribute('mozapp', manifestURL);
+    iframe.src = url;
+    return frame;
+  };
+
+  function maybeSetFrameIsCritical(iframe, origin) {
+    // XXX Those urls needs to be built dynamically.
+    if (origin.startsWith('app://communications.gaiamobile.org/dialer') ||
+        origin.startsWith('app://clock.gaiamobile.org')) {
+      iframe.setAttribute('mozapptype', 'critical');
+    }
+  };
+
+  window.ActivityWindow = function ActivityWindow(app, config) {
+    this.config = config;
+
+    /**
+     * Specify we're belong to which appWindow instance.
+     * @type {AppWindow}
+     */
+    this.parentWindow = app;
+
+    var evt = document.createEvent('CustomEvent');
+    evt.initCustomEvent('activitywillopen', true, true, { origin: config.origin });
+
+    // Create the &lt;iframe mozbrowser mozapp> that hosts the app
+    var frame = createFrame(null, origin, url, name, manifest, manifestURL);
+    var iframe = frame.firstChild;
+    frame.classList.add('inlineActivity');
+    iframe.dataset.frameType = 'inline-activity';
+
+    iframe.setAttribute('expecting-system-message',
+                        'expecting-system-message');
+    maybeSetFrameIsCritical(iframe, origin);
+
+    // Give a name to the frame for differentiating between main frame and
+    // inline frame. With the name we can get frames of the same app using the
+    // window.open method.
+    iframe.name = 'inline';
+    iframe.dataset.start = Date.now();
+
+    this.resize();
+
+    frame.addEventListener('mozbrowserloadend', function activityloaded(e) {
+      e.target.removeEventListener(e.type, activityloaded, true);
+
+      var evt = document.createEvent('CustomEvent');
+      evt.initCustomEvent('activityloadtime', true, false, {
+        time: parseInt(Date.now() - iframe.dataset.start),
+        type: 'c', // Activity is always cold booted now.
+        src: iframe.src
+      });
+      iframe.dispatchEvent(evt);
+    }, true);
+
+    // Add the iframe to the document
+    windows.appendChild(frame);
+
+    // Open the frame, first, store the reference
+    openFrame = frame;
+
+    setVisibilityForInlineActivity(true);
+
+    setVisibilityForCurrentApp(false);
+
+    if ('orientation' in manifest) {
+      frame.dataset.orientation = manifest.orientation;
+      setOrientationForInlineActivity(frame);
+    }
+
+    setFrameBackground(openFrame, function gotBackground() {
+      // Start the transition when this async/sync callback is called.
+      openFrame.classList.add('active');
+      if (inlineActivityFrames.length == 1)
+        activityCallerOrigin = displayedApp;
+      if ('wrapper' in runningApps[displayedApp].frame.dataset) {
+        wrapperFooter.classList.remove('visible');
+        wrapperHeader.classList.remove('visible');
+      }
+    });
+
+    this.config.iframe = this.iframe = iframe;
+    this.config.frame = this.frame = frame;
+  };
+
+  /**
+   * ActivityWindow is inherited from appWindow;
+   */
+  ActivityWindow.prototype.__proto__ = AppWindow.prototype;
+
+  ActivityWindow.prototype._super = AppWindow;
+
+  ActivityWindow.prototype.resize = function actw_resize() {
+    // Borrow the window size from parent window
+  }
+
+  /**
+   * Event prefix presents the object type
+   * when publishing an event from the element.
+   * @type {String}
+   */
+  ActivityWindow.eventPrefix = 'activity';
+
+  /**
+   * Destroy the window and release the resource.
+   */
+  ActivityWindow.prototype.destroy = function actw_destroy() {
+    this.parentWindow = null;
+    // If frame is transitioning we should remove the reference
+    // ?
+    // 
+    this.publish('willclose');
+
+    // If frame is never set visible, we can remove the frame directly
+    // without closing transition
+    if (!this.element.classList.contains('active')) {
+      this.element.parentNode.removeChild(this.element);
+      return;
+    }
+    // Take keyboard focus away from the closing window
+    this.element.firstChild.blur();
+    // Remove the active class and start the closing transition
+    this.element.classList.remove('active');
+  };
+}(this));</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AppWindow.html">AppWindow</a></li><li><a href="System.UI.html">UI</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AnimatedIcon">AnimatedIcon</a></li><li><a href="global.html#Clock">Clock</a></li><li><a href="global.html#DeviceStorageWatcher">DeviceStorageWatcher</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#SystemDialog">SystemDialog</a></li><li><a href="global.html#SystemScreen">SystemScreen</a></li><li><a href="global.html#timeoutID">timeoutID</a></li><li><a href="global.html#timerID">timerID</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jun 20 2013 17:51:10 GMT+0800 (CST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
