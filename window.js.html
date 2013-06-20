@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: window.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: window.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>(function(window) {
+  'use strict';
+  var nextID = 0;
+  var screenElement = document.getElementById('screen');
+
+  /**
+   * AppWindow creates, contains, manages a mozbrowser iframe.
+   * AppWindow is directly managed by Window Manager,
+   * by call resize(), open(), close() on AppWindow.
+   *
+   * Basically AppWindow would manipulate all mozbrowser events
+   * fired from the mozbrowser iframe by itself and show relevant UI.
+   *
+   * AppWindow is also the parent class of ActivityWindow and PopupWindow.
+   * Mostly they do the same thing but is different at some points
+   * like the way transitioning.
+   *
+   * About creating an AppWindow,
+   * you need to provide at least the web app/page URL.
+   * If you have also provided the manifest,
+   * then you would get an AppWindow object which is a web app.
+   * Otherwise you would get an AppWindow which is in 'Wrapper' type.
+   * The only one different thing between web app and web page is
+   * just the manifest URL.
+   * If you are a wrapper type AppWindow, there would be some
+   * navigation UI for a wrapper like goBack, goForward, refresh.
+   *
+   * @constructor AppWindow
+   */
+  
+
+  window.AppWindow = function AppWindow(url, manifestURL) {
+    this.id = nextID++;
+    this.config = System.extend(new BrowserConfig(url, manifestURL), this.default_config);
+    this._browser = new BrowserFrame(this.config);
+    this._splash = this.getIconForSplash();
+
+    // XXX Remove this
+    //this.iframe.unloaded = true;
+
+    this.appIdentity = this._browser.element.dataset.origin;
+
+    // We keep the appError object here for the purpose that
+    // we may need to export the error state of AppWindow instance
+    // to the other module in the future.
+    if (window.AppError) {
+      this.appError = new AppError(this);
+    }
+    this.publish('appcreated', this.config);
+  };
+
+  /**
+   * Represent the current visibility state,
+   * i.e. what is currently visible. Possible value:
+   * 'frame': the actual app iframe
+   * 'screenshot': the screenshot overlay,
+   *               serve as a placeholder for visible but not active apps.
+   * 'none': nothing is currently visible.
+   */
+  AppWindow.prototype._visibilityState = 'frame',
+
+  /**
+   * In order to prevent flashing of unpainted frame/screenshot overlay
+   * during switching from one to another,
+   * many event listener & callbacks are employed.
+   *
+   * 1. Switching from 'frame' to 'screenshot' state:
+   *   _showScreenshotOverlay() is called
+   *   get screenshot from frame
+   *   when getting the screenshot,
+   *   show the screenshot overlay and hide the frame
+   *
+   * 2. Switching from 'screenshot' to 'frame' state:
+   *   _showFrame() is called
+   *   register next paint listener, and set the frame to visible
+   *   finally, when next painted, hide the screenshot
+   *
+   * 3. Switching from 'none' to 'frame' state:
+   *   _showFrame() is called
+   *
+   * 4. Switching from 'frame' to 'none' state:
+   *   _hideFrame() is called
+   *
+   * 5. Switching from 'none' to 'screenshot' state:
+   *   get screenshot from frame
+   *   when getting the screenshot, show the screenshot overlay
+   *
+   * 6. Switching from 'screenshot' to 'none' state:
+   *   _hideScreenshotOverlay is called
+   *
+   * @memberOf AppWindow
+   *
+   */
+
+  AppWindow.prototype.setVisible =
+    function aw_setVisible(visible, screenshotIfInvisible) {
+      if (visible) {
+        this._visibilityState = 'frame';
+        this._showFrame();
+      } else {
+        if (screenshotIfInvisible) {
+          this._visibilityState = 'screenshot';
+          this._showScreenshotOverlay();
+        } else {
+          this._visibilityState = 'none';
+          this._hideFrame();
+          this._hideScreenshotOverlay();
+        }
+      }
+    };
+
+  /**
+   * _showFrame will check |this._visibilityState|
+   * and then turn on the frame visibility.
+   * So this shouldn't be invoked by others directly.
+   */
+  AppWindow.prototype._showFrame = function aw__showFrame() {
+    if (this._visibilityState != 'frame')
+      return;
+
+    // Require a next paint event
+    // to remove the screenshot overlay if it exists.
+    if (this.screenshotOverlay.classList.contains('visible')) {
+      this._waitForNextPaint(this._hideScreenshotOverlay.bind(this));
+    }
+
+    this.iframe.classList.remove('hidden');
+    this.iframe.setVisible(true);
+  };
+
+  /**
+   * _hideFrame will check |this._visibilityState|
+   * and then turn off the frame visibility.
+   * So this shouldn't be invoked by others directly.
+   */
+  AppWindow.prototype._hideFrame = function aw__hideFrame() {
+    if (this._visibilityState !== 'frame') {
+      this.iframe.setVisible(false);
+      this.iframe.classList.add('hidden');
+    }
+  };
+
+  AppWindow.prototype.reload = function aw_reload() {
+    this.iframe.reload(true);
+  };
+
+  AppWindow.prototype.kill = function aw_kill() {
+    if (this._screenshotURL) {
+      URL.revokeObjectURL(this._screenshotURL);
+    }
+    // XXX: A workaround because a AppWindow instance shouldn't
+    // reference Window Manager directly here.
+    // In the future we should make every app maintain and execute the events
+    // in itself like resize, setVisibility...
+    // And Window Manager is in charge of cross app management.
+    this.destroy();
+  };
+
+  AppWindow.prototype.render = function aw_render() {
+    var screenshotOverlay = document.createElement('div');
+    screenshotOverlay.classList.add('screenshot-overlay');
+    this.frame.appendChild(screenshotOverlay);
+    this.screenshotOverlay = screenshotOverlay;
+  };
+
+  /**
+   * A temp variable to store current screenshot object URL.
+   */
+  AppWindow.prototype._screenshotURL = undefined;
+
+  /**
+   * A static timeout to make sure
+   * the next event don't happen too late.
+   * (The same as WindowManager: kTransitionTimeout)
+   */
+  AppWindow.prototype.NEXTPAINT_TIMEOUT = 1000;
+
+  AppWindow.prototype.debug = function aw_debug(msg) {
+    console.log('[appWindow][' + this.origin + ']' +
+                '[' + new Date().getTime() / 1000 + ']' + msg);
+  };
+
+  /**
+   * Wait for a next paint event from mozbrowser iframe,
+   * The callback would be called in this.NEXTPAINT_TIMEOUT ms
+   * if the next paint event doesn't happen.
+   * The use case is for the moment just before we turn on
+   * the iframe visibility, so the TIMEOUT isn't too long.
+   * @param  {Function} callback The callback function to be invoked
+   *                             after we get next paint event.
+   */
+  AppWindow.prototype._waitForNextPaint =
+    function aw__waitForNextPaint(callback) {
+      if (!callback)
+        return;
+
+      var nextPaintTimer;
+      var iframe = this.iframe;
+      var onNextPaint = function aw_onNextPaint() {
+        iframe.removeNextPaintListener(onNextPaint);
+        clearTimeout(nextPaintTimer);
+
+        callback();
+      };
+
+      nextPaintTimer = setTimeout(function ifNextPaintIsTooLate() {
+        iframe.removeNextPaintListener(onNextPaint);
+
+        callback();
+      }, this.NEXTPAINT_TIMEOUT);
+
+      iframe.addNextPaintListener(onNextPaint);
+    };
+
+  /**
+   * Currently this happens to active app window when:
+   * Attentionscreen shows no matter it's fresh newly created
+   * or slide down from active-statusbar mode.
+   */
+  AppWindow.prototype._showScreenshotOverlay =
+    function aw__showScreenshotOverlay() {
+      if (this._nextPaintTimer) {
+        clearTimeout(this._nextPaintTimer);
+        this._nextPaintTimer = null;
+      }
+
+      this.getScreenshot(function onGettingScreenshot(screenshot) {
+        // If the callback is too late,
+        // and we're brought to foreground by somebody.
+        if (this._visibilityState == 'frame')
+          return;
+
+        if (!screenshot) {
+          // If no screenshot,
+          // still hide the frame.
+          this._hideFrame();
+          return;
+        }
+
+        this._screenshotURL = URL.createObjectURL(screenshot);
+        this.screenshotOverlay.style.backgroundImage =
+          'url(' + this._screenshotURL + ')';
+        this.screenshotOverlay.classList.add('visible');
+
+        if (!this.iframe.classList.contains('hidden'))
+          this._hideFrame();
+
+        // XXX: we ought not to change screenshots at Window Manager
+        // here. In the long run Window Manager should replace
+        // its screenshots variable with appWindow._screenshotURL.
+        if (WindowManager.screenshots[this.origin]) {
+          URL.revokeObjectURL(WindowManager.screenshots[this.origin]);
+        }
+        WindowManager.screenshots[this.origin] = this._screenshotURL;
+      }.bind(this));
+    };
+
+  /**
+   * Check if current visibility state is screenshot or not,
+   * to hide the screenshot overlay.
+   */
+  AppWindow.prototype._hideScreenshotOverlay =
+    function aw__hideScreenshotOverlay() {
+      if (this._visibilityState != 'screenshot' &&
+          this.screenshotOverlay.classList.contains('visible'))
+        this.screenshotOverlay.classList.remove('visible');
+    };
+
+  /**
+   * get the screenshot of mozbrowser iframe.
+   * @param  {Function} callback The callback function to be invoked
+   *                             after we get the screenshot.
+   */
+  AppWindow.prototype.getScreenshot = function aw_getScreenshot(callback) {
+    // XXX: We had better store offsetWidth/offsetHeight.
+
+    // We don't need the screenshot of homescreen because:
+    // 1. Homescreen background is transparent,
+    //    currently gecko only sends JPG to us.
+    //    See bug 878003.
+    // 2. Homescreen screenshot isn't required by card view.
+    //    Since getScreenshot takes additional memory usage,
+    //    let's early return here.
+
+    // XXX: Determine |this.isHomescreen| or not on our own in
+    // appWindow.
+    if (this.isHomescreen) {
+      callback();
+      return;
+    }
+
+    var req = this.iframe.getScreenshot(
+      this.iframe.offsetWidth, this.iframe.offsetHeight);
+
+    req.onsuccess = function gotScreenshotFromFrame(evt) {
+      var result = evt.target.result;
+      callback(result);
+    };
+
+    req.onerror = function gotScreenshotFromFrameError(evt) {
+      callback();
+    };
+  };
+
+  /**
+   * Trace the current inline activity window opened by
+   * this app window.
+   * Note: an inline activity window may also opens a
+   * new inline activity window.
+   * @type {AppWindow}
+   */
+  AppWindow.prototype.inlineActivityWindow = null;
+
+  /**
+   * Get the configuration of this app window object.
+   * @param  {String} name The key of configuration, e.g. "url".
+   * @return {Object|String|Boolean} The configuration value of specific key
+   */
+  AppWindow.prototype.getConfig = function aw_getConfig(name) {
+    return this.config[name];
+  };
+
+  /**
+   * A public method used by Window Manager.
+   * Currently we don't know who wants to open the inline activity,
+   * but since web activity could only be triggered by user action,
+   * we could assume that only the focused app could invoke inline activity.
+   * And Window Manager is the one who knows which app window is active now.
+   * @param  {Object} config The configuration of the inline activity frame.
+   */
+  AppWindow.prototype.startInlineActivity = function(config) {
+    // If the same inline activity frame is existed and showing,
+    // we reuse its iframe.
+    var focusedActivityWindow = this.getFocusedActivityWindow();
+    if (focusedActivityWindow &&
+        focusedActivityWindow.getConfig('url') == config.url) {
+        return;
+    }
+    this.inlineActivityWindow = new ActivityWindow(this, config);
+  };
+
+  /**
+   * Go through this.inlineActivityWindow to find the latest window.
+   * @return {ActivityWindow} The focused activity window.
+   */
+  AppWindow.prototype.getFocusedActivityWindow = function() {
+    if (this.inlineActivityWindow) {
+      return this.inlineActivityWindow.getFocusedActivityWindow();
+    } else if (this instanceof ActivityWindow) {
+      // If this is an instance of ActivityWindow and
+      // doesn't have another inlineActivityWindow,
+      // return itself.
+      return this;
+    } else {
+      return null;
+    }
+  };
+
+  /**
+   * Event prefix presents the object type
+   * when publishing an event from the element.
+   * @type {String}
+   */
+  AppWindow.eventPrefix = 'app';
+
+  /**
+   * Publish an event.
+   * @param  {String} event  Event name, without object type prefix.
+   * @param  {Object} detail Parameters in JSON format.
+   */
+  AppWindow.prototype.publish = function(event, detail) {
+    var evt = document.createEvent('CustomEvent');
+    evt.initCustomEvent(this.constructor.eventPrefix + event,
+                        true, false, detail);
+    this.element.dispatchEvent(evt);
+  };
+
+  /**
+   * Remove the DOM and release the resource.
+   */
+  AppWindow.prototype.destroy = function() {
+    if (this._killed)
+      return;
+
+    // Avoid to be killed twice.
+    this._killed = true;
+    this.publish('terminated', { origin: this.origin });
+
+    // Destroy inline activity window if we have one.
+    // This would recursively destroy the chained inline activities.
+    if (this.inlineActivityWindow) {
+      this.inlineActivityWindow.destroy();
+    }
+
+    delete this.element.dataset.object;
+    this.element.parentNode.remove(this.element);
+  };
+
+}(this));
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AppWindow.html">AppWindow</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jun 20 2013 17:35:26 GMT+0800 (CST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
