@@ -96,12 +96,12 @@
 <dd>
     
     <div class="description">
-        DeviceStorageWatcher listens for nsIDOMDeviceStorage.onchange events
+        <p>DeviceStorageWatcher listens for nsIDOMDeviceStorage.onchange events
 notifying about low device storage situations (see Bug 861921). When a
 'onchange' event containing a 'low-disk-space' reason is received, we show a
 banner for a few seconds and pin a notification in the notifications center.
 When the reason of the 'onchange' event is 'available-disk-space', we remove
-the pinned notification, if one exists.
+the pinned notification, if one exists.</p>
     </div>
     
     
@@ -130,7 +130,7 @@ the pinned notification, if one exists.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="storage_watcher.js.html">storage_watcher.js</a>, <a href="storage_watcher.js.html#line15">line 15</a>
+        storage_watcher.js, line 15
     </li></ul></dd>
     
     
@@ -155,10 +155,10 @@ the pinned notification, if one exists.
 <dd>
     
     <div class="description">
-        System app is made of a top-level `<div ="screen"></div>` DOM element
+        <p>System app is made of a top-level <code>&lt;div =&quot;screen&quot;&gt;&lt;/div&gt;</code> DOM element
 which contain all possible screens displayed by the app.
 Multiple screens can be displayed at a time. We store the list of currently
-visible screens into this DOM element class attribute.
+visible screens into this DOM element class attribute.</p>
     </div>
     
     
@@ -187,7 +187,7 @@ visible screens into this DOM element class attribute.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="system_dialog.js.html">system_dialog.js</a>, <a href="system_dialog.js.html#line11">line 11</a>
+        system_dialog.js, line 11
     </li></ul></dd>
     
     
@@ -212,7 +212,7 @@ visible screens into this DOM element class attribute.
 <dd>
     
     <div class="description">
-        One-shot timer used to refresh the clock at a minute's turn
+        <p>One-shot timer used to refresh the clock at a minute's turn</p>
     </div>
     
     
@@ -241,7 +241,7 @@ visible screens into this DOM element class attribute.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="statusbar.js.html">statusbar.js</a>, <a href="statusbar.js.html#line78">line 78</a>
+        statusbar.js, line 78
     </li></ul></dd>
     
     
@@ -266,7 +266,7 @@ visible screens into this DOM element class attribute.
 <dd>
     
     <div class="description">
-        Timer used to refresh the clock every minute
+        <p>Timer used to refresh the clock every minute</p>
     </div>
     
     
@@ -295,7 +295,7 @@ visible screens into this DOM element class attribute.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="statusbar.js.html">statusbar.js</a>, <a href="statusbar.js.html#line81">line 81</a>
+        statusbar.js, line 81
     </li></ul></dd>
     
     
@@ -327,9 +327,9 @@ visible screens into this DOM element class attribute.
     
     
     <div class="description">
-        Create an animated icon by using a canvas element coupled with a flat image
+        <p>Create an animated icon by using a canvas element coupled with a flat image
 containing all the animation frames arranged as a vertical row. The delay
-between each frame is fixed.
+between each frame is fixed.</p>
     </div>
     
 
@@ -362,7 +362,7 @@ between each frame is fixed.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="statusbar.js.html">statusbar.js</a>, <a href="statusbar.js.html#line12">line 12</a>
+        statusbar.js, line 12
     </li></ul></dd>
     
     
@@ -398,8 +398,8 @@ between each frame is fixed.
     
     
     <div class="description">
-        Creates an object used for refreshing the clock UI element. Handles all
-related timer manipulation (start/stop/cancel).
+        <p>Creates an object used for refreshing the clock UI element. Handles all
+related timer manipulation (start/stop/cancel).</p>
     </div>
     
 
@@ -432,7 +432,7 @@ related timer manipulation (start/stop/cancel).
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="statusbar.js.html">statusbar.js</a>, <a href="statusbar.js.html#line76">line 76</a>
+        statusbar.js, line 76
     </li></ul></dd>
     
     
@@ -468,10 +468,10 @@ related timer manipulation (start/stop/cancel).
     
     
     <div class="description">
-        Start the timer used to refresh the clock, will call the specified
+        <p>Start the timer used to refresh the clock, will call the specified
 callback at every timer tick to refresh the UI. The callback used to
 refresh the UI will also be called immediately to ensure the UI is
-consistent.
+consistent.</p>
     </div>
     
 
@@ -521,8 +521,8 @@ consistent.
             
             
             
-            <td class="description last">Function used to refresh the UI at every timer
-       tick, should accept a date object as its only argument.</td>
+            <td class="description last"><p>Function used to refresh the UI at every timer
+       tick, should accept a date object as its only argument.</p></td>
         </tr>
 	
 	
@@ -553,7 +553,7 @@ consistent.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="statusbar.js.html">statusbar.js</a>, <a href="statusbar.js.html#line92">line 92</a>
+        statusbar.js, line 92
     </li></ul></dd>
     
     
@@ -589,7 +589,7 @@ consistent.
     
     
     <div class="description">
-        Stops the timer used to refresh the clock
+        <p>Stops the timer used to refresh the clock</p>
     </div>
     
 
@@ -622,7 +622,7 @@ consistent.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="statusbar.js.html">statusbar.js</a>, <a href="statusbar.js.html#line114">line 114</a>
+        statusbar.js, line 114
     </li></ul></dd>
     
     
@@ -658,18 +658,16 @@ consistent.
     
     
     <div class="description">
-        System app displays various kind of dialogs.
+        <p>System app displays various kind of dialogs.
 A dialog is a system app 'screen' that has a high z-index and is used to be
 displayed on top of other apps. But it doesn't display over the status bar,
-nor the eventually displayed keyboard.
-
-`SystemDialog` except the dialog DOM Element `id`.
-This DOM Element has to have a DOM attribute 'role' set to 'dialog'.
-
-It also supports a second `options` object with following attributes:
- `onHide`: function called when dialog is hidden, either when `hide()`
+nor the eventually displayed keyboard.</p>
+<p><code>SystemDialog</code> except the dialog DOM Element <code>id</code>.
+This DOM Element has to have a DOM attribute 'role' set to 'dialog'.</p>
+<p>It also supports a second <code>options</code> object with following attributes:
+ <code>onHide</code>: function called when dialog is hidden, either when <code>hide()</code>
            method is called, or when dialog is automatically hidden on
-           home button press
+           home button press</p>
     </div>
     
 
@@ -702,7 +700,7 @@ It also supports a second `options` object with following attributes:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="system_dialog.js.html">system_dialog.js</a>, <a href="system_dialog.js.html#line41">line 41</a>
+        system_dialog.js, line 41
     </li></ul></dd>
     
     
@@ -743,13 +741,13 @@ It also supports a second `options` object with following attributes:
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AppWindow.html">AppWindow</a></li><li><a href="BrowserConfig.html">BrowserConfig</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AnimatedIcon">AnimatedIcon</a></li><li><a href="global.html#Clock">Clock</a></li><li><a href="global.html#DeviceStorageWatcher">DeviceStorageWatcher</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#SystemDialog">SystemDialog</a></li><li><a href="global.html#SystemScreen">SystemScreen</a></li><li><a href="global.html#timeoutID">timeoutID</a></li><li><a href="global.html#timerID">timerID</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AppWindow.html">AppWindow</a></li><li><a href="BrowserConfig.html">BrowserConfig</a></li><li><a href="BrowserFrame.html">BrowserFrame</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AnimatedIcon">AnimatedIcon</a></li><li><a href="global.html#Clock">Clock</a></li><li><a href="global.html#DeviceStorageWatcher">DeviceStorageWatcher</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#SystemDialog">SystemDialog</a></li><li><a href="global.html#SystemScreen">SystemScreen</a></li><li><a href="global.html#timeoutID">timeoutID</a></li><li><a href="global.html#timerID">timerID</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Jun 21 2013 16:00:08 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Jun 21 2013 19:44:22 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>
