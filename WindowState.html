@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>FirefoxOS - SystemApp - API documentation : <i class="icon-shield" style="color:#0186d1"></i> BrowserConfig</title>
+    <title>FirefoxOS - SystemApp - API documentation : <i class="icon-beaker"></i> WindowState</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -32,7 +32,7 @@
           </div>
 
           <div class="span9">
-              <h1 class="page-header"><i class="icon-shield" style="color:#0186d1"></i> BrowserConfig</h1>
+              <h1 class="page-header"><i class="icon-beaker"></i> WindowState</h1>
               
 
 
@@ -41,7 +41,7 @@
     
 <header>
     <!--h2>
-    BrowserConfig
+    WindowState
     </h2-->
     
 </header>  
@@ -53,15 +53,62 @@
     
 
     
-        <ul class="breadcrumb"><li>Requires</li>
-            <li>module:Applications</li>
-        </ul>
-    
     
     
         
+            <div class="description"><p>This provides methods used for transition state handling. It's not meant to
+be used directly.</p></div>
+        
+        
+        
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+        
+        
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl class="bs-docs-example bs-methods">
+            
 <dt>
-    <h4 class="name" id="BrowserConfig">new BrowserConfig<span class="signature">(appURL, <span class="optional">manifestURL</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="_setTransition"><span class="label label-info">static</span> _setTransition<span class="signature">(type, transition)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -69,22 +116,7 @@
     
     
     <div class="description">
-        <p>This class generates browser configuration object from manifestURL or src provided.
-The configuration is for BrowserFrame generation.</p>
-<ul>
-<li><p>If manifestURL is provided, we would treat it as a web app,
-and then use Applications to fetch the remaining info we need
-to construct the options for mozbrowser iframe.</p>
-</li>
-<li><p>If only URL is provided, we would treat it as a web page.</p>
-</li>
-</ul>
-<p>The returned configuration object contains:
-<em> Origin: the same as appURL.
-</em> manifestURL: the same as manifestURL.
-<em> manifest: the parsed manifest object.
-</em> name: the name of the app, retrieved from manifest.
-* oop: indicate it's running out of process or in process.</p>
+        <p>Set the transition way of opening or closing transition.</p>
     </div>
     
 
@@ -106,8 +138,6 @@ to construct the options for mozbrowser iframe.</p>
 		<th>Type</th>
 
 		
-		<th>Argument</th>
-		
 
 		
 
@@ -120,7 +150,7 @@ to construct the options for mozbrowser iframe.</p>
 
         <tr>
             
-                <td class="name">appURL</td>
+                <td class="name">type</td>
             
 
             <td class="type">
@@ -133,25 +163,17 @@ to construct the options for mozbrowser iframe.</p>
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
 
-            <td class="description last"><p>The URL of the app or the page to be opened.</p></td>
+            <td class="description last"><p>'open' or 'close'</p></td>
         </tr>
 
 	
 
         <tr>
             
-                <td class="name">manifestURL</td>
+                <td class="name">transition</td>
             
 
             <td class="type">
@@ -164,20 +186,10 @@ to construct the options for mozbrowser iframe.</p>
             </td>
 
             
-                <td class="attributes">
-                
-                    <span class="label">optional</span>&nbsp;
-                
-
-                
-
-                
-                </td>
-            
 
             
 
-            <td class="description last"><p>The manifest URL of the app.</p></td>
+            <td class="description last"><p>The CSS rule name about window transition.</p></td>
         </tr>
 
 	
@@ -211,12 +223,118 @@ to construct the options for mozbrowser iframe.</p>
     
     
     
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="BrowserFrame.html">BrowserFrame</a></li>
-        </ul>
-    </dd>
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_setTransitionState"><span class="label label-info">static</span> _setTransitionState<span class="signature">(state)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Set the transition state to {state}.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">state</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The next state of transition.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
     
     
     
@@ -236,17 +354,7 @@ to construct the options for mozbrowser iframe.</p>
     
 </dd>
 
-    
-    </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
+        </dl>
     
     
     
@@ -265,7 +373,7 @@ to construct the options for mozbrowser iframe.</p>
         <br clear="both">
 
       <footer>
-        Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Mon Jun 24 2013 03:02:48 GMT+0800 (CST)
+        Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Mon Jun 24 2013 03:02:49 GMT+0800 (CST)
         <br>
       </footer>
       <script> prettyPrint(); </script>
