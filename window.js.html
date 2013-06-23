@@ -59,7 +59,6 @@
   window.AppWindow = function AppWindow(url, manifestURL) {
     this.id = nextID++;
     this.config = new BrowserConfig(url, manifestURL);
-    this._browser = new BrowserFrame(this.config);
     this._splash = this.getIconForSplash();
     
     // We keep the appError object here for the purpose that
@@ -68,24 +67,151 @@
     if (window.AppError) {
       this.appError = new AppError(this);
     }
-    this.publish('appcreated', this.config);
+    this.render();
+
+    /** 
+     * AppWindow is created.
+     * 
+     * @event AppWindow#appcreated
+     * @type {object}
+     * @property {string} origin - The origin of this appWindow instance.
+     */
+    this.publish('created', this.config);
   };
 
   /**
-   * Extend target object with input object.
-   * @param  {Object} target The object which is going to be extended.
-   * @param  {Object} input  The object used to extend target.
-   * @return {Object}        The extended object.
+   *  Open the app window.
+   * We shouldn't direcly modify this.
    */
-  AppWindow.prototype.extend = function aw_extend(target, input) {
-    for (var key in input) {
-      if (hasOwnProperty.call(input, key)) {
-        target[key] = input[key];
-      }
+  AppWindow.prototype.open = function aw_open() {
+    if (this.element.dataset.transition ||
+        this.element.classList.contains('active')) {
+      // Do nothing if we are transitioning or
+      // we are already active.
+      return;
+    }
+    if (this._unloaded) {
+      console.log(this._splash);
+      this.element.style.backgroundImage = 'url(' + this._splash + ')';
     }
 
-    return target;
+    /** 
+     * The appWindow is opened.
+     * 
+     * @event AppWindow#appopen
+     * @type {object}
+     * @property {string} origin - The origin of this appWindow instance.
+     */
+    this.publish('open', { origin: this.config.origin });
+    if (this._preopen)
+      this._preopen();
+    this.toForeground();
+    
+    this.element.dataset.transition = this.openTransition;
   };
+
+  /**
+   * Close the app window.
+   * We shouldn't direcly modify this.
+   */
+  AppWindow.prototype.close = function aw_close() {
+    if (this.element.dataset.transition ||
+        !this.element.classList.contains('active')) {
+      // Do nothing if we are transitioning or
+      // we are already inactive.
+      return;
+    }
+
+    /** 
+     * The appWindow is going to be closed.
+     * 
+     * @event AppWindow#appwillclose
+     * @type {object}
+     * @property {string} origin - The origin of this appWindow instance.
+     */
+    this.publish('willclose', { origin: this.config.origin });
+    this._browser.element.blur();
+    if (this._preclose) 
+      this._preclose();
+    this.element.dataset.transition = this.closeTransition;
+  };
+
+  /**
+   * Implement app swap out transtion here.
+   * @param  {Function} callback Callback to be called
+   * after swapping done.
+   */
+  AppWindow.prototype.swapOut = function aw_swapOut(callback) {
+    if (this.element.dataset.transition ||
+        !this.element.classList.contains('active')) {
+      // Do nothing if we are transitioning or
+      // we are already inactive.
+      return;
+    }
+    if (this._preclose)
+      this._preclose();
+    this.element.dataset.transition = 'swap-out';
+  };
+
+  /**
+   * Implement app swap in transtion here.
+   * @param  {Function} callback Callback to be called
+   * after swapping done.
+   */
+  AppWindow.prototype.swapIn = function aw_swapIn(callback) {
+    if (this.element.dataset.transition ||
+        this.element.classList.contains('active')) {
+      // Do nothing if we are transitioning or
+      // we are already active.
+      return;
+    }
+    if (this._preopen)
+      this._preopen();
+    this.toForeground();
+    this.element.dataset.transition = 'swap-in';
+  };
+
+  /**
+   * Fetch the splash icon,
+   * used when we open the app.
+   */
+  AppWindow.prototype.getIconForSplash = function aw_getIconForSplash() {
+    if (this._splash)
+      return this._splash;
+
+    var manifest = this.config.manifest;
+    var icons = 'icons' in manifest ? manifest['icons'] : null;
+    if (!icons) {
+      return null;
+    } else if (!this._preloadSplash) {
+      var a = document.createElement('a');
+      a.href = this.config.origin;
+      var splash = a.protocol + '//' + a.hostname + ':' + (a.port || 80) + splash;
+
+      // Start to load the image in background to avoid flickering if possible.
+      this._preloadSplash = new Image();
+      this._preloadSplash.src = splash;
+    }
+
+    var sizes = Object.keys(icons).map(function parse(str) {
+      return parseInt(str, 10);
+    });
+
+    sizes.sort(function(x, y) { return y - x; });
+
+    this._splash = icons[sizes[0]];
+    return icons[sizes[0]];
+  };
+
+  /**
+   * Class name is used to add a type-specific class on the element.
+   * We also use the CLASSNAME + _id to specify &lt;code>element.id&lt;/code>.
+   * @static
+   * @type {String}
+   */
+  AppWindow.prototype.CLASSNAME = 'appWindow';
+
+  AppWindow.prototype.windowType = 'window';
 
   /**
    * Represent the current visibility state,
@@ -186,15 +312,27 @@
     if (this._screenshotURL) {
       URL.revokeObjectURL(this._screenshotURL);
     }
-    // XXX: A workaround because a AppWindow instance shouldn't
-    // reference Window Manager directly here.
-    // In the future we should make every app maintain and execute the events
-    // in itself like resize, setVisibility...
-    // And Window Manager is in charge of cross app management.
-    this.destroy();
+
+    // If we're active window, perform a close transition
+    // before being removed.
+    if (this.isActive) {
+      this.close(this.destroy.bind(this));
+    } else {
+      this.destroy();
+    }
   };
 
   AppWindow.prototype.render = function aw_render() {
+    var element = document.createElement('div');
+    element.id = this.CLASSNAME + this._id;
+    element.classList.add(this.CLASSNAME);
+    this._browser = new BrowserFrame(this.config);
+    this._start = Date.now();
+    element.appendChild(this._browser);
+    this.containerElement.appendChild(element);
+
+    this.element = this.frame = element;
+
     var screenshotOverlay = document.createElement('div');
     screenshotOverlay.classList.add('screenshot-overlay');
     this.frame.appendChild(screenshotOverlay);
@@ -395,7 +533,7 @@
   };
 
   /**
-   * @description Event prefix presents the object type
+   * Event prefix presents the object type
    * when publishing an event from the element.
    *
    * For example, before an AppWindow instance is opened,
@@ -408,6 +546,7 @@
 
   /**
    * Publish an event.
+   * 
    * @param  {String} event  Event name, without object type prefix.
    * @param  {Object} detail Parameters in JSON format.
    */
@@ -427,6 +566,15 @@
 
     // Avoid to be killed twice.
     this._killed = true;
+
+    /**
+     * The appWindow is terminated or killed. 
+     * 
+     * @event AppWindow#appterminated
+     * @memberOf AppWindow
+     * @type {object}
+     * @property {string} origin - The origin of this appWindow instance.
+     */
     this.publish('terminated', { origin: this.origin });
 
     // Destroy inline activity window if we have one.
@@ -435,6 +583,7 @@
       this.inlineActivityWindow.destroy();
     }
 
+    this._browser.destroy();
     // Remove object reference to this.
     delete this.element.dataset.object;
     this.element.parentNode.remove(this.element);
@@ -451,13 +600,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AppWindow.html">AppWindow</a></li><li><a href="BrowserConfig.html">BrowserConfig</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AnimatedIcon">AnimatedIcon</a></li><li><a href="global.html#Clock">Clock</a></li><li><a href="global.html#DeviceStorageWatcher">DeviceStorageWatcher</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#SystemDialog">SystemDialog</a></li><li><a href="global.html#SystemScreen">SystemScreen</a></li><li><a href="global.html#timeoutID">timeoutID</a></li><li><a href="global.html#timerID">timerID</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ActivityWindow.html">ActivityWindow</a></li><li><a href="AppWindow.html">AppWindow</a></li><li><a href="BrowserConfig.html">BrowserConfig</a></li><li><a href="BrowserFrame.html">BrowserFrame</a></li><li><a href="HomescreenWindow.html">HomescreenWindow</a></li></ul><h3>Events</h3><ul><li><a href="ActivityWindow.html#event:appcreated">appcreated</a></li><li><a href="ActivityWindow.html#event:appopen">appopen</a></li><li><a href="ActivityWindow.html#event:appterminated">appterminated</a></li><li><a href="ActivityWindow.html#event:appwillclose">appwillclose</a></li><li><a href="AppWindow.html#event:appcreated">appcreated</a></li><li><a href="AppWindow.html#event:appopen">appopen</a></li><li><a href="AppWindow.html#event:appterminated">appterminated</a></li><li><a href="AppWindow.html#event:appwillclose">appwillclose</a></li><li><a href="HomescreenWindow.html#event:appcreated">appcreated</a></li><li><a href="HomescreenWindow.html#event:appopen">appopen</a></li><li><a href="HomescreenWindow.html#event:appterminated">appterminated</a></li><li><a href="HomescreenWindow.html#event:appwillclose">appwillclose</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AnimatedIcon">AnimatedIcon</a></li><li><a href="global.html#Clock">Clock</a></li><li><a href="global.html#DeviceStorageWatcher">DeviceStorageWatcher</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#SystemDialog">SystemDialog</a></li><li><a href="global.html#SystemScreen">SystemScreen</a></li><li><a href="global.html#timeoutID">timeoutID</a></li><li><a href="global.html#timerID">timerID</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Jun 21 2013 16:00:08 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jun 23 2013 01:49:03 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

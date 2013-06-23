@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: app_window_manager.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: app_window_manager.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>(function(window) {
+  'use strict';
+  
+  AppWindowManager = {
+    /**
+     * The list of currently running AppWindow instances.
+     * @private
+     * @type {Array}
+     */
+    _runningApps: [],
+
+    /**
+     * The homescreen app window instance.
+     * @private
+     * @type {AppWindow}
+     */
+    _homescreenWindow: null,
+
+    /**
+     * The init process of AppWindowManager:
+     * 1. Create a Homescreen Window instance.
+     * 2. After the HomescreenWindow instance is ready,
+     *    launch FTU if necessary.
+     * 3. FTU launcher would publish 'ftuskip' or 'ftudone' event,
+     *    open homescreen when we get these events.
+     */
+    init: function awm_init() {
+      window.addEventListener('ftuopen', this);
+      window.addEventListener('ftudone', this);
+      window.addEventListener('ftuskip', this);
+      window.addEventListener('homescreenready', this);
+      window.addEventListener('mozChromeEvent', this);
+
+      if (Applications.ready) {
+        this.safelyLaunchFTU();
+      } else {
+        window.addEventListener('applicationready', this);
+      }
+    },
+
+    /**
+     * The event handler of all mozChromeEvents.
+     *
+     * Note: mozChromeEvent is going to be removed one day.
+     * @param  {Object} detail Event detail object.
+     */
+    _mozChromeEventHandler: function awm__mozChromeEventHandler(detail) {
+      var startTime = Date.now();
+
+      var manifestURL = e.detail.manifestURL;
+      if (!manifestURL)
+        return;
+
+      var app = Applications.getByManifestURL(manifestURL);
+      if (!app)
+        return;
+
+      var manifest = app.manifest;
+      var name = new ManifestHelper(manifest).name;
+      var origin = app.origin;
+      var splash = getIconForSplash(app.manifest);
+
+      // Check if it's a virtual app from a entry point.
+      // If so, change the app name and origin to the
+      // entry point.
+      var entryPoints = manifest.entry_points;
+      if (entryPoints && manifest.type == 'certified') {
+        var givenPath = e.detail.url.substr(origin.length);
+
+        // Workaround here until the bug (to be filed) is fixed
+        // Basicly, gecko is sending the URL without launch_path sometimes
+        for (var ep in entryPoints) {
+          var currentEp = entryPoints[ep];
+          var path = givenPath;
+          if (path.indexOf('?') != -1) {
+            path = path.substr(0, path.indexOf('?'));
+          }
+
+          //Remove the origin and / to find if if the url is the entry point
+          if (path.indexOf('/' + ep) == 0 &&
+              (currentEp.launch_path == path)) {
+            origin = origin + currentEp.launch_path;
+            name = new ManifestHelper(currentEp).name;
+            splash = getIconForSplash(new ManifestHelper(currentEp));
+          }
+        }
+      }
+
+      if (splash) {
+        var a = document.createElement('a');
+        a.href = origin;
+        splash = a.protocol + '//' + a.hostname + ':' + (a.port || 80) + splash;
+
+        // Start to load the image in background to avoid flickering if possible.
+        var img = new Image();
+        img.src = splash;
+      }
+
+      switch (detail.type) {
+        case 'webapps-close':
+          this._runningApps[ origin].kill();
+          break;
+
+        case 'webapps-launch':
+          if (origin == this._homescreenWindow.getConfig('origin')) {
+            // No need to append a frame if is homescreen
+            this.setDisplayedApp();
+          } else {
+            if (!this._runningApps(origin)) {
+              runningApps[origin] = new AppWindow({
+                origin: origin,
+                url: detail.url,
+                name: name,
+                manifest: app.manifest,
+                manifestURL: app.manifestURL
+              });
+            }
+            // runningApps[origin].iframe.dataset.start = startTime;
+            this.setDisplayedApp(origin);
+          }
+          break;
+
+        // System Message Handler API is asking us to open the specific URL
+        // that handles the pending system message.
+        // We will launch it in background if it's not handling an activity.
+        case 'open-app':
+          // If the system message goes to System app,
+          // we should not be launching that in a frame.
+          if (detail.url === window.location.href)
+            return;
+
+          var currentApp = this._runningApps[this._displayedApp];
+
+          if (detail.isActivity && detail.target.disposition &&
+              detail.target.disposition == 'inline') {
+            // Inline activities behaves more like a dialog,
+            // let's deal them here.
+            currentApp.startInlineActivity({
+                origin: origin,
+                url: detail.url,
+                name: name,
+                manifest: manifest,
+                manifestURL: app.manifestURL
+              });
+
+            return;
+          }
+
+          if (this._runningApps[origin]) {
+            // XXX: Move into appWindow.
+            // If the app is in foreground, it's too risky to change it's
+            // URL. We'll ignore this request.
+            if (this._displayedApp !== origin) {
+              // If the app is opened and it is loaded to the correct page,
+              // then there is nothing to do.
+              if (currentApp.getConfig['url'] !== detail.url) {
+                // Rewrite the URL of the app frame to the requested URL.
+                // XXX: We could ended opening URls not for the app frame
+                // in the app frame. But we don't care.
+                this._runningApps[this._displayedApp].setURL(detail.url);
+              }
+            }
+          } else if (origin !== this._homescreenWindow.getConfig('origin')) {
+            // XXX: We could ended opening URls not for the app frame
+            // in the app frame. But we don't care.
+            var app = new AppWindow({
+                            origin: origin,
+                            url: detail.url,
+                            name: name,
+                            manifest: manifest,
+                            manifestURL: app.manifestURL,
+                            expectingSystemMessage: true
+                          });
+
+            // set the size of the iframe
+            // so Cards View will get a correct screenshot of the frame
+            if (!detail.isActivity) {
+              this._runningApps[origin].resize();
+              this._runningApps[origin].setVisible(false);
+            }
+          } else {
+            this._ensureHomescreen();
+          }
+
+          // We will only bring web activity handling apps to the foreground
+          if (!detail.isActivity)
+            return;
+
+          // XXX: the correct way would be for UtilityTray to close itself
+          // when there is a appwillopen/appopen event.
+          UtilityTray.hide();
+
+          this.setDisplayedApp(origin);
+        break;
+      }
+    },
+
+    handleEvent: function awm_handleEvent(evt) {
+      switch (evt.type) {
+        case 'mozChromeEvent':
+          this._mozChromeEventHandler(evt.detail);
+          break;
+
+        case 'homescreenready':
+          FtuLauncher.retrieve.bind(FtuLauncher);
+          break;
+
+        // Animate init logo when FTU is launched.
+        case 'ftuopen':
+          InitLogoHandler.animate();
+          break;
+
+        case 'ftuskip':
+          InitLogoHandler.animate();
+        case 'ftudone':
+          this.setDisplayedApp();
+          break;
+
+        case 'applicationready':
+          window.removeEventListener('applicationready', appListReady);
+          this.safelyLaunchFTU();
+          break;
+      }
+    },
+
+    setDisplayedApp: function awm_setDisplayedApp(origin) {
+      if (!origin || this._runningApps[origin]) {
+        this._homescreenWindow.open();
+        return;
+      }
+
+      this._runningApps[origin].open();
+    },
+
+    getRunningApps: function awm_getRunningApps() {
+      return this._runningApps;
+    },
+
+    /**
+     * The function is to ensure homescreen app window is
+     * running, otherwise we will relaunch it.
+     * 
+     * @private
+     */
+    _ensureHomescreen: function awm__ensureHomescreen() {
+      if (!this._homescreenWindow) {
+        this._homescreenWindow = new HomescreenWindow();
+      } else {
+        this._homescreenWindow.goHome();
+      }
+    },
+
+    /**
+     * @deprecated Move into AppWindow.
+     */
+    launch: function awm_launch() {
+    },
+
+    /**
+     * @deprecated Move into AppWindow.
+     */
+    kill: function awm_kill() {
+    },
+
+    /**
+     * @deprecated Moved into AppWindow.
+     */
+    reload: function awn_reload() {
+
+    },
+
+    setOrientationForApp: function awm_setOrientationForApp() {
+
+    },
+
+    getAppFrame: function awm_getAppFrame() {
+
+    },
+
+    getCurrentDisplayedApp: function awm_getCurrentDisplayedApp() {
+      return this._runningApps[this._displayedApp];
+    },
+
+    getOrientationForApp: function awm_getOrientationForApp(origin) {
+      var app = this._runningApps[origin];
+
+      if (!app || !app.manifest)
+        return;
+
+      return app.manifest.orientation;
+    },
+
+    toggleHomescreen: function awm_toggleHomescreen(visible) {
+      this._ensureHomescreen();
+      if (this._homescreenWindow)
+        this._homescreenWindow.setVisible(visible);
+    },
+
+    /**
+     * Use AppWindow.screenshot instead.
+     * @deprecated Decrecated.
+     * @type {Array}
+     */
+    screenshots: []
+  };
+
+  /**
+   * AppWindowManager manages the life cycle of AppWindow instances.
+   *
+   * It on demand creates a new AppWindow instance,
+   * resize an existing AppWindow instance,
+   * destroy a closing AppWindow instance.
+   *
+   * @requires {InitLogoHandler}
+   * @requires {UtilityTray}
+   * @requires {FtuLauncher}
+   * @requires {Applications}
+   * @requires {AppWindow}
+   * @type {Object}
+   */
+  window.AppWindowManager = AppWindowManager;
+}(this));</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ActivityWindow.html">ActivityWindow</a></li><li><a href="AppWindow.html">AppWindow</a></li><li><a href="BrowserConfig.html">BrowserConfig</a></li><li><a href="BrowserFrame.html">BrowserFrame</a></li><li><a href="HomescreenWindow.html">HomescreenWindow</a></li></ul><h3>Events</h3><ul><li><a href="ActivityWindow.html#event:appcreated">appcreated</a></li><li><a href="ActivityWindow.html#event:appopen">appopen</a></li><li><a href="ActivityWindow.html#event:appterminated">appterminated</a></li><li><a href="ActivityWindow.html#event:appwillclose">appwillclose</a></li><li><a href="AppWindow.html#event:appcreated">appcreated</a></li><li><a href="AppWindow.html#event:appopen">appopen</a></li><li><a href="AppWindow.html#event:appterminated">appterminated</a></li><li><a href="AppWindow.html#event:appwillclose">appwillclose</a></li><li><a href="HomescreenWindow.html#event:appcreated">appcreated</a></li><li><a href="HomescreenWindow.html#event:appopen">appopen</a></li><li><a href="HomescreenWindow.html#event:appterminated">appterminated</a></li><li><a href="HomescreenWindow.html#event:appwillclose">appwillclose</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AnimatedIcon">AnimatedIcon</a></li><li><a href="global.html#Clock">Clock</a></li><li><a href="global.html#DeviceStorageWatcher">DeviceStorageWatcher</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#SystemDialog">SystemDialog</a></li><li><a href="global.html#SystemScreen">SystemScreen</a></li><li><a href="global.html#timeoutID">timeoutID</a></li><li><a href="global.html#timerID">timerID</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jun 23 2013 01:49:03 GMT+0800 (CST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

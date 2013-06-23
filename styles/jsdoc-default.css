@@ -6,10 +6,11 @@ html
 
 body
 {
-	font: 14px "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans serif;
+	font: 12px/1.5 "Helvetica Neue", Arial, sans-serif;
 	line-height: 130%;
 	color: #000;
-	background-color: #fff;
+	background-color: #F1F6DD;
+	margin: 0;
 }
 
 a {
@@ -24,10 +25,49 @@ a:active {
     color: #444;
 }
 
-header
+#logo
 {
-	display: block;
-	padding: 6px 4px;
+	width: 100%;
+	background-color: #667F03;
+    padding: 0.5em 0 0.5em 0;
+}
+
+#logo_text
+{
+	position: relative;
+	left: 270px;
+	width: 825px;
+	height: 100%;
+	padding-left: 1em;
+	border-left: 1px solid #667F03;
+	background: #667F03 url(../images/logo.png) 0 -40px no-repeat;
+}
+
+#logo h1, #logo h2
+{
+	font: normal 300% 'century gothic', arial, sans-serif;
+	border-bottom: 0;
+	text-transform: none;
+	margin: 0;
+}
+
+#logo_text h1, #logo_text h1 a, #logo_text h1 a:hover 
+{
+	color: #FFF;
+	letter-spacing: 0.1em;
+	text-decoration: none;
+}
+
+#logo_text h1 a .logo_colour
+{
+	color: #CDF63E;
+}
+
+#logo_text h2
+{
+	font-size: 100%;
+	padding: 4px 0 0 0;
+	color: #DDD;
 }
 
 .class-description {
@@ -40,8 +80,12 @@ header
 }
 
 #main {
-    float: left;
-    width: 100%;
+    padding: 1em 0 1em 1em;
+    min-width: 825px;
+    margin-left: 270px;
+    border-left: 1px solid #667F03;
+    border-bottom: 1px solid #667F03;
+    background-color: #fff;
 }
 
 section
@@ -50,8 +94,13 @@ section
 	
 	background-color: #fff;
 	padding: 12px 24px;
-    border-bottom: 1px solid #ccc;
-    margin-right: 240px;
+}
+
+header
+{
+	background-color: #667F03;
+	color: #fff;
+	padding: 3px;
 }
 
 .variation {
@@ -68,47 +117,9 @@ section
 
 nav
 {
-	display: block;
 	float: left;
-    margin-left: -230px;
-    margin-top: 28px;
-    width: 220px;
-    border-left: 1px solid #ccc;
-    padding-left: 9px;
-}
-
-nav ul {
-    font-family: 'Lucida Grande', 'Lucida Sans Unicode', arial, sans-serif;
-    font-size: 100%;
-    line-height: 17px;
-    padding:0;
-    margin:0;
-    list-style-type:none;
-}
-
-nav h2 a, nav h2 a:visited {
-    color: #A35A00;
-    text-decoration: none;
-}
-
-nav h3 {
-    margin-top: 12px;
-}
-
-nav li {
-    margin-top: 6px;
-}
-
-nav a {
-    color: #5C5954;
-}
-
-nav a:visited {
-    color: #5C5954;
-}
-
-nav a:active {
-    color: #5C5954;
+    width: 250px;
+    padding: 1em;
 }
 
 footer {
@@ -151,7 +162,7 @@ h4
 	letter-spacing: -0.01em;
 	margin-top: 16px;
 	margin: 18px 0 3px 0;
-	color: #A35A00;
+	color: #667F03;
 }
 
 h5, .container-overview .subsection-title
@@ -170,10 +181,10 @@ h6
 	font-style: italic;
 }
 
-.ancestors { color: #999; }
+.ancestors { color: #ddd; }
 .ancestors a
 {
-    color: #999 !important;
+    color: #ddd !important;
     text-decoration: none;
 }
 
@@ -195,14 +206,12 @@ h6
 	font-family: Consolas, "Lucida Console", Monaco, monospace;
 }
 
-.details { margin-top: 14px; border-left: 2px solid #DDD; }
-.details dt { width:100px; float:left; padding-left: 10px;  padding-top: 6px; }
+.details { margin-top: 14px; }
+.details dt { width:100px; float:left; border-left: 2px solid #667F03; padding-left: 10px;  padding-top: 6px; }
 .details dd { margin-left: 50px; }
 .details ul { margin: 0; }
 .details ul { list-style-type: none; }
 .details li { margin-left: 30px; padding-top: 6px; }
-.details pre.prettyprint { margin: 0 }
-.details .object-value { padding-top: 0; }
 
 .description {
 	margin-bottom: 1em;
@@ -220,7 +229,7 @@ h6
 
 .prettyprint
 {
-	border: 1px solid #ddd;
+	border: 1px solid #667F03;
 	width: 80%;
     overflow: auto;
 }
@@ -239,7 +248,7 @@ h6
 	margin: 0;
 	background-color: #fff;
 	color: #000;
-	border-left: 3px #ddd solid;
+	border-left: 3px #667F03 solid;
 }
 
 .params, .props
@@ -250,14 +259,14 @@ h6
 }
 
 .params .name, .props .name, .name code {
-	color: #A35A00;
+	color: #667F03;
 	font-family: Consolas, 'Lucida Console', Monaco, monospace;
 	font-size: 100%;
 }
 
 .params td, .params th, .props td, .props th
 {
-	border: 1px solid #ddd;
+	border: 1px solid #667F03;
 	margin: 0px;
 	text-align: left;
 	vertical-align: top;
@@ -267,19 +276,28 @@ h6
 
 .params thead tr, .props thead tr
 {
-	background-color: #ddd;
+	background-color: #667F03;
+	color: #fff;
 	font-weight: bold;
 }
 
-.params .params thead tr, .props .props thead tr
-{
-	background-color: #fff;
-	font-weight: bold;
-}
-
-.params th, .props th { border-right: 1px solid #aaa; }
-.params thead .last, .props thead .last { border-right: 1px solid #ddd; }
+.params th, .props th { border-right: 1px solid #3d4d02; }
+.params thead .last, .props thead .last { border-right: 1px solid #667F03; }
 
 .disabled {
     color: #454545;
+}
+
+
+
+
+
+
+
+
+
+
+.returns .param-type {
+    padding: 1px;
+    border: solid 1px lightgray;
 }

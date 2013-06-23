@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: homescreen_window.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: homescreen_window.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>(function(window){
+  /**
+   * HomescreenWindow is a special AppWindow.
+   *
+   * It launches and manages the homescreen app.
+   * 
+   * It's a singleton. Only one HomescreenWindow instance running at one time.
+   *
+   * @extends {AppWindow}
+   * @requires AppWindow
+   * @class  HomescreenWindow
+   */
+  function HomescreenWindow() {
+    /**
+     * Make sure we're a singleton.
+     */
+    if (HomescreenWindow._instance)
+      return;
+
+    this._id = 0;
+    this.elements = {};
+    this.preInit();
+    HomescreenWindow._instance = this;
+  };
+
+  HomescreenWindow.eventPredix = 'homescreen';
+
+  HomescreenWindow.prototype = {
+    _instance: null,
+
+    __proto__: AppWindow.prototype,
+
+    /**
+     * HomescreenWindow has specific opening/closing
+     * transitions, see |window.css| for implementation
+     * info.
+     * @type {String}
+     */
+    openTransition: 'zoom-in',
+
+    closeTransition: 'zoom-out',
+
+    /**
+     * Ensure we're alive before going to homescreen.
+     * (HomescreenWindow.open()).
+     */
+    preopen: function hw_preopen() {
+      this.ensure();
+    },
+
+    /**
+     * Restart homescreen if the browser iframe
+     * doesn't exist.
+     */
+    ensure: function hw_ensure() {
+      if (!this._browser) {
+        this._browser = new BrowserFrame(this.config);
+        this.update();
+      }
+    },
+
+    update: function hw_update() {
+      this.element.appendChild(this._browser);
+      this.resize();
+    },
+
+    goHome: function hw_goHome() {
+      this._browser.src = homescreenURL;
+      this.resize();
+    },
+
+    preInit: function hw_preInit() {
+      var lock = navigator.mozSettings.createLock();
+      var setting = lock.get('homescreen.manifestURL');
+      var self = this;
+      setting.onsuccess = function() {
+        var app =
+          Applications.getByManifestURL(this.result['homescreen.manifestURL']);
+
+        if (app) {
+          var homescreenManifestURL = app.manifestURL;
+          var homescreenURL = app.origin + '/index.html#root';
+          self.config = new BrowserConfig(homescreenURL, homescreenManifestURL);
+          self.config.isHomescreen = true;
+
+          self.render();
+          // Dispatch an event here for battery check.
+          self.publish('ready');
+        }
+      };
+    },
+
+    destroy: function hw_destroy() {
+      /**
+       * Override AppWindow.destroy().
+       * We should restart ourselves instead of
+       * being removed immediately when crashed.
+       */
+      this._super.destroy();
+      this.render();
+    }
+  };
+  window.HomescreenWindow = HomescreenWindow;
+})(this);</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ActivityWindow.html">ActivityWindow</a></li><li><a href="AppWindow.html">AppWindow</a></li><li><a href="BrowserConfig.html">BrowserConfig</a></li><li><a href="BrowserFrame.html">BrowserFrame</a></li><li><a href="HomescreenWindow.html">HomescreenWindow</a></li></ul><h3>Events</h3><ul><li><a href="ActivityWindow.html#event:appcreated">appcreated</a></li><li><a href="ActivityWindow.html#event:appopen">appopen</a></li><li><a href="ActivityWindow.html#event:appterminated">appterminated</a></li><li><a href="ActivityWindow.html#event:appwillclose">appwillclose</a></li><li><a href="AppWindow.html#event:appcreated">appcreated</a></li><li><a href="AppWindow.html#event:appopen">appopen</a></li><li><a href="AppWindow.html#event:appterminated">appterminated</a></li><li><a href="AppWindow.html#event:appwillclose">appwillclose</a></li><li><a href="HomescreenWindow.html#event:appcreated">appcreated</a></li><li><a href="HomescreenWindow.html#event:appopen">appopen</a></li><li><a href="HomescreenWindow.html#event:appterminated">appterminated</a></li><li><a href="HomescreenWindow.html#event:appwillclose">appwillclose</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AnimatedIcon">AnimatedIcon</a></li><li><a href="global.html#Clock">Clock</a></li><li><a href="global.html#DeviceStorageWatcher">DeviceStorageWatcher</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#SystemDialog">SystemDialog</a></li><li><a href="global.html#SystemScreen">SystemScreen</a></li><li><a href="global.html#timeoutID">timeoutID</a></li><li><a href="global.html#timerID">timerID</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jun 23 2013 01:49:03 GMT+0800 (CST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

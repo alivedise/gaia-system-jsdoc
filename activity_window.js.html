@@ -26,68 +26,21 @@
     <section>
         <article>
             <pre class="prettyprint source"><code>(function(window) {
-  // XXX: This function is borrowed from Window Manager.
-  // We should integrate and move this into BrowserFrame later.
-  function createFrame(origFrame, origin, url, name, manifest, manifestURL) {
-    var iframe = origFrame || document.createElement('iframe');
-    iframe.setAttribute('mozallowfullscreen', 'true');
-
-    var frame = document.createElement('div');
-    frame.appendChild(iframe);
-    frame.className = 'activityWindow';
-
-    iframe.dataset.frameOrigin = origin;
-    // Save original frame URL in order to restore it on frame load error
-    iframe.dataset.frameURL = url;
-
-    // Note that we don't set the frame size here.  That will happen
-    // when we display the app in setDisplayedApp()
-
-    // frames are began unloaded.
-    iframe.dataset.unloaded = true;
-
-    if (!manifestURL) {
-      frame.setAttribute('data-wrapper', 'true');
-      return frame;
-    }
-
-    // Most apps currently need to be hosted in a special 'mozbrowser' iframe.
-    // They also need to be marked as 'mozapp' to be recognized as apps by the
-    // platform.
-    iframe.setAttribute('mozbrowser', 'true');
-
-    // These apps currently have bugs preventing them from being
-    // run out of process. All other apps will be run OOP.
-    //
-    var host = document.location.host;
-    var domain = host.replace(/(^[\w\d]+\.)?([\w\d]+\.[a-z]+)/, '$2');
-    var protocol = document.location.protocol + '//';
-    var browserManifestUrl =
-      protocol + 'browser.' + domain + '/manifest.webapp';
-    var outOfProcessBlackList = [
-      browserManifestUrl
-      // Requires nested content processes (bug 761935).  This is not
-      // on the schedule for v1.
-    ];
-
-    if (outOfProcessBlackList.indexOf(manifestURL) === -1) {
-      // FIXME: content shouldn't control this directly
-      iframe.setAttribute('remote', 'true');
-    }
-
-    iframe.setAttribute('mozapp', manifestURL);
-    iframe.src = url;
-    return frame;
-  };
-
-  function maybeSetFrameIsCritical(iframe, origin) {
-    // XXX Those urls needs to be built dynamically.
-    if (origin.startsWith('app://communications.gaiamobile.org/dialer') ||
-        origin.startsWith('app://clock.gaiamobile.org')) {
-      iframe.setAttribute('mozapptype', 'critical');
-    }
-  };
-
+  /**
+   * ActivityWindow is exactly an specific app window but contains
+   * a mozbrowser iframe runnign as an inline activity.
+   * 
+   * An ActivityWindow instance is created, managed by another AppWindow instance.
+   *
+   * That means an ActivityWindow instance could also opens another ActivityWindow instance.
+   *
+   * @param {AppWindow} app    The ActivityWindow opener. Will be stored at |this.parentWindow|.
+   * @param {Object} config The configuration of the inline activity window.
+   *
+   * @extends {AppWindow}
+   * @requires AppWindow
+   * @class  ActivityWindow
+   */
   window.ActivityWindow = function ActivityWindow(app, config) {
     this.config = config;
 
@@ -165,10 +118,34 @@
    */
   ActivityWindow.prototype.__proto__ = AppWindow.prototype;
 
+  /**
+   * The super class reference.
+   * @private
+   * @type {Function}
+   */
   ActivityWindow.prototype._super = AppWindow;
 
-  ActivityWindow.prototype.resize = function actw_resize() {
+  /**
+   * Class name is used to add a type-specific class on the element.
+   * We also use the CLASSNAME + _id to specify &lt;code>element.id&lt;/code>.
+   * @static
+   * @type {String}
+   */
+  ActivityWindow.prototype.CLASSNAME = 'inlineActivity';
+
+  ActivityWindow.prototype.resize = function actw_resize(width, height) {
     // Borrow the window size from parent window
+    // Copy the dimension of the currently displayed app
+    if (!this.parentWindow)
+      return;
+
+    // Traverse the inline activity chain to resize the latest one.
+    if (this.inlineActivityWindow) {
+      this.inlineActivityWindow.resize(width, height);
+    } else {
+      this.element.style.width = width;
+      this.element.style.height = height;
+    }
   }
 
   /**
@@ -181,7 +158,7 @@
   /**
    * Destroy the window and release the resource.
    */
-  ActivityWindow.prototype.destroy = function actw_destroy() {
+  ActivityWindow.prototype.kill = function actw_kill() {
     this.parentWindow = null;
     // If frame is transitioning we should remove the reference
     // ?
@@ -209,13 +186,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AppWindow.html">AppWindow</a></li><li><a href="BrowserConfig.html">BrowserConfig</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AnimatedIcon">AnimatedIcon</a></li><li><a href="global.html#Clock">Clock</a></li><li><a href="global.html#DeviceStorageWatcher">DeviceStorageWatcher</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#SystemDialog">SystemDialog</a></li><li><a href="global.html#SystemScreen">SystemScreen</a></li><li><a href="global.html#timeoutID">timeoutID</a></li><li><a href="global.html#timerID">timerID</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ActivityWindow.html">ActivityWindow</a></li><li><a href="AppWindow.html">AppWindow</a></li><li><a href="BrowserConfig.html">BrowserConfig</a></li><li><a href="BrowserFrame.html">BrowserFrame</a></li><li><a href="HomescreenWindow.html">HomescreenWindow</a></li></ul><h3>Events</h3><ul><li><a href="ActivityWindow.html#event:appcreated">appcreated</a></li><li><a href="ActivityWindow.html#event:appopen">appopen</a></li><li><a href="ActivityWindow.html#event:appterminated">appterminated</a></li><li><a href="ActivityWindow.html#event:appwillclose">appwillclose</a></li><li><a href="AppWindow.html#event:appcreated">appcreated</a></li><li><a href="AppWindow.html#event:appopen">appopen</a></li><li><a href="AppWindow.html#event:appterminated">appterminated</a></li><li><a href="AppWindow.html#event:appwillclose">appwillclose</a></li><li><a href="HomescreenWindow.html#event:appcreated">appcreated</a></li><li><a href="HomescreenWindow.html#event:appopen">appopen</a></li><li><a href="HomescreenWindow.html#event:appterminated">appterminated</a></li><li><a href="HomescreenWindow.html#event:appwillclose">appwillclose</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AnimatedIcon">AnimatedIcon</a></li><li><a href="global.html#Clock">Clock</a></li><li><a href="global.html#DeviceStorageWatcher">DeviceStorageWatcher</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#SystemDialog">SystemDialog</a></li><li><a href="global.html#SystemScreen">SystemScreen</a></li><li><a href="global.html#timeoutID">timeoutID</a></li><li><a href="global.html#timerID">timerID</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Jun 21 2013 16:00:08 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jun 23 2013 01:49:03 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

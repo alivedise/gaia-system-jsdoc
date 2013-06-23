@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>FirefoxOS - SystemApp - API documentation : <i class="icon-shield" style="color:#0186d1"></i> AppWindow</title>
+    <title>FirefoxOS - SystemApp - API documentation : <i class="icon-shield" style="color:#0186d1"></i> HomescreenWindow</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -30,7 +30,7 @@
           </div>
 
           <div class="span9">
-              <h1 class="page-title"><i class="icon-shield" style="color:#0186d1"></i> AppWindow</h1>
+              <h1 class="page-title"><i class="icon-shield" style="color:#0186d1"></i> HomescreenWindow</h1>
               
 
 
@@ -39,7 +39,7 @@
     
 <header>
     <h2>
-    AppWindow
+    HomescreenWindow
     </h2>
     
 </header>  
@@ -51,7 +51,7 @@
     
         
 <dt>
-    <h4 class="name" id="AppWindow"><span class="type-signature"></span>new AppWindow<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="HomescreenWindow"><span class="type-signature"></span>new HomescreenWindow<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -59,23 +59,9 @@
     
     
     <div class="description">
-        <p>AppWindow creates, contains, manages a mozbrowser iframe.
-AppWindow is directly managed by Window Manager,
-by call resize(), open(), close() on AppWindow.</p>
-<p>Basically AppWindow would manipulate all mozbrowser events
-fired from the mozbrowser iframe by itself and show relevant UI.</p>
-<p>AppWindow is also the parent class of ActivityWindow and PopupWindow.
-Mostly they do the same thing but is different at some points
-like the way transitioning.</p>
-<p>About creating an AppWindow,
-you need to provide at least the web app/page URL.
-If you have also provided the manifest,
-then you would get an AppWindow object which is a web app.
-Otherwise you would get an AppWindow which is in 'Wrapper' type.
-The only one different thing between web app and web page is
-just the manifest URL.
-If you are a wrapper type AppWindow, there would be some
-navigation UI for a wrapper like goBack, goForward, refresh.</p>
+        <p>HomescreenWindow is a special AppWindow.</p>
+<p>It launches and manages the homescreen app.</p>
+<p>It's a singleton. Only one HomescreenWindow instance running at one time.</p>
     </div>
     
 
@@ -132,9 +118,21 @@ navigation UI for a wrapper like goBack, goForward, refresh.</p>
     </div>
     
     
+        <h3 class="subsection-title">Extends</h3>
+        
+        <ul>
+            <li><a href="AppWindow.html">AppWindow</a></li>
+        </ul>
     
     
     
+    
+    
+        <h3 class="subsection-title">Requires</h3>
+        
+        <ul>
+            <li>module:AppWindow</li>
+        </ul>
     
     
     
@@ -145,57 +143,6 @@ navigation UI for a wrapper like goBack, goForward, refresh.</p>
         <h3 class="subsection-title">Members</h3>
         
         <dl>
-            
-<dt>
-    <h4 class="name" id="eventPrefix"><span class="type-signature">&lt;static> </span>eventPrefix<span class="type-signature"> :String</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Event prefix presents the object type
-when publishing an event from the element.</p>
-<p>For example, before an AppWindow instance is opened,
-it would publish 'appwillopen' event. But when an ActivityWindow instance
-is opened, it would publish 'activitywillopen' event.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
             
 <dt>
     <h4 class="name" id="_screenshotURL"><span class="type-signature"></span>_screenshotURL<span class="type-signature"></span></h4>
@@ -217,6 +164,11 @@ is opened, it would publish 'activitywillopen' event.</p>
     
     
 
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#_screenshotURL">AppWindow#_screenshotURL</a>
+    </li></dd>
     
     
     
@@ -270,6 +222,11 @@ i.e. what is currently visible. Possible value:
     
 
     
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#_visibilityState">AppWindow#_visibilityState</a>
+    </li></dd>
+    
     
     
     
@@ -317,6 +274,11 @@ We also use the CLASSNAME + _id to specify &lt;code&gt;element.id&lt;/code&gt;.<
     
     
 
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#CLASSNAME">AppWindow#CLASSNAME</a>
+    </li></dd>
     
     
     
@@ -368,6 +330,11 @@ new inline activity window.</p>
     
 
     
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#inlineActivityWindow">AppWindow#inlineActivityWindow</a>
+    </li></dd>
+    
     
     
     
@@ -416,6 +383,11 @@ the next event don't happen too late.
     
     
 
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#NEXTPAINT_TIMEOUT">AppWindow#NEXTPAINT_TIMEOUT</a>
+    </li></dd>
     
     
     
@@ -478,6 +450,11 @@ So this shouldn't be invoked by others directly.</p>
     
     
 
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#_hideFrame">AppWindow#_hideFrame</a>
+    </li></dd>
     
     
     
@@ -543,6 +520,11 @@ to hide the screenshot overlay.</p>
     
     
 
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#_hideScreenshotOverlay">AppWindow#_hideScreenshotOverlay</a>
+    </li></dd>
     
     
     
@@ -610,6 +592,11 @@ So this shouldn't be invoked by others directly.</p>
     
 
     
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#_showFrame">AppWindow#_showFrame</a>
+    </li></dd>
+    
     
     
     
@@ -675,6 +662,11 @@ or slide down from active-statusbar mode.</p>
     
     
 
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#_showScreenshotOverlay">AppWindow#_showScreenshotOverlay</a>
+    </li></dd>
     
     
     
@@ -793,6 +785,11 @@ the iframe visibility, so the TIMEOUT isn't too long.</p>
     
 
     
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#_waitForNextPaint">AppWindow#_waitForNextPaint</a>
+    </li></dd>
+    
     
     
     
@@ -858,6 +855,11 @@ We shouldn't direcly modify this.</p>
     
 
     
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#close">AppWindow#close</a>
+    </li></dd>
+    
     
     
     
@@ -921,6 +923,11 @@ We shouldn't direcly modify this.</p>
     
     
 
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#destroy">AppWindow#destroy</a>
+    </li></dd>
     
     
     
@@ -1034,6 +1041,11 @@ We shouldn't direcly modify this.</p>
     
 
     
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#getConfig">AppWindow#getConfig</a>
+    </li></dd>
+    
     
     
     
@@ -1122,6 +1134,11 @@ We shouldn't direcly modify this.</p>
     
 
     
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#getFocusedActivityWindow">AppWindow#getFocusedActivityWindow</a>
+    </li></dd>
+    
     
     
     
@@ -1204,6 +1221,11 @@ used when we open the app.</p>
     
     
 
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#getIconForSplash">AppWindow#getIconForSplash</a>
+    </li></dd>
     
     
     
@@ -1318,6 +1340,11 @@ used when we open the app.</p>
     
 
     
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#getScreenshot">AppWindow#getScreenshot</a>
+    </li></dd>
+    
     
     
     
@@ -1382,6 +1409,11 @@ We shouldn't direcly modify this.</p>
     
     
 
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#open">AppWindow#open</a>
+    </li></dd>
     
     
     
@@ -1517,6 +1549,11 @@ We shouldn't direcly modify this.</p>
     
     
 
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#publish">AppWindow#publish</a>
+    </li></dd>
     
     
     
@@ -1660,6 +1697,11 @@ We will use these parameters to calulate width and height.</p>
     
 
     
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#resize">AppWindow#resize</a>
+    </li></dd>
+    
     
     
     
@@ -1751,6 +1793,11 @@ _hideScreenshotOverlay is called</p>
     
     
 
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#setVisible">AppWindow#setVisible</a>
+    </li></dd>
     
     
     
@@ -1868,6 +1915,11 @@ And Window Manager is the one who knows which app window is active now.</p>
     
 
     
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#startInlineActivity">AppWindow#startInlineActivity</a>
+    </li></dd>
+    
     
     
     
@@ -1981,6 +2033,11 @@ after swapping done.</p></td>
     
 
     
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#swapIn">AppWindow#swapIn</a>
+    </li></dd>
+    
     
     
     
@@ -2093,6 +2150,11 @@ after swapping done.</p></td>
     
     
 
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#swapOut">AppWindow#swapOut</a>
+    </li></dd>
     
     
     
@@ -2227,6 +2289,11 @@ after swapping done.</p></td>
     
 
     
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#event:appcreated">AppWindow#event:appcreated</a>
+    </li></dd>
+    
     
     
     
@@ -2351,6 +2418,11 @@ after swapping done.</p></td>
     
     
 
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#event:appopen">AppWindow#event:appopen</a>
+    </li></dd>
     
     
     
@@ -2477,6 +2549,11 @@ after swapping done.</p></td>
     
 
     
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#event:appterminated">AppWindow#event:appterminated</a>
+    </li></dd>
+    
     
     
     
@@ -2601,6 +2678,11 @@ after swapping done.</p></td>
     
     
 
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AppWindow.html#event:appwillclose">AppWindow#event:appwillclose</a>
+    </li></dd>
     
     
     
