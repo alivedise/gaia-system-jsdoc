@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>FirefoxOS - SystemApp - API documentation : <i class="icon-code"></i> TransitionEvent</title>
+    <title>FirefoxOS - SystemApp - API documentation : <i class="icon-beaker"></i> WindowTransition</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -32,7 +32,7 @@
           </div>
 
           <div class="span9">
-              <h1 class="page-header"><i class="icon-code"></i> TransitionEvent</h1>
+              <h1 class="page-header"><i class="icon-beaker"></i> WindowTransition</h1>
               
 
 
@@ -41,7 +41,7 @@
     
 <header>
     <!--h2>
-    TransitionEvent
+    WindowTransition
     </h2-->
     
 </header>  
@@ -56,14 +56,33 @@
     
     
         
-            <div class="description"><p>This object declares all transition event enum:</p>
+            <div class="description"><p>This provides methods and attributes used for transition state handling. It's not meant to
+be used directly.</p>
+<p>The finite state machine of transition is working as(being from normal state):</p>
 <ul>
-<li>OPEN</li>
-<li>CLOSE</li>
-<li>FINISH</li>
-<li>END</li>
-<li>CANCEL</li>
-</ul></div>
+<li><code>closed</code>  ---<em>event</em> <strong>OPEN</strong> ----------------&gt; <code>opening</code></li>
+<li><code>opening</code> ---<em>event</em> <strong>END/FINISH/CANCEL</strong> ---&gt; <code>opened</code></li>
+<li><code>opened</code>  ---<em>event</em> <strong>CLOSE</strong> ---------------&gt; <code>closing</code></li>
+<li><code>closing</code> ---<em>event</em> <strong>END/FINISH/CANCEL</strong> ---&gt; <code>closed</code></li>
+</ul>
+<p>If you want to reuse this mixin in your object, you need to define these attributes: <code>this.element</code></p>
+<p>And these method: <code>this.setVisible()</code> <code>this.publish()</code></p>
+<p>The following callback functions are executed only when the transition state are successfully switched:
+<code>_onOpen</code>
+<code>_onClose</code>
+<code>_onEnd</code>
+<code>_onFinish</code>
+<code>_onCancel</code>
+<code>_leaveOpened</code>
+<code>_enterOpened</code>
+<code>_leaveClosed</code>
+<code>_enterClosed</code>
+<code>_leaveClosing</code>
+<code>_enterClosing</code>
+<code>_leaveOpening</code>
+<code>_enterOpening</code></p>
+<p>Every callback here is for internal usage and would be executed only once.</p>
+<p>However you could utilize inner event in other functions.</p></div>
         
         
         
@@ -107,7 +126,313 @@
     
     
     
+        <h3 class="subsection-title">Members</h3>
+        
+        <dl class="bs-docs-example bs-members">
+            
+<dt>
+    <h4 class="name" id="_previousTransitionState"><span class="label label-info">static</span> _previousTransitionState<span class="type-signature"> :String|null</span></h4>
     
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Record the previous transition state.</p>
+<p><strong>Only updated if the state changes successfully.</strong></p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_transitionState"><span class="label label-info">static</span> _transitionState<span class="type-signature"> :String</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>_transitionState indicates current transition state of appWindow.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul class="inline"><li>Default Value: </li>
+    <li class="tag-default">"closed"</li></ul>
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl class="bs-docs-example bs-methods">
+            
+<dt>
+    <h4 class="name" id="_setTransition"><span class="label label-info">static</span> _setTransition<span class="signature">(type, transition)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Set the transition way of opening or closing transition.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">type</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>'open' or 'close'</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name">transition</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The CSS rule name about window transition.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_transitionHandler"><span class="label label-info">static</span> _transitionHandler<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Handle the transition event.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        </dl>
     
     
     
