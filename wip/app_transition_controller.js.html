@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>FirefoxOS - SystemApp - API documentation : Source: app_transition_controller.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link href="styles/bootstrap.css" rel="stylesheet">
+    <link href="styles/docs.css" rel="stylesheet">
+    <link href="styles/bootstrap-custom.css" rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <header class="header navbar navbar-inverse">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="brand" href="#"><strong>FirefoxOS SystemApp</strong> API documentation</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+          <div class="span4">
+              <h2><a href="index.html">Index</a></h2><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Modules</li><li><a href="module-ActivityWindowFactory.html">ActivityWindowFactory</a></li>
+<li><a href="module-AppWindowFactory.html">AppWindowFactory</a></li>
+<li><a href="module-AppWindowManager.html">AppWindowManager</a></li>
+<li><a href="module-HomescreenLauncher.html">HomescreenLauncher</a></li>
+<li><a href="module-LayoutManager.html">LayoutManager</a></li>
+<li><a href="module-OrientationManager.html">OrientationManager</a></li>
+<li><a href="module-WrapperFactory.html">WrapperFactory</a></li></ul></div><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Classes</li><li><a href="ActivityWindow.html"><i class="icon-shield" style="color: #0186d1"></i> ActivityWindow</a></li><li><a href="AppAuthenticationDialog.html"><i class="icon-shield" style="color: #0186d1"></i> AppAuthenticationDialog</a></li><li><a href="AppChrome.html"><i class="icon-shield" style="color: #0186d1"></i> AppChrome</a></li><li><a href="AppModalDialog.html"><i class="icon-shield" style="color: #0186d1"></i> AppModalDialog</a></li><li><a href="AppTransitionController.html"><i class="icon-shield" style="color: #0186d1"></i> AppTransitionController</a></li><li><a href="AppWindow.html"><i class="icon-shield" style="color: #0186d1"></i> AppWindow</a></li><li><a href="BrowserFrame.html"><i class="icon-shield" style="color: #0186d1"></i> BrowserFrame</a></li><li><a href="HomescreenWindow.html"><i class="icon-shield" style="color: #0186d1"></i> HomescreenWindow</a></li></ul></div><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Public Events</li><li><a href="ActivityWindow.html#event:activitybackground"><i class="icon-bell-alt" style="color: yellow"></i> activitybackground <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityclose"><i class="icon-bell-alt" style="color: yellow"></i> activityclose <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityclosing"><i class="icon-bell-alt" style="color: yellow"></i> activityclosing <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activitycreated"><i class="icon-bell-alt" style="color: yellow"></i> activitycreated <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityforeground"><i class="icon-bell-alt" style="color: yellow"></i> activityforeground <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityopen"><i class="icon-bell-alt" style="color: yellow"></i> activityopen <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityopening"><i class="icon-bell-alt" style="color: yellow"></i> activityopening <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityrendered"><i class="icon-bell-alt" style="color: yellow"></i> activityrendered <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityterminated"><i class="icon-bell-alt" style="color: yellow"></i> activityterminated <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activitywillrender"><i class="icon-bell-alt" style="color: yellow"></i> activitywillrender <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="AppWindow.html#event:appclose"><i class="icon-bell-alt" style="color: yellow"></i> appclose <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appclosing"><i class="icon-bell-alt" style="color: yellow"></i> appclosing <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appcreated"><i class="icon-bell-alt" style="color: yellow"></i> appcreated <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appdestroyed"><i class="icon-bell-alt" style="color: yellow"></i> appdestroyed <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appopen"><i class="icon-bell-alt" style="color: yellow"></i> appopen <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appopening"><i class="icon-bell-alt" style="color: yellow"></i> appopening <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:apprendered"><i class="icon-bell-alt" style="color: yellow"></i> apprendered <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:apprequestclose"><i class="icon-bell-alt" style="color: yellow"></i> apprequestclose <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:apprequestopen"><i class="icon-bell-alt" style="color: yellow"></i> apprequestopen <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appresize"><i class="icon-bell-alt" style="color: yellow"></i> appresize <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appterminated"><i class="icon-bell-alt" style="color: yellow"></i> appterminated <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appwilldestroy"><i class="icon-bell-alt" style="color: yellow"></i> appwilldestroy <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appwillrender"><i class="icon-bell-alt" style="color: yellow"></i> appwillrender <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenbackground"><i class="icon-bell-alt" style="color: yellow"></i> homescreenbackground <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenclose"><i class="icon-bell-alt" style="color: yellow"></i> homescreenclose <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenclosing"><i class="icon-bell-alt" style="color: yellow"></i> homescreenclosing <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreencreated"><i class="icon-bell-alt" style="color: yellow"></i> homescreencreated <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenforeground"><i class="icon-bell-alt" style="color: yellow"></i> homescreenforeground <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenopen"><i class="icon-bell-alt" style="color: yellow"></i> homescreenopen <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenopening"><i class="icon-bell-alt" style="color: yellow"></i> homescreenopening <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenrendered"><i class="icon-bell-alt" style="color: yellow"></i> homescreenrendered <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenterminated"><i class="icon-bell-alt" style="color: yellow"></i> homescreenterminated <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenwillrender"><i class="icon-bell-alt" style="color: yellow"></i> homescreenwillrender <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="module-LayoutManager.html#event:system-resize"><i class="icon-bell-alt" style="color: yellow"></i> system-resize <span class="label label-inverse pull-right">module:LayoutManager</span></a></li><li><a href="module-OrientationManager.html#event:reset-orientation"><i class="icon-bell-alt" style="color: yellow"></i> reset-orientation <span class="label label-inverse pull-right">module:OrientationManager</span></a></li></ul></div><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Private Events</li><li><a href="AppWindow.html#event:_swipein"><i class="icon-bell-alt" style="color: yellow"></i> _swipein <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:_swipeout"><i class="icon-bell-alt" style="color: yellow"></i> _swipeout <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:_withkeyboard"><i class="icon-bell-alt" style="color: yellow"></i> _withkeyboard <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:_withoutkeyboard"><i class="icon-bell-alt" style="color: yellow"></i> _withoutkeyboard <span class="label label-inverse pull-right">AppWindow</span></a></li></ul></div><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Mixins</li><li><a href="BrowserMixin.html"><i class="icon-beaker"></i> BrowserMixin</a></li></ul></div><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Global</li><li><a href="global.html#addEventListeners"><i class="icon-globe" style="color: black;"></i> addEventListeners</a></li><li><a href="global.html#Clock"><i class="icon-globe" style="color: black;"></i> Clock</a></li><li><a href="global.html#localizeElement"><i class="icon-globe" style="color: black;"></i> localizeElement</a></li><li><a href="global.html#LockScreen"><i class="icon-globe" style="color: black;"></i> LockScreen</a></li><li><a href="global.html#populateErrorMessage"><i class="icon-globe" style="color: black;"></i> populateErrorMessage</a></li><li><a href="global.html#start"><i class="icon-globe" style="color: black;"></i> start</a></li><li><a href="global.html#stop"><i class="icon-globe" style="color: black;"></i> stop</a></li><li><a href="global.html#SystemDialog"><i class="icon-globe" style="color: black;"></i> SystemDialog</a></li><li><a href="global.html#SystemScreen"><i class="icon-globe" style="color: black;"></i> SystemScreen</a></li><li><a href="global.html#timeoutID"><i class="icon-globe" style="color: black;"></i> timeoutID</a></li><li><a href="global.html#timerID"><i class="icon-globe" style="color: black;"></i> timerID</a></li></ul></div>
+          </div>
+
+          <div class="span8">
+              <h1 class="page-header">Source: app_transition_controller.js</h1>
+              
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>'use strict';
+
+(function(window) {
+  var DEBUG = false;
+  var TransitionEvents = ['open', 'close', 'complete', 'timeout'];
+  var screenElement = document.getElementById('screen');
+
+  var TransitionStateTable = {
+    'closed': ['opening', null, null, null],
+    'opened': [null, 'closing', null, null],
+    'opening': [null, 'closing', 'opened', 'opened'],
+    'closing': ['opened', null, 'closed', 'closed']
+  };
+
+  /**
+   * AppTransitionController controlls the opening and closing animation
+   * of the given appWindow.
+   *
+   * @param {AppWindow} app The app window instance which this controller
+   *                        belongs to.
+   *
+   * @class AppTransitionController
+   */
+  window.AppTransitionController =
+    function AppTransitionController(app) {
+      if (!app || !app.element)
+        return;
+
+      this.app = app;
+      if (this.app.openAnimation)
+        this.openAnimation = this.app.openAnimation;
+
+      if (this.app.closeAnimation)
+        this.closeAnimation = this.app.closeAnimation;
+
+      this.app.element.addEventListener('_opening', this);
+      this.app.element.addEventListener('_closing', this);
+      this.app.element.addEventListener('_opened', this);
+      this.app.element.addEventListener('_closed', this);
+      this.app.element.addEventListener('_opentransitionstart', this);
+      this.app.element.addEventListener('_closetransitionstart', this);
+      this.app.element.addEventListener('_openingtimeout', this);
+      this.app.element.addEventListener('_closingtimeout', this);
+      this.app.element.addEventListener('animationend', this);
+    };
+
+  AppTransitionController.prototype.destroy = function() {
+    if (!this.app || !this.app.element)
+      return;
+
+    this.app.element.removeEventListener('_opening', this);
+    this.app.element.removeEventListener('_closing', this);
+    this.app.element.removeEventListener('_opened', this);
+    this.app.element.removeEventListener('_closed', this);
+    this.app.element.removeEventListener('_opentransitionstart', this);
+    this.app.element.removeEventListener('_closetransitionstart', this);
+    this.app.element.removeEventListener('_openingtimeout', this);
+    this.app.element.removeEventListener('_closingtimeout', this);
+    this.app.element.removeEventListener('animationend', this);
+    this.app.element.removeEventListener('animationstart', this);
+    this.app = null;
+  };
+
+  AppTransitionController.prototype._transitionState = 'closed';
+  AppTransitionController.prototype.openAnimation = 'enlarge';
+  AppTransitionController.prototype.closeAnimation = 'reduce';
+  AppTransitionController.prototype.TRANSITION_TIMEOUT = 350;
+  AppTransitionController.prototype.SLOW_TRANSITION_TIMEOUT = 3500;
+  AppTransitionController.prototype.changeTransitionState =
+    function atc_changeTransitionState(evt) {
+      var currentState = this._transitionState;
+      var evtIndex = TransitionEvents.indexOf(evt);
+      var state = TransitionStateTable[currentState][evtIndex];
+      if (!state) {
+        return;
+      }
+
+      this.app.debug(currentState, state, '::', evt);
+
+      this.switchTransitionState(state);
+      this['_do_' + state]();
+      this.app.publish(state);
+      //backward compatibility
+      if (state == 'opening') {
+        /**
+         * Fired when the app is doing opening animation.
+         * @event AppWindow#appopening
+         */
+        this.app.publish('willopen');
+      } else if (state == 'closing') {
+        /**
+         * Fired when the app is doing closing animation.
+         * @event AppWindow#appclosing
+         */
+        this.app.publish('willclose');
+      } else if (state == 'opened') {
+        /**
+         * Fired when the app's opening animation is ended.
+         * @event AppWindow#appopen
+         */
+        this.app.publish('open');
+      } else if (state == 'closed') {
+        /**
+         * Fired when the app's closing animation is ended.
+         * @event AppWindow#appclose
+         */
+        this.app.publish('close');
+      }
+    };
+
+  AppTransitionController.prototype._do_closing =
+    function atc_do_closing() {
+      this._closingTimeout = window.setTimeout(function() {
+        this.app.broadcast('closingtimeout');
+      }.bind(this),
+      System.slowTransition ? this.SLOW_TRANSITION_TIMEOUT :
+                              this.TRANSITION_TIMEOUT);
+      this.app.element.classList.add('transition-closing');
+      this.app.element.classList.add(this.currentAnimation ||
+        this.closeAnimation);
+    };
+
+  AppTransitionController.prototype._do_closed =
+    function atc_do_closed() {
+      this.resetTransition();
+    };
+
+  AppTransitionController.prototype._do_opening =
+    function atc_do_opening() {
+      this._openingTimeout = window.setTimeout(function() {
+        this.app.broadcast('openingtimeout');
+      }.bind(this),
+      System.slowTransition ? this.SLOW_TRANSITION_TIMEOUT :
+                              this.TRANSITION_TIMEOUT);
+      this.app.element.classList.add('transition-opening');
+      this.app.element.classList.add(this.currentAnimation ||
+        this.openAnimation);
+    };
+
+  AppTransitionController.prototype._do_opened =
+    function atc_do_opened() {
+      this.resetTransition();
+    };
+
+  AppTransitionController.prototype.switchTransitionState =
+    function atc_switchTransitionState(state) {
+      this._transitionState = state;
+      if (!this.app)
+        return;
+      this.app._changeState('transition', this._transitionState);
+    };
+
+  // TODO: move general transition handlers into another object.
+  AppTransitionController.prototype.handle_closing =
+    function atc_handle_closing() {
+      if (!this.app || !this.app.element)
+        return;
+      this.app.element.setAttribute('aria-hidden', 'true');
+      this.switchTransitionState('closing');
+    };
+
+  AppTransitionController.prototype.handle_closed =
+    function atc_handle_closed() {
+      if (!this.app || !this.app.element)
+        return;
+
+      this.app.setVisible(false, true);
+      this.app.element.setAttribute('aria-hidden', 'true');
+      this.app.element.classList.remove('active');
+    };
+
+  AppTransitionController.prototype.handle_opening =
+    function atc_handle_opening() {
+      if (!this.app || !this.app.element)
+        return;
+      this.app.launchTime = Date.now();
+      this.app.fadeIn();
+      this.app.element.removeAttribute('aria-hidden');
+      this.app.setVisible(true);
+
+      // TODO:
+      // May have orientation manager to deal with lock orientation request.
+      if (this.app.isHomescreen) {
+        //this.app.setOrientation();
+      }
+    };
+
+  AppTransitionController.prototype.handle_opened =
+    function atc_handle_opened() {
+      if (!this.app || !this.app.element)
+        return;
+
+      if (this.app.loaded) {
+        this.app.publish('loadtime', {
+          time: parseInt(Date.now() - this._start),
+          type: 'w'
+        });
+      }
+
+      this.resetTransition();
+      this.app.element.removeAttribute('aria-hidden');
+      this.app.element.classList.add('active');
+      this.app.setVisible(true);
+
+      // TODO:
+      // May have orientation manager to deal with lock orientation request.
+      this.app.setOrientation();
+
+      // this.app.width is defined means we're resized ever.
+      // but this.app.resized may be cleared.
+      if (this.app.resized &amp;&amp;
+          !LayoutManager.match(this.app.width,
+            this.app.height - this.app.calibratedHeight(),
+            this.app.isFullScreen())) {
+        this.app.resize();
+      }
+      this.app.waitForNextPaint(function() {
+        if (this._transitionState !== 'opened')
+          return;
+        // XXX: Remove this after SIMPIN Dialog is refactored.
+        // See https://bugzilla.mozilla.org/show_bug.cgi?id=938979
+        if (!SimPinDialog.visible)
+          this.app.focus();
+      }.bind(this));
+    };
+
+  AppTransitionController.prototype.requireOpen = function(animation) {
+    if (animation) {
+      this.currentAnimation = animation;
+    }
+    this.changeTransitionState('open', 'requireopen');
+  };
+
+  AppTransitionController.prototype.requireClose = function(animation) {
+    if (animation) {
+      this.currentAnimation = animation;
+    }
+    this.changeTransitionState('close', 'requireclose');
+  };
+
+  AppTransitionController.prototype.resetTransition =
+    function atc_resetTransition() {
+      if (this._openingTimeout) {
+        window.clearTimeout(this._openingTimeout);
+        this._openingTimeout = null;
+      }
+
+      if (this._closingTimeout) {
+        window.clearTimeout(this._closingTimeout);
+        this._closingTimeout = null;
+      }
+      this.app.element.classList.remove(
+        this.currentAnimation || this.openAnimation);
+      this.app.element.classList.remove(
+        this.currentAnimation || this.closeAnimation);
+      this.currentAnimation = null;
+      this.app.element.classList.remove('transition-opening');
+      this.app.element.classList.remove('transition-closing');
+    };
+
+  AppTransitionController.prototype.handleEvent =
+    function atc_handleEvent(evt) {
+      switch (evt.type) {
+        case '_opening':
+          this.handle_opening();
+          break;
+        case '_opened':
+          this.handle_opened();
+          break;
+        case '_closed':
+          this.handle_closed();
+          break;
+        case '_closing':
+          this.handle_closing();
+          break;
+        case '_closingtimeout':
+        case '_openingtimeout':
+          this.changeTransitionState('timeout', evt.type);
+          break;
+        case 'animationend':
+          this.app.debug(evt.animationName + ' has been ENDED!');
+          this.changeTransitionState('complete', evt.type);
+          break;
+      }
+    };
+}(this));
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+          </div>
+      </div>
+
+        <br clear="both">
+
+      <footer>
+        Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Mon Dec 02 2013 19:57:00 GMT+0800 (CST)
+        <br>
+      </footer>
+      <script> prettyPrint(); </script>
+    </div>
+  </body>
+</html>

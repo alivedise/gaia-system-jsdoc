@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>FirefoxOS - SystemApp - API documentation : Source: homescreen_window.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link href="styles/bootstrap.css" rel="stylesheet">
+    <link href="styles/docs.css" rel="stylesheet">
+    <link href="styles/bootstrap-custom.css" rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <header class="header navbar navbar-inverse">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="brand" href="#"><strong>FirefoxOS SystemApp</strong> API documentation</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+          <div class="span4">
+              <h2><a href="index.html">Index</a></h2><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Modules</li><li><a href="module-ActivityWindowFactory.html">ActivityWindowFactory</a></li>
+<li><a href="module-AppWindowFactory.html">AppWindowFactory</a></li>
+<li><a href="module-AppWindowManager.html">AppWindowManager</a></li>
+<li><a href="module-HomescreenLauncher.html">HomescreenLauncher</a></li>
+<li><a href="module-LayoutManager.html">LayoutManager</a></li>
+<li><a href="module-OrientationManager.html">OrientationManager</a></li>
+<li><a href="module-WrapperFactory.html">WrapperFactory</a></li></ul></div><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Classes</li><li><a href="ActivityWindow.html"><i class="icon-shield" style="color: #0186d1"></i> ActivityWindow</a></li><li><a href="AppAuthenticationDialog.html"><i class="icon-shield" style="color: #0186d1"></i> AppAuthenticationDialog</a></li><li><a href="AppChrome.html"><i class="icon-shield" style="color: #0186d1"></i> AppChrome</a></li><li><a href="AppModalDialog.html"><i class="icon-shield" style="color: #0186d1"></i> AppModalDialog</a></li><li><a href="AppTransitionController.html"><i class="icon-shield" style="color: #0186d1"></i> AppTransitionController</a></li><li><a href="AppWindow.html"><i class="icon-shield" style="color: #0186d1"></i> AppWindow</a></li><li><a href="BrowserFrame.html"><i class="icon-shield" style="color: #0186d1"></i> BrowserFrame</a></li><li><a href="HomescreenWindow.html"><i class="icon-shield" style="color: #0186d1"></i> HomescreenWindow</a></li></ul></div><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Public Events</li><li><a href="ActivityWindow.html#event:activitybackground"><i class="icon-bell-alt" style="color: yellow"></i> activitybackground <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityclose"><i class="icon-bell-alt" style="color: yellow"></i> activityclose <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityclosing"><i class="icon-bell-alt" style="color: yellow"></i> activityclosing <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activitycreated"><i class="icon-bell-alt" style="color: yellow"></i> activitycreated <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityforeground"><i class="icon-bell-alt" style="color: yellow"></i> activityforeground <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityopen"><i class="icon-bell-alt" style="color: yellow"></i> activityopen <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityopening"><i class="icon-bell-alt" style="color: yellow"></i> activityopening <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityrendered"><i class="icon-bell-alt" style="color: yellow"></i> activityrendered <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityterminated"><i class="icon-bell-alt" style="color: yellow"></i> activityterminated <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activitywillrender"><i class="icon-bell-alt" style="color: yellow"></i> activitywillrender <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="AppWindow.html#event:appclose"><i class="icon-bell-alt" style="color: yellow"></i> appclose <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appclosing"><i class="icon-bell-alt" style="color: yellow"></i> appclosing <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appcreated"><i class="icon-bell-alt" style="color: yellow"></i> appcreated <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appdestroyed"><i class="icon-bell-alt" style="color: yellow"></i> appdestroyed <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appopen"><i class="icon-bell-alt" style="color: yellow"></i> appopen <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appopening"><i class="icon-bell-alt" style="color: yellow"></i> appopening <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:apprendered"><i class="icon-bell-alt" style="color: yellow"></i> apprendered <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:apprequestclose"><i class="icon-bell-alt" style="color: yellow"></i> apprequestclose <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:apprequestopen"><i class="icon-bell-alt" style="color: yellow"></i> apprequestopen <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appresize"><i class="icon-bell-alt" style="color: yellow"></i> appresize <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appterminated"><i class="icon-bell-alt" style="color: yellow"></i> appterminated <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appwilldestroy"><i class="icon-bell-alt" style="color: yellow"></i> appwilldestroy <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appwillrender"><i class="icon-bell-alt" style="color: yellow"></i> appwillrender <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenbackground"><i class="icon-bell-alt" style="color: yellow"></i> homescreenbackground <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenclose"><i class="icon-bell-alt" style="color: yellow"></i> homescreenclose <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenclosing"><i class="icon-bell-alt" style="color: yellow"></i> homescreenclosing <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreencreated"><i class="icon-bell-alt" style="color: yellow"></i> homescreencreated <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenforeground"><i class="icon-bell-alt" style="color: yellow"></i> homescreenforeground <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenopen"><i class="icon-bell-alt" style="color: yellow"></i> homescreenopen <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenopening"><i class="icon-bell-alt" style="color: yellow"></i> homescreenopening <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenrendered"><i class="icon-bell-alt" style="color: yellow"></i> homescreenrendered <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenterminated"><i class="icon-bell-alt" style="color: yellow"></i> homescreenterminated <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenwillrender"><i class="icon-bell-alt" style="color: yellow"></i> homescreenwillrender <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="module-LayoutManager.html#event:system-resize"><i class="icon-bell-alt" style="color: yellow"></i> system-resize <span class="label label-inverse pull-right">module:LayoutManager</span></a></li><li><a href="module-OrientationManager.html#event:reset-orientation"><i class="icon-bell-alt" style="color: yellow"></i> reset-orientation <span class="label label-inverse pull-right">module:OrientationManager</span></a></li></ul></div><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Private Events</li><li><a href="AppWindow.html#event:_swipein"><i class="icon-bell-alt" style="color: yellow"></i> _swipein <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:_swipeout"><i class="icon-bell-alt" style="color: yellow"></i> _swipeout <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:_withkeyboard"><i class="icon-bell-alt" style="color: yellow"></i> _withkeyboard <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:_withoutkeyboard"><i class="icon-bell-alt" style="color: yellow"></i> _withoutkeyboard <span class="label label-inverse pull-right">AppWindow</span></a></li></ul></div><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Mixins</li><li><a href="BrowserMixin.html"><i class="icon-beaker"></i> BrowserMixin</a></li></ul></div><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Global</li><li><a href="global.html#addEventListeners"><i class="icon-globe" style="color: black;"></i> addEventListeners</a></li><li><a href="global.html#Clock"><i class="icon-globe" style="color: black;"></i> Clock</a></li><li><a href="global.html#localizeElement"><i class="icon-globe" style="color: black;"></i> localizeElement</a></li><li><a href="global.html#LockScreen"><i class="icon-globe" style="color: black;"></i> LockScreen</a></li><li><a href="global.html#populateErrorMessage"><i class="icon-globe" style="color: black;"></i> populateErrorMessage</a></li><li><a href="global.html#start"><i class="icon-globe" style="color: black;"></i> start</a></li><li><a href="global.html#stop"><i class="icon-globe" style="color: black;"></i> stop</a></li><li><a href="global.html#SystemDialog"><i class="icon-globe" style="color: black;"></i> SystemDialog</a></li><li><a href="global.html#SystemScreen"><i class="icon-globe" style="color: black;"></i> SystemScreen</a></li><li><a href="global.html#timeoutID"><i class="icon-globe" style="color: black;"></i> timeoutID</a></li><li><a href="global.html#timerID"><i class="icon-globe" style="color: black;"></i> timerID</a></li></ul></div>
+          </div>
+
+          <div class="span8">
+              <h1 class="page-header">Source: homescreen_window.js</h1>
+              
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>(function(window) {
+  /**
+   * HomescreenWindow creates a instance of homescreen by give manifestURL.
+   *
+   * @class HomescreenWindow
+   * @param {String} manifestURL The manifestURL of the homescreen app.
+   */
+  var HomescreenWindow = function HomescreenWindow(manifestURL) {
+    this.instanceID = 'homescreen';
+    this.setBrowserConfig(manifestURL);
+    this.render();
+    this.publish('created');
+    return this;
+  };
+
+  /**
+   * Fired when the homescreen window is created.
+   * @event HomescreenWindow#homescreencreated
+   */
+  /**
+   * Fired when the homescreen window is removed.
+   * @event HomescreenWindow#homescreenterminated
+   */
+  /**
+   * Fired when the homescreen window is opening.
+   * @event HomescreenWindow#homescreenopening
+   */
+  /**
+   * Fired when the homescreen window is opened.
+   * @event HomescreenWindow#homescreenopen
+   */
+  /**
+   * Fired when the homescreen window is cloing.
+   * @event HomescreenWindow#homescreenclosing
+   */
+  /**
+   * Fired when the homescreen window is closed.
+   * @event HomescreenWindow#homescreenclose
+   */
+  /**
+   * Fired before the homescreen window is rendered.
+   * @event HomescreenWindow#homescreenwillrender
+   */
+  /**
+   * Fired when the homescreen window is rendered to the DOM tree.
+   * @event HomescreenWindow#homescreenrendered
+   */
+  /**
+   * Fired when the page visibility of the homescreen window is
+   * changed to foreground.
+   * @event HomescreenWindow#homescreenforeground
+   */
+  /**
+   * Fired when the page visibility of the homescreen window is
+   * changed to background.
+   * @event HomescreenWindow#homescreenbackground
+   */
+
+  HomescreenWindow.prototype.__proto__ = AppWindow.prototype;
+
+  HomescreenWindow.prototype._DEBUG = false;
+
+  HomescreenWindow.prototype.CLASS_NAME = 'HomescreenWindow';
+
+  HomescreenWindow.prototype.setBrowserConfig =
+    function hw_setBrowserConfig(manifestURL) {
+      var app = Applications.getByManifestURL(manifestURL);
+      this.origin = app.origin;
+      this.manifestURL = app.manifestURL;
+      this.url = app.origin + '/index.html#root';
+
+      this.browser_config =
+        new BrowserConfigHelper(this.origin, this.manifestURL);
+
+      // Necessary for b2gperf now.
+      this.name = this.browser_config.name;
+
+      this.manifest = this.browser_config.manifest;
+      // XXX: Remove this hardcode
+      this.browser_config.url = this.url;
+      this.browser_config.isHomescreen = true;
+      this.config = this.browser_config;
+      this.isHomescreen = true;
+    };
+
+  HomescreenWindow.registeredEvents =
+    ['_opening', 'mozbrowserclose', 'mozbrowsererror',
+      'mozbrowservisibilitychange', 'mozbrowserloadend'];
+
+  HomescreenWindow.subComponents = {
+    'transitionController': window.AppTransitionController,
+    'modalDialog': window.AppModalDialog,
+    'authDialog': window.AppAuthenticationDialog
+  };
+
+  HomescreenWindow.prototype.openAnimation = 'zoom-out';
+  HomescreenWindow.prototype.closeAnimation = 'zoom-in';
+
+  HomescreenWindow.prototype._handle__opening = function hw__handle__opening() {
+    this.ensure();
+  };
+
+  HomescreenWindow.prototype._handle_mozbrowserclose =
+    function hw__handle_mozbrowserclose(evt) {
+      evt.stopImmediatePropagation();
+      this.restart();
+    };
+
+  HomescreenWindow.prototype._handle_mozbrowsererror =
+    function hw__handle_mozbrowsererror(evt) {
+      if (evt.detail.type == 'fatal') {
+        evt.stopImmediatePropagation();
+        this.restart();
+      }
+    };
+
+  HomescreenWindow.prototype.restart = function hw_restart() {
+    // If the crashing app is the home screen app and it is the displaying app
+    // we will need to relaunch it right away.
+    // Alternatively, if home screen is not the displaying app,
+    // we will not relaunch it until the foreground app is closed.
+    // (to be dealt in setDisplayedApp(), not here)
+
+    // If we're displayed, restart immediately.
+    if (this.isActive()) {
+      this.kill();
+
+      // XXX workaround bug 810431.
+      // we need this here and not in other situations
+      // as it is expected that homescreen frame is available.
+      setTimeout(function() {
+        this.render();
+      }.bind(this));
+    } else {
+      // Otherwise wait until next opening request.
+      this.kill();
+    }
+  };
+
+  HomescreenWindow.prototype.kill = function hw_kill() {
+    this.containerElement.removeChild(this.element);
+    this.element = this.frame = this.iframe = null;
+    this.browser = null;
+    this.publish('terminated');
+  };
+
+  HomescreenWindow.prototype.view = function hw_view() {
+    return '&lt;div class="appWindow homescreen" id="homescreen">' +
+              '&lt;div class="fade-overlay">&lt;/div>' +
+           '&lt;/div>';
+  };
+
+  HomescreenWindow.prototype.eventPrefix = 'homescreen';
+
+  HomescreenWindow.prototype.toggle = function hw_toggle(visible) {
+    this.ensure();
+    if (this.browser.element)
+      this.setVisible(visible);
+  };
+
+  // Ensure the homescreen is loaded and return its frame.  Restarts
+  // the homescreen app if it was killed in the background.
+  // Note: this function would not invoke openWindow(homescreen),
+  // which should be handled in setDisplayedApp and in closeWindow()
+  HomescreenWindow.prototype.ensure = function hw_ensure(reset) {
+    if (!this.element) {
+      this.render();
+    } else if (reset) {
+      this.browser.element.src = this.browser_config.url + new Date();
+    }
+
+    return this.element;
+  };
+
+  window.HomescreenWindow = HomescreenWindow;
+}(this));
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+          </div>
+      </div>
+
+        <br clear="both">
+
+      <footer>
+        Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Mon Dec 02 2013 19:57:00 GMT+0800 (CST)
+        <br>
+      </footer>
+      <script> prettyPrint(); </script>
+    </div>
+  </body>
+</html>
