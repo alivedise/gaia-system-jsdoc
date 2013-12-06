@@ -25,110 +25,190 @@
     
     <section>
         <article>
-            <pre class="prettyprint source"><code>(function(window){
+            <pre class="prettyprint source"><code>(function(window) {
   /**
-   * HomescreenWindow is a special AppWindow.
+   * HomescreenWindow creates a instance of homescreen by give manifestURL.
    *
-   * It launches and manages the homescreen app.
-   * 
-   * It's a singleton. Only one HomescreenWindow instance running at one time.
+   * Flow chart:
+   * {% img http://i.imgur.com/vLA8YEN.png %}
    *
-   * @extends {AppWindow}
-   * @requires AppWindow
-   * @class  HomescreenWindow
+   * @class HomescreenWindow
+   * @param {String} manifestURL The manifestURL of the homescreen app.
    */
-  function HomescreenWindow() {
-    /**
-     * Make sure we're a singleton.
-     */
-    if (HomescreenWindow._instance)
-      return;
-
-    this._id = 0;
-    this.elements = {};
-    this.preInit();
-    HomescreenWindow._instance = this;
+  var HomescreenWindow = function HomescreenWindow(manifestURL) {
+    this.instanceID = 'homescreen';
+    this.setBrowserConfig(manifestURL);
+    this.render();
+    this.publish('created');
+    return this;
   };
 
-  HomescreenWindow.eventPredix = 'homescreen';
+  /**
+   * Fired when the homescreen window is created.
+   * @event HomescreenWindow#homescreencreated
+   */
+  /**
+   * Fired when the homescreen window is removed.
+   * @event HomescreenWindow#homescreenterminated
+   */
+  /**
+   * Fired when the homescreen window is opening.
+   * @event HomescreenWindow#homescreenopening
+   */
+  /**
+   * Fired when the homescreen window is opened.
+   * @event HomescreenWindow#homescreenopen
+   */
+  /**
+   * Fired when the homescreen window is cloing.
+   * @event HomescreenWindow#homescreenclosing
+   */
+  /**
+   * Fired when the homescreen window is closed.
+   * @event HomescreenWindow#homescreenclose
+   */
+  /**
+   * Fired before the homescreen window is rendered.
+   * @event HomescreenWindow#homescreenwillrender
+   */
+  /**
+   * Fired when the homescreen window is rendered to the DOM tree.
+   * @event HomescreenWindow#homescreenrendered
+   */
+  /**
+   * Fired when the page visibility of the homescreen window is
+   * changed to foreground.
+   * @event HomescreenWindow#homescreenforeground
+   */
+  /**
+   * Fired when the page visibility of the homescreen window is
+   * changed to background.
+   * @event HomescreenWindow#homescreenbackground
+   */
 
-  HomescreenWindow.prototype = {
-    _instance: null,
+  HomescreenWindow.prototype.__proto__ = AppWindow.prototype;
 
-    __proto__: AppWindow.prototype,
+  HomescreenWindow.prototype._DEBUG = false;
 
-    /**
-     * HomescreenWindow has specific opening/closing
-     * transitions, see |window.css| for implementation
-     * info.
-     * @type {String}
-     */
-    openTransition: 'zoom-in',
+  HomescreenWindow.prototype.CLASS_NAME = 'HomescreenWindow';
 
-    closeTransition: 'zoom-out',
+  /**
+   * Construct browser config object by manifestURL.
+   * @param {String} manifestURL The manifestURL of homescreen.
+   */
+  HomescreenWindow.prototype.setBrowserConfig =
+    function hw_setBrowserConfig(manifestURL) {
+      var app = Applications.getByManifestURL(manifestURL);
+      this.origin = app.origin;
+      this.manifestURL = app.manifestURL;
+      this.url = app.origin + '/index.html#root';
 
-    /**
-     * Ensure we're alive before going to homescreen.
-     * (HomescreenWindow.open()).
-     */
-    preopen: function hw_preopen() {
-      this.ensure();
-    },
+      this.browser_config =
+        new BrowserConfigHelper(this.origin, this.manifestURL);
 
-    /**
-     * Restart homescreen if the browser iframe
-     * doesn't exist.
-     */
-    ensure: function hw_ensure() {
-      if (!this._browser) {
-        this._browser = new BrowserFrame(this.config);
-        this.update();
+      // Necessary for b2gperf now.
+      this.name = this.browser_config.name;
+
+      this.manifest = this.browser_config.manifest;
+      // XXX: Remove this hardcode
+      this.browser_config.url = this.url;
+      this.browser_config.isHomescreen = true;
+      this.config = this.browser_config;
+      this.isHomescreen = true;
+    };
+
+  HomescreenWindow.registeredEvents =
+    ['_opening', 'mozbrowserclose', 'mozbrowsererror',
+      'mozbrowservisibilitychange', 'mozbrowserloadend'];
+
+  HomescreenWindow.subComponents = {
+    'transitionController': window.AppTransitionController,
+    'modalDialog': window.AppModalDialog,
+    'authDialog': window.AppAuthenticationDialog
+  };
+
+  HomescreenWindow.prototype.openAnimation = 'zoom-out';
+  HomescreenWindow.prototype.closeAnimation = 'zoom-in';
+
+  HomescreenWindow.prototype._handle__opening = function hw__handle__opening() {
+    this.ensure();
+  };
+
+  HomescreenWindow.prototype._handle_mozbrowserclose =
+    function hw__handle_mozbrowserclose(evt) {
+      evt.stopImmediatePropagation();
+      this.restart();
+    };
+
+  HomescreenWindow.prototype._handle_mozbrowsererror =
+    function hw__handle_mozbrowsererror(evt) {
+      if (evt.detail.type == 'fatal') {
+        evt.stopImmediatePropagation();
+        this.publish('crashed');
+        this.restart();
       }
-    },
+    };
 
-    update: function hw_update() {
-      this.element.appendChild(this._browser);
-      this.resize();
-    },
+  HomescreenWindow.prototype.restart = function hw_restart() {
+    // If the crashing app is the home screen app and it is the displaying app
+    // we will need to relaunch it right away.
+    // Alternatively, if home screen is not the displaying app,
+    // we will not relaunch it until the foreground app is closed.
+    // (to be dealt in setDisplayedApp(), not here)
 
-    goHome: function hw_goHome() {
-      this._browser.src = homescreenURL;
-      this.resize();
-    },
+    // If we're displayed, restart immediately.
+    if (this.isActive()) {
+      this.kill();
 
-    preInit: function hw_preInit() {
-      var lock = navigator.mozSettings.createLock();
-      var setting = lock.get('homescreen.manifestURL');
-      var self = this;
-      setting.onsuccess = function() {
-        var app =
-          Applications.getByManifestURL(this.result['homescreen.manifestURL']);
-
-        if (app) {
-          var homescreenManifestURL = app.manifestURL;
-          var homescreenURL = app.origin + '/index.html#root';
-          self.config = new BrowserConfig(homescreenURL, homescreenManifestURL);
-          self.config.isHomescreen = true;
-
-          self.render();
-          // Dispatch an event here for battery check.
-          self.publish('ready');
-        }
-      };
-    },
-
-    destroy: function hw_destroy() {
-      /**
-       * Override AppWindow.destroy().
-       * We should restart ourselves instead of
-       * being removed immediately when crashed.
-       */
-      this._super.destroy();
-      this.render();
+      // XXX workaround bug 810431.
+      // we need this here and not in other situations
+      // as it is expected that homescreen frame is available.
+      setTimeout(function() {
+        this.render();
+        this.open();
+      }.bind(this));
+    } else {
+      // Otherwise wait until next opening request.
+      this.kill();
     }
   };
+
+  HomescreenWindow.prototype.kill = function hw_kill() {
+    this.destroy();
+    this.publish('terminated');
+  };
+
+  HomescreenWindow.prototype.view = function hw_view() {
+    return '&lt;div class="appWindow homescreen" id="homescreen">' +
+              '&lt;div class="fade-overlay">&lt;/div>' +
+           '&lt;/div>';
+  };
+
+  HomescreenWindow.prototype.eventPrefix = 'homescreen';
+
+  HomescreenWindow.prototype.toggle = function hw_toggle(visible) {
+    this.ensure();
+    if (this.browser.element)
+      this.setVisible(visible);
+  };
+
+  // Ensure the homescreen is loaded and return its frame.  Restarts
+  // the homescreen app if it was killed in the background.
+  // Note: this function would not invoke openWindow(homescreen),
+  // which should be handled in setDisplayedApp and in closeWindow()
+  HomescreenWindow.prototype.ensure = function hw_ensure(reset) {
+    if (!this.element) {
+      this.render();
+    } else if (reset) {
+      this.browser.element.src = this.browser_config.url + new Date();
+    }
+
+    return this.element;
+  };
+
   window.HomescreenWindow = HomescreenWindow;
-})(this);</code></pre>
+}(this));
+</code></pre>
         </article>
     </section>
 
@@ -138,13 +218,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ActivityWindow.html">ActivityWindow</a></li><li><a href="AppWindow.html">AppWindow</a></li><li><a href="BrowserConfig.html">BrowserConfig</a></li><li><a href="BrowserFrame.html">BrowserFrame</a></li><li><a href="HomescreenWindow.html">HomescreenWindow</a></li></ul><h3>Events</h3><ul><li><a href="ActivityWindow.html#event:appcreated">appcreated</a></li><li><a href="ActivityWindow.html#event:appopen">appopen</a></li><li><a href="ActivityWindow.html#event:appterminated">appterminated</a></li><li><a href="ActivityWindow.html#event:appwillclose">appwillclose</a></li><li><a href="AppWindow.html#event:appcreated">appcreated</a></li><li><a href="AppWindow.html#event:appopen">appopen</a></li><li><a href="AppWindow.html#event:appterminated">appterminated</a></li><li><a href="AppWindow.html#event:appwillclose">appwillclose</a></li><li><a href="HomescreenWindow.html#event:appcreated">appcreated</a></li><li><a href="HomescreenWindow.html#event:appopen">appopen</a></li><li><a href="HomescreenWindow.html#event:appterminated">appterminated</a></li><li><a href="HomescreenWindow.html#event:appwillclose">appwillclose</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AnimatedIcon">AnimatedIcon</a></li><li><a href="global.html#Clock">Clock</a></li><li><a href="global.html#DeviceStorageWatcher">DeviceStorageWatcher</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#SystemDialog">SystemDialog</a></li><li><a href="global.html#SystemScreen">SystemScreen</a></li><li><a href="global.html#timeoutID">timeoutID</a></li><li><a href="global.html#timerID">timerID</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-ActivityWindowFactory.html">ActivityWindowFactory</a></li><li><a href="module-AppWindowFactory.html">AppWindowFactory</a></li><li><a href="module-AppWindowManager.html">AppWindowManager</a></li><li><a href="module-HomescreenLauncher.html">HomescreenLauncher</a></li><li><a href="module-LayoutManager.html">LayoutManager</a></li><li><a href="module-OrientationManager.html">OrientationManager</a></li><li><a href="module-System.html">System</a></li><li><a href="module-WrapperFactory.html">WrapperFactory</a></li></ul><h3>Classes</h3><ul><li><a href="ActivityWindow.html">ActivityWindow</a></li><li><a href="AppAuthenticationDialog.html">AppAuthenticationDialog</a></li><li><a href="AppChrome.html">AppChrome</a></li><li><a href="AppModalDialog.html">AppModalDialog</a></li><li><a href="AppTransitionController.html">AppTransitionController</a></li><li><a href="AppWindow.html">AppWindow</a></li><li><a href="BaseUI.html">BaseUI</a></li><li><a href="BrowserFrame.html">BrowserFrame</a></li><li><a href="Clock.html">Clock</a></li><li><a href="HomescreenWindow.html">HomescreenWindow</a></li></ul><h3>Events</h3><ul><li><a href="ActivityWindow.html#event:activitybackground">activitybackground</a></li><li><a href="ActivityWindow.html#event:activityclose">activityclose</a></li><li><a href="ActivityWindow.html#event:activityclosing">activityclosing</a></li><li><a href="ActivityWindow.html#event:activitycreated">activitycreated</a></li><li><a href="ActivityWindow.html#event:activityforeground">activityforeground</a></li><li><a href="ActivityWindow.html#event:activityopen">activityopen</a></li><li><a href="ActivityWindow.html#event:activityopening">activityopening</a></li><li><a href="ActivityWindow.html#event:activityrendered">activityrendered</a></li><li><a href="ActivityWindow.html#event:activityterminated">activityterminated</a></li><li><a href="ActivityWindow.html#event:activitywillrender">activitywillrender</a></li><li><a href="AppWindow.html#event:appclose">appclose</a></li><li><a href="AppWindow.html#event:appclosing">appclosing</a></li><li><a href="AppWindow.html#event:appcreated">appcreated</a></li><li><a href="AppWindow.html#event:appdestroyed">appdestroyed</a></li><li><a href="AppWindow.html#event:appopen">appopen</a></li><li><a href="AppWindow.html#event:appopening">appopening</a></li><li><a href="AppWindow.html#event:apprendered">apprendered</a></li><li><a href="AppWindow.html#event:apprequestclose">apprequestclose</a></li><li><a href="AppWindow.html#event:apprequestopen">apprequestopen</a></li><li><a href="AppWindow.html#event:appresize">appresize</a></li><li><a href="AppWindow.html#event:appterminated">appterminated</a></li><li><a href="AppWindow.html#event:appwilldestroy">appwilldestroy</a></li><li><a href="AppWindow.html#event:appwillrender">appwillrender</a></li><li><a href="AppWindow.html#event:_swipein">_swipein</a></li><li><a href="AppWindow.html#event:_swipeout">_swipeout</a></li><li><a href="AppWindow.html#event:_withkeyboard">_withkeyboard</a></li><li><a href="AppWindow.html#event:_withoutkeyboard">_withoutkeyboard</a></li><li><a href="HomescreenWindow.html#event:homescreenbackground">homescreenbackground</a></li><li><a href="HomescreenWindow.html#event:homescreenclose">homescreenclose</a></li><li><a href="HomescreenWindow.html#event:homescreenclosing">homescreenclosing</a></li><li><a href="HomescreenWindow.html#event:homescreencreated">homescreencreated</a></li><li><a href="HomescreenWindow.html#event:homescreenforeground">homescreenforeground</a></li><li><a href="HomescreenWindow.html#event:homescreenopen">homescreenopen</a></li><li><a href="HomescreenWindow.html#event:homescreenopening">homescreenopening</a></li><li><a href="HomescreenWindow.html#event:homescreenrendered">homescreenrendered</a></li><li><a href="HomescreenWindow.html#event:homescreenterminated">homescreenterminated</a></li><li><a href="HomescreenWindow.html#event:homescreenwillrender">homescreenwillrender</a></li><li><a href="module-LayoutManager.html#event:system-resize">system-resize</a></li><li><a href="module-OrientationManager.html#event:reset-orientation">reset-orientation</a></li></ul><h3>Mixins</h3><ul><li><a href="BrowserMixin.html">BrowserMixin</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DatePicker">DatePicker</a></li><li><a href="global.html#LockScreen">LockScreen</a></li><li><a href="global.html#SpinDatePicker">SpinDatePicker</a></li><li><a href="global.html#SystemDialog">SystemDialog</a></li><li><a href="global.html#SystemScreen">SystemScreen</a></li><li><a href="global.html#ValuePicker">ValuePicker</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jun 23 2013 01:49:03 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Fri Dec 06 2013 14:42:54 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

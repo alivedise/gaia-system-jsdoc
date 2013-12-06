@@ -25,158 +25,295 @@
     
     <section>
         <article>
-            <pre class="prettyprint source"><code>(function(window) {
+            <pre class="prettyprint source"><code>'use strict';
+
+(function(window) {
+  var _id = 0;
+
   /**
-   * ActivityWindow is exactly an specific app window but contains
-   * a mozbrowser iframe runnign as an inline activity.
-   * 
-   * An ActivityWindow instance is created, managed by another AppWindow instance.
+   * ActivityWindow is the wrapper for the inline activity instances.
+   * For window disposition activity, they are done in AppWindow.
    *
-   * That means an ActivityWindow instance could also opens another ActivityWindow instance.
+   * @example
+   * var app = new AppWindow({
+   *   url: 'http://uitest.gaiamobile.org:8080/index.html',
+   *   manifestURL: 'http://uitest.gaiamobile.org:8080/manifest.webapp'
+   * });
+   * var activity = new ActivityWindow({
+   *   url: 'http://gallery.gaiamobile.org:8080/pick.html',
+   *   manifestURL: 'http://gallery.gaiamobile.org:8080/manifest.webapp'
+   * }, app);
    *
-   * @param {AppWindow} app    The ActivityWindow opener. Will be stored at |this.parentWindow|.
-   * @param {Object} config The configuration of the inline activity window.
-   *
-   * @extends {AppWindow}
-   * @requires AppWindow
-   * @class  ActivityWindow
+   * @class ActivityWindow
+   * @param {Object} config The configuration object of this activity.
+   * @param {AppWindow|ActivityWindow} caller The caller of this activity.
    */
-  window.ActivityWindow = function ActivityWindow(app, config) {
+  /**
+   * Fired when the activity window is created.
+   * @event ActivityWindow#activitycreated
+   */
+  /**
+   * Fired when the activity window is removed.
+   * @event ActivityWindow#activityterminated
+   */
+  /**
+   * Fired when the activity window is opening.
+   * @event ActivityWindow#activityopening
+   */
+  /**
+   * Fired when the activity window is opened.
+   * @event ActivityWindow#activityopen
+   */
+  /**
+   * Fired when the activity window is cloing.
+   * @event ActivityWindow#activityclosing
+   */
+  /**
+   * Fired when the activity window is closed.
+   * @event ActivityWindow#activityclose
+   */
+  /**
+   * Fired before the activity window is rendered.
+   * @event ActivityWindow#activitywillrender
+   */
+  /**
+   * Fired when the activity window is rendered to the DOM tree.
+   * @event ActivityWindow#activityrendered
+   */
+  /**
+   * Fired when the page visibility of the activity window is
+   * changed to foreground.
+   * @event ActivityWindow#activityforeground
+   */
+  /**
+   * Fired when the page visibility of the activity window is
+   * changed to background.
+   * @event ActivityWindow#activitybackground
+   */
+  var ActivityWindow = function ActivityWindow(config, caller) {
     this.config = config;
-
-    /**
-     * Specify we're belong to which appWindow instance.
-     * @type {AppWindow}
-     */
-    this.parentWindow = app;
-
-    var evt = document.createEvent('CustomEvent');
-    evt.initCustomEvent('activitywillopen', true, true, { origin: config.origin });
-
-    // Create the &lt;iframe mozbrowser mozapp> that hosts the app
-    var frame = createFrame(null, origin, url, name, manifest, manifestURL);
-    var iframe = frame.firstChild;
-    frame.classList.add('inlineActivity');
-    iframe.dataset.frameType = 'inline-activity';
-
-    iframe.setAttribute('expecting-system-message',
-                        'expecting-system-message');
-    maybeSetFrameIsCritical(iframe, origin);
-
-    // Give a name to the frame for differentiating between main frame and
-    // inline frame. With the name we can get frames of the same app using the
-    // window.open method.
-    iframe.name = 'inline';
-    iframe.dataset.start = Date.now();
-
-    this.resize();
-
-    frame.addEventListener('mozbrowserloadend', function activityloaded(e) {
-      e.target.removeEventListener(e.type, activityloaded, true);
-
-      var evt = document.createEvent('CustomEvent');
-      evt.initCustomEvent('activityloadtime', true, false, {
-        time: parseInt(Date.now() - iframe.dataset.start),
-        type: 'c', // Activity is always cold booted now.
-        src: iframe.src
-      });
-      iframe.dispatchEvent(evt);
-    }, true);
-
-    // Add the iframe to the document
-    windows.appendChild(frame);
-
-    // Open the frame, first, store the reference
-    openFrame = frame;
-
-    setVisibilityForInlineActivity(true);
-
-    setVisibilityForCurrentApp(false);
-
-    if ('orientation' in manifest) {
-      frame.dataset.orientation = manifest.orientation;
-      setOrientationForInlineActivity(frame);
+    for (var key in config) {
+      this[key] = config[key];
     }
 
-    setFrameBackground(openFrame, function gotBackground() {
-      // Start the transition when this async/sync callback is called.
-      openFrame.classList.add('active');
-      if (inlineActivityFrames.length == 1)
-        activityCallerOrigin = displayedApp;
-      if ('wrapper' in runningApps[displayedApp].frame.dataset) {
-        wrapperFooter.classList.remove('visible');
-        wrapperHeader.classList.remove('visible');
-      }
-    });
+    if (caller) {
+      caller.setActivityCallee(this);
+      this.activityCaller = caller;
+      // TODO: Put us inside the caller element.
+    }
 
-    this.config.iframe = this.iframe = iframe;
-    this.config.frame = this.frame = frame;
+    this.render();
+    this.publish('created');
+    // We'll open ourselves automatically,
+    // but maybe we should do requestOpen and let manager open us.
+    this.open();
   };
 
-  /**
-   * ActivityWindow is inherited from appWindow;
-   */
   ActivityWindow.prototype.__proto__ = AppWindow.prototype;
 
-  /**
-   * The super class reference.
-   * @private
-   * @type {Function}
-   */
-  ActivityWindow.prototype._super = AppWindow;
+  ActivityWindow.prototype.eventPrefix = 'activity';
 
-  /**
-   * Class name is used to add a type-specific class on the element.
-   * We also use the CLASSNAME + _id to specify &lt;code>element.id&lt;/code>.
-   * @static
-   * @type {String}
-   */
-  ActivityWindow.prototype.CLASSNAME = 'inlineActivity';
+  ActivityWindow.prototype.CLASS_NAME = 'ActivityWindow';
 
-  ActivityWindow.prototype.resize = function actw_resize(width, height) {
-    // Borrow the window size from parent window
-    // Copy the dimension of the currently displayed app
-    if (!this.parentWindow)
-      return;
+  ActivityWindow.prototype._DEBUG = false;
 
-    // Traverse the inline activity chain to resize the latest one.
-    if (this.inlineActivityWindow) {
-      this.inlineActivityWindow.resize(width, height);
-    } else {
-      this.element.style.width = width;
-      this.element.style.height = height;
-    }
-  }
+  ActivityWindow.prototype.openAnimation = 'slideleft';
+  ActivityWindow.prototype.closeAnimation = 'slideright';
 
-  /**
-   * Event prefix presents the object type
-   * when publishing an event from the element.
-   * @type {String}
-   */
-  ActivityWindow.eventPrefix = 'activity';
+  // Current policy is to copy the caller's orientation.
+  // So we just overwrite resize method.
+  ActivityWindow.prototype.setOrientation =
+    function acw_setOrientation(noCapture) {
+      if (this.isActive()) {
+        var manifest = this.activityCaller ?
+                        this.activityCaller.manifest :
+                        (this.manifest || this.config.manifest);
 
-  /**
-   * Destroy the window and release the resource.
-   */
-  ActivityWindow.prototype.kill = function actw_kill() {
-    this.parentWindow = null;
-    // If frame is transitioning we should remove the reference
-    // ?
-    // 
-    this.publish('willclose');
+        var orientation = manifest ? (manifest.orientation ||
+                          OrientationManager.globalOrientation) :
+                          OrientationManager.globalOrientation;
+        if (orientation) {
+          var rv = false;
+          if ('lockOrientation' in screen) {
+            rv = screen.lockOrientation(orientation);
+          } else if ('mozLockOrientation' in screen) {
+            rv = screen.mozLockOrientation(orientation);
+          }
+          if (rv === false) {
+            console.warn('screen.mozLockOrientation() returned false for',
+                         this.origin, 'orientation', orientation);
+          }
+        } else {  // If no orientation was requested, then let it rotate
+          if ('unlockOrientation' in screen) {
+            screen.unlockOrientation();
+          } else if ('mozUnlockOrientation' in screen) {
+            screen.mozUnlockOrientation();
+          }
+        }
+      }
 
-    // If frame is never set visible, we can remove the frame directly
-    // without closing transition
-    if (!this.element.classList.contains('active')) {
-      this.element.parentNode.removeChild(this.element);
-      return;
-    }
-    // Take keyboard focus away from the closing window
-    this.element.firstChild.blur();
-    // Remove the active class and start the closing transition
-    this.element.classList.remove('active');
+      if (!noCapture &amp;&amp; this.activityCallee &amp;&amp;
+          this.activityCallee instanceof ActivityWindow) {
+        this.activityCallee.setOrientation(noCapture);
+      }
+    };
+
+  ActivityWindow.prototype.view = function acw_view() {
+    this.instanceID = _id;
+    return '&lt;div class="appWindow activityWindow inline-activity' +
+            '" id="activity-window-' + _id++ + '">' +
+            '&lt;div class="screenshot-overlay">&lt;/div>' +
+            '&lt;div class="fade-overlay">&lt;/div>' +
+            '&lt;/div>';
   };
-}(this));</code></pre>
+
+  ActivityWindow.subComponents = {
+    'transitionController': window.AppTransitionController,
+    'modalDialog': window.AppModalDialog,
+    'authDialog': window.AppAuthenticationDialog
+  };
+
+  ActivityWindow.registeredEvents =
+    ['mozbrowserclose', 'mozbrowsererror', 'mozbrowservisibilitychange',
+      'mozbrowserloadend', 'mozbrowseractivitydone', 'mozbrowserloadstart',
+      '_localized', '_opened', '_closing'];
+
+  ActivityWindow.prototype._handle__closing =
+    function acw__handle__closing() {
+      this.restoreCaller();
+    };
+
+  ActivityWindow.prototype._handle_mozbrowseractivitydone =
+    function aw__handle_mozbrowseractivitydone() {
+      this.kill();
+    };
+
+  /**
+   * Kill ActivityWindow. We overwrite the default behavior of
+   * AppWindow.kill here.
+   */
+  ActivityWindow.prototype.kill = function acw_kill(evt) {
+    if (this._killed)
+      return;
+    this._killed = true;
+    if (evt &amp;&amp; 'stopPropagation' in evt) {
+      evt.stopPropagation();
+    }
+    if (this.isActive()) {
+      var self = this;
+      this.element.addEventListener('_closed', function onClose() {
+        self.element.addEventListener('_closed', onClose);
+        self.publish('terminated');
+        self.forceDebug('xxxxxx');
+        // If caller is an instance of appWindow,
+        // tell AppWindowManager to open it.
+        // XXX: Call this.activityCaller.open() if open logic is done.
+        if (self.activityCallee) {
+          self.activityCallee.kill();
+        }
+        if (self.activityCaller instanceof AppWindow) {
+          // If we're killed by event handler, display the caller.
+          if (evt) {
+            self.activityCaller.requestOpen();
+          }
+        } else if (self.activityCaller instanceof ActivityWindow) {
+          if (evt) {
+            self.activityCaller.open();
+          }
+        } else {
+          console.warn('unknown window type of activity caller.');
+        }
+        self.element.parentNode.removeChild(self.element);
+      });
+      this.close();
+    } else {
+      this.publish('terminated');
+      if (this.activityCallee) {
+        this.activityCallee.kill();
+      }
+      this.element.parentNode.removeChild(this.element);
+    }
+    this.debug('killed by ', evt ? evt.type : 'direct function call.');
+    this.activityCaller.unsetActivityCallee();
+  };
+
+  ActivityWindow.prototype.render = function acw_render() {
+    this.publish('willrender');
+    this.containerElement.insertAdjacentHTML('beforeend', this.view());
+    // TODO: Use BrowserConfigHelper.
+    this.browser_config = {
+      origin: this.origin,
+      url: this.url,
+      name: this.name,
+      manifest: this.manifest,
+      manifestURL: this.manifestURL,
+      window_name: 'inline' + this.instanceID,
+      oop: true
+    };
+    this.browser = new BrowserFrame(this.browser_config);
+    this.element =
+      document.getElementById('activity-window-' + this.instanceID);
+    this.element.insertBefore(this.browser.element, this.element.childNodes[0]);
+    this.frame = this.element;
+    this.iframe = this.browser.element;
+    this.screenshotOverlay = this.element.querySelector('.screenshot-overlay');
+    this.fadeOverlay = this.element.querySelector('.fade-overlay');
+
+    this._registerEvents();
+    this.installSubComponents();
+    this.publish('rendered');
+  };
+
+  /**
+   * ActivityWindow's default container is '#windows'.
+   * However, we could dynamically change this in layout manager
+   * after it recieves the activitywillrender event.
+   */
+  ActivityWindow.prototype.containerElement =
+    document.getElementById('windows');
+
+  ActivityWindow.prototype.restoreCaller = function restoreCaller() {
+    var app = this.activityCaller;
+    // Do nothing if app is not active.
+    if (!app || !app.isActive() || app._killed)
+      return;
+
+    // Do not bubble the orientation lock this time.
+    app.setOrientation(true);
+    if (app instanceof AppWindow) {
+      // XXX: Refine this in AttentionWindow
+      if (!AttentionScreen.isFullyVisible()) {
+        app.setVisible(true);
+      }
+    } else if (app instanceof ActivityWindow) {
+      // XXX: Refine this in AttentionWindow
+      if (!AttentionScreen.isFullyVisible()) {
+        app.setVisible(true);
+      }
+    }
+  };
+
+  ActivityWindow.prototype._handle__opened =
+    function acw__handle__opened() {
+      var app = this.activityCaller;
+      // Set page visibility of focused app to false
+      // once inline activity frame's transition is ended.
+      // XXX: We have trouble to make all inline activity
+      // openers being sent to background now,
+      // because of OOM killer may kill them accidently.
+      // See https://bugzilla.mozilla.org/show_bug.cgi?id=914412,
+      // and https://bugzilla.mozilla.org/show_bug.cgi?id=822325.
+      // So we only set browser app(in-process)'s page visibility
+      // to false now to resolve 914412.
+      if (app &amp;&amp; app instanceof AppWindow &amp;&amp; !app.isOOP()) {
+        app.setVisible(false, true);
+      }
+    };
+
+  window.ActivityWindow = ActivityWindow;
+
+}(this));
+</code></pre>
         </article>
     </section>
 
@@ -186,13 +323,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ActivityWindow.html">ActivityWindow</a></li><li><a href="AppWindow.html">AppWindow</a></li><li><a href="BrowserConfig.html">BrowserConfig</a></li><li><a href="BrowserFrame.html">BrowserFrame</a></li><li><a href="HomescreenWindow.html">HomescreenWindow</a></li></ul><h3>Events</h3><ul><li><a href="ActivityWindow.html#event:appcreated">appcreated</a></li><li><a href="ActivityWindow.html#event:appopen">appopen</a></li><li><a href="ActivityWindow.html#event:appterminated">appterminated</a></li><li><a href="ActivityWindow.html#event:appwillclose">appwillclose</a></li><li><a href="AppWindow.html#event:appcreated">appcreated</a></li><li><a href="AppWindow.html#event:appopen">appopen</a></li><li><a href="AppWindow.html#event:appterminated">appterminated</a></li><li><a href="AppWindow.html#event:appwillclose">appwillclose</a></li><li><a href="HomescreenWindow.html#event:appcreated">appcreated</a></li><li><a href="HomescreenWindow.html#event:appopen">appopen</a></li><li><a href="HomescreenWindow.html#event:appterminated">appterminated</a></li><li><a href="HomescreenWindow.html#event:appwillclose">appwillclose</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AnimatedIcon">AnimatedIcon</a></li><li><a href="global.html#Clock">Clock</a></li><li><a href="global.html#DeviceStorageWatcher">DeviceStorageWatcher</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#SystemDialog">SystemDialog</a></li><li><a href="global.html#SystemScreen">SystemScreen</a></li><li><a href="global.html#timeoutID">timeoutID</a></li><li><a href="global.html#timerID">timerID</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-ActivityWindowFactory.html">ActivityWindowFactory</a></li><li><a href="module-AppWindowFactory.html">AppWindowFactory</a></li><li><a href="module-AppWindowManager.html">AppWindowManager</a></li><li><a href="module-HomescreenLauncher.html">HomescreenLauncher</a></li><li><a href="module-LayoutManager.html">LayoutManager</a></li><li><a href="module-OrientationManager.html">OrientationManager</a></li><li><a href="module-System.html">System</a></li><li><a href="module-WrapperFactory.html">WrapperFactory</a></li></ul><h3>Classes</h3><ul><li><a href="ActivityWindow.html">ActivityWindow</a></li><li><a href="AppAuthenticationDialog.html">AppAuthenticationDialog</a></li><li><a href="AppChrome.html">AppChrome</a></li><li><a href="AppModalDialog.html">AppModalDialog</a></li><li><a href="AppTransitionController.html">AppTransitionController</a></li><li><a href="AppWindow.html">AppWindow</a></li><li><a href="BaseUI.html">BaseUI</a></li><li><a href="BrowserFrame.html">BrowserFrame</a></li><li><a href="Clock.html">Clock</a></li><li><a href="HomescreenWindow.html">HomescreenWindow</a></li></ul><h3>Events</h3><ul><li><a href="ActivityWindow.html#event:activitybackground">activitybackground</a></li><li><a href="ActivityWindow.html#event:activityclose">activityclose</a></li><li><a href="ActivityWindow.html#event:activityclosing">activityclosing</a></li><li><a href="ActivityWindow.html#event:activitycreated">activitycreated</a></li><li><a href="ActivityWindow.html#event:activityforeground">activityforeground</a></li><li><a href="ActivityWindow.html#event:activityopen">activityopen</a></li><li><a href="ActivityWindow.html#event:activityopening">activityopening</a></li><li><a href="ActivityWindow.html#event:activityrendered">activityrendered</a></li><li><a href="ActivityWindow.html#event:activityterminated">activityterminated</a></li><li><a href="ActivityWindow.html#event:activitywillrender">activitywillrender</a></li><li><a href="AppWindow.html#event:appclose">appclose</a></li><li><a href="AppWindow.html#event:appclosing">appclosing</a></li><li><a href="AppWindow.html#event:appcreated">appcreated</a></li><li><a href="AppWindow.html#event:appdestroyed">appdestroyed</a></li><li><a href="AppWindow.html#event:appopen">appopen</a></li><li><a href="AppWindow.html#event:appopening">appopening</a></li><li><a href="AppWindow.html#event:apprendered">apprendered</a></li><li><a href="AppWindow.html#event:apprequestclose">apprequestclose</a></li><li><a href="AppWindow.html#event:apprequestopen">apprequestopen</a></li><li><a href="AppWindow.html#event:appresize">appresize</a></li><li><a href="AppWindow.html#event:appterminated">appterminated</a></li><li><a href="AppWindow.html#event:appwilldestroy">appwilldestroy</a></li><li><a href="AppWindow.html#event:appwillrender">appwillrender</a></li><li><a href="AppWindow.html#event:_swipein">_swipein</a></li><li><a href="AppWindow.html#event:_swipeout">_swipeout</a></li><li><a href="AppWindow.html#event:_withkeyboard">_withkeyboard</a></li><li><a href="AppWindow.html#event:_withoutkeyboard">_withoutkeyboard</a></li><li><a href="HomescreenWindow.html#event:homescreenbackground">homescreenbackground</a></li><li><a href="HomescreenWindow.html#event:homescreenclose">homescreenclose</a></li><li><a href="HomescreenWindow.html#event:homescreenclosing">homescreenclosing</a></li><li><a href="HomescreenWindow.html#event:homescreencreated">homescreencreated</a></li><li><a href="HomescreenWindow.html#event:homescreenforeground">homescreenforeground</a></li><li><a href="HomescreenWindow.html#event:homescreenopen">homescreenopen</a></li><li><a href="HomescreenWindow.html#event:homescreenopening">homescreenopening</a></li><li><a href="HomescreenWindow.html#event:homescreenrendered">homescreenrendered</a></li><li><a href="HomescreenWindow.html#event:homescreenterminated">homescreenterminated</a></li><li><a href="HomescreenWindow.html#event:homescreenwillrender">homescreenwillrender</a></li><li><a href="module-LayoutManager.html#event:system-resize">system-resize</a></li><li><a href="module-OrientationManager.html#event:reset-orientation">reset-orientation</a></li></ul><h3>Mixins</h3><ul><li><a href="BrowserMixin.html">BrowserMixin</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DatePicker">DatePicker</a></li><li><a href="global.html#LockScreen">LockScreen</a></li><li><a href="global.html#SpinDatePicker">SpinDatePicker</a></li><li><a href="global.html#SystemDialog">SystemDialog</a></li><li><a href="global.html#SystemScreen">SystemScreen</a></li><li><a href="global.html#ValuePicker">ValuePicker</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jun 23 2013 01:49:03 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Fri Dec 06 2013 14:42:54 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -54,7 +54,6 @@ var SimPinDialog = {
   errorMsgBody: document.getElementById('messageBody'),
 
   mobileConnection: null,
-  icc: null,
 
   lockType: 'pin',
   action: 'unlock',
@@ -96,17 +95,15 @@ var SimPinDialog = {
   handleCardState: function spl_handleCardState() {
     var _ = navigator.mozL10n.get;
 
-    var cardState = this.mobileConnection.cardState;
+    var cardState = IccHelper.cardState;
     var lockType = this.lockTypeMap[cardState];
-    var retryCount = this.mobileConnection.retryCount;
-
-    if (!retryCount) {
-      this.triesLeftMsg.hidden = true;
-    } else {
-      var l10nArgs = { n: retryCount };
-      this.triesLeftMsg.textContent = _('inputCodeRetriesLeft', l10nArgs);
-      this.triesLeftMsg.hidden = false;
-    }
+    IccHelper.getCardLockRetryCount(lockType, (function(retryCount) {
+      if (retryCount) {
+        var l10nArgs = { n: retryCount };
+        this.triesLeftMsg.textContent = _('inputCodeRetriesLeft', l10nArgs);
+        this.triesLeftMsg.hidden = false;
+      }
+    }).bind(this));
 
     switch (lockType) {
       case 'pin':
@@ -212,8 +209,11 @@ var SimPinDialog = {
   },
 
   unlockCardLock: function spl_unlockCardLock(options) {
-    var req = this.icc.unlockCardLock(options);
+    var req = IccHelper.unlockCardLock(options);
     req.onsuccess = this.close.bind(this, 'success');
+    req.onerror = (function spl_unlockCardLockError() {
+      this.handleError(req.error);
+    }).bind(this);
   },
 
   enableLock: function spl_enableLock() {
@@ -248,7 +248,7 @@ var SimPinDialog = {
   },
 
   setCardLock: function spl_setCardLock(options) {
-    var req = this.icc.setCardLock(options);
+    var req = IccHelper.setCardLock(options);
     req.onsuccess = this.close.bind(this, 'success');
   },
   inputFieldControl: function spl_inputField(isPin, isPuk, isXck, isNewPin) {
@@ -295,10 +295,19 @@ var SimPinDialog = {
     this.xckInput.value = '';
     this.xckInput.blur();
     this.newPinInput.value = '';
+    this.newPinInput.blur();
     this.confirmPinInput.value = '';
+    this.confirmPinInput.blur();
   },
 
   onclose: null,
+
+  _visible: false,
+
+  get visible() {
+    return this._visible;
+  },
+
   /**
    * Show the SIM pin dialog
    * @param {String}   action  Name of the action to execute,
@@ -314,6 +323,7 @@ var SimPinDialog = {
     UtilityTray.hide(true);
 
     this.systemDialog.show();
+    this._visible = true;
     this.action = action;
     this.lockType = 'pin';
     switch (action) {
@@ -330,12 +340,13 @@ var SimPinDialog = {
         break;
     }
 
-    if (onclose && typeof onclose === 'function')
+    if (onclose &amp;&amp; typeof onclose === 'function')
       this.onclose = onclose;
   },
 
   close: function spl_close(reason) {
     this.systemDialog.hide(reason);
+    this._visible = false;
   },
 
   skip: function spl_skip() {
@@ -348,16 +359,17 @@ var SimPinDialog = {
                                        onHide: this.onHide.bind(this)
                                      });
 
-    this.mobileConnection = window.navigator.mozMobileConnection;
+    // XXX: check bug-926169
+    // this is used to keep all tests passing while introducing multi-sim APIs
+    this.mobileConnection = window.navigator.mozMobileConnection ||
+      window.navigator.mozMobileConnections &amp;&amp;
+        window.navigator.mozMobileConnections[0];
+
     if (!this.mobileConnection)
       return;
 
-    this.icc = window.navigator.mozIccManager;
-    if (!this.icc)
+    if (!IccHelper)
       return;
-
-    this.icc.addEventListener('icccardlockerror',
-      this.handleError.bind(this));
 
     this.dialogDone.onclick = this.verify.bind(this);
     this.dialogClose.onclick = this.skip.bind(this);
@@ -381,13 +393,13 @@ SimPinDialog.init();
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ActivityWindow.html">ActivityWindow</a></li><li><a href="AppWindow.html">AppWindow</a></li><li><a href="BrowserConfig.html">BrowserConfig</a></li><li><a href="BrowserFrame.html">BrowserFrame</a></li><li><a href="HomescreenWindow.html">HomescreenWindow</a></li></ul><h3>Events</h3><ul><li><a href="ActivityWindow.html#event:appcreated">appcreated</a></li><li><a href="ActivityWindow.html#event:appopen">appopen</a></li><li><a href="ActivityWindow.html#event:appterminated">appterminated</a></li><li><a href="ActivityWindow.html#event:appwillclose">appwillclose</a></li><li><a href="AppWindow.html#event:appcreated">appcreated</a></li><li><a href="AppWindow.html#event:appopen">appopen</a></li><li><a href="AppWindow.html#event:appterminated">appterminated</a></li><li><a href="AppWindow.html#event:appwillclose">appwillclose</a></li><li><a href="HomescreenWindow.html#event:appcreated">appcreated</a></li><li><a href="HomescreenWindow.html#event:appopen">appopen</a></li><li><a href="HomescreenWindow.html#event:appterminated">appterminated</a></li><li><a href="HomescreenWindow.html#event:appwillclose">appwillclose</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AnimatedIcon">AnimatedIcon</a></li><li><a href="global.html#Clock">Clock</a></li><li><a href="global.html#DeviceStorageWatcher">DeviceStorageWatcher</a></li><li><a href="global.html#start">start</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#SystemDialog">SystemDialog</a></li><li><a href="global.html#SystemScreen">SystemScreen</a></li><li><a href="global.html#timeoutID">timeoutID</a></li><li><a href="global.html#timerID">timerID</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-ActivityWindowFactory.html">ActivityWindowFactory</a></li><li><a href="module-AppWindowFactory.html">AppWindowFactory</a></li><li><a href="module-AppWindowManager.html">AppWindowManager</a></li><li><a href="module-HomescreenLauncher.html">HomescreenLauncher</a></li><li><a href="module-LayoutManager.html">LayoutManager</a></li><li><a href="module-OrientationManager.html">OrientationManager</a></li><li><a href="module-System.html">System</a></li><li><a href="module-WrapperFactory.html">WrapperFactory</a></li></ul><h3>Classes</h3><ul><li><a href="ActivityWindow.html">ActivityWindow</a></li><li><a href="AppAuthenticationDialog.html">AppAuthenticationDialog</a></li><li><a href="AppChrome.html">AppChrome</a></li><li><a href="AppModalDialog.html">AppModalDialog</a></li><li><a href="AppTransitionController.html">AppTransitionController</a></li><li><a href="AppWindow.html">AppWindow</a></li><li><a href="BaseUI.html">BaseUI</a></li><li><a href="BrowserFrame.html">BrowserFrame</a></li><li><a href="Clock.html">Clock</a></li><li><a href="HomescreenWindow.html">HomescreenWindow</a></li></ul><h3>Events</h3><ul><li><a href="ActivityWindow.html#event:activitybackground">activitybackground</a></li><li><a href="ActivityWindow.html#event:activityclose">activityclose</a></li><li><a href="ActivityWindow.html#event:activityclosing">activityclosing</a></li><li><a href="ActivityWindow.html#event:activitycreated">activitycreated</a></li><li><a href="ActivityWindow.html#event:activityforeground">activityforeground</a></li><li><a href="ActivityWindow.html#event:activityopen">activityopen</a></li><li><a href="ActivityWindow.html#event:activityopening">activityopening</a></li><li><a href="ActivityWindow.html#event:activityrendered">activityrendered</a></li><li><a href="ActivityWindow.html#event:activityterminated">activityterminated</a></li><li><a href="ActivityWindow.html#event:activitywillrender">activitywillrender</a></li><li><a href="AppWindow.html#event:appclose">appclose</a></li><li><a href="AppWindow.html#event:appclosing">appclosing</a></li><li><a href="AppWindow.html#event:appcreated">appcreated</a></li><li><a href="AppWindow.html#event:appdestroyed">appdestroyed</a></li><li><a href="AppWindow.html#event:appopen">appopen</a></li><li><a href="AppWindow.html#event:appopening">appopening</a></li><li><a href="AppWindow.html#event:apprendered">apprendered</a></li><li><a href="AppWindow.html#event:apprequestclose">apprequestclose</a></li><li><a href="AppWindow.html#event:apprequestopen">apprequestopen</a></li><li><a href="AppWindow.html#event:appresize">appresize</a></li><li><a href="AppWindow.html#event:appterminated">appterminated</a></li><li><a href="AppWindow.html#event:appwilldestroy">appwilldestroy</a></li><li><a href="AppWindow.html#event:appwillrender">appwillrender</a></li><li><a href="AppWindow.html#event:_swipein">_swipein</a></li><li><a href="AppWindow.html#event:_swipeout">_swipeout</a></li><li><a href="AppWindow.html#event:_withkeyboard">_withkeyboard</a></li><li><a href="AppWindow.html#event:_withoutkeyboard">_withoutkeyboard</a></li><li><a href="HomescreenWindow.html#event:homescreenbackground">homescreenbackground</a></li><li><a href="HomescreenWindow.html#event:homescreenclose">homescreenclose</a></li><li><a href="HomescreenWindow.html#event:homescreenclosing">homescreenclosing</a></li><li><a href="HomescreenWindow.html#event:homescreencreated">homescreencreated</a></li><li><a href="HomescreenWindow.html#event:homescreenforeground">homescreenforeground</a></li><li><a href="HomescreenWindow.html#event:homescreenopen">homescreenopen</a></li><li><a href="HomescreenWindow.html#event:homescreenopening">homescreenopening</a></li><li><a href="HomescreenWindow.html#event:homescreenrendered">homescreenrendered</a></li><li><a href="HomescreenWindow.html#event:homescreenterminated">homescreenterminated</a></li><li><a href="HomescreenWindow.html#event:homescreenwillrender">homescreenwillrender</a></li><li><a href="module-LayoutManager.html#event:system-resize">system-resize</a></li><li><a href="module-OrientationManager.html#event:reset-orientation">reset-orientation</a></li></ul><h3>Mixins</h3><ul><li><a href="BrowserMixin.html">BrowserMixin</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DatePicker">DatePicker</a></li><li><a href="global.html#LockScreen">LockScreen</a></li><li><a href="global.html#SpinDatePicker">SpinDatePicker</a></li><li><a href="global.html#SystemDialog">SystemDialog</a></li><li><a href="global.html#SystemScreen">SystemScreen</a></li><li><a href="global.html#ValuePicker">ValuePicker</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jun 23 2013 01:49:03 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Fri Dec 06 2013 14:42:54 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>
