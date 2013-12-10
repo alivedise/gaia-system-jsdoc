@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>FirefoxOS - SystemApp - API documentation : Module: AppWindowManager</title>
+    <title>FirefoxOS - SystemApp - API documentation : <i class="icon-shield" style="color:#0186d1"></i> Clock</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -39,7 +39,7 @@
           </div>
 
           <div class="span8">
-              <h1 class="page-header">Module: AppWindowManager</h1>
+              <h1 class="page-header"><i class="icon-shield" style="color:#0186d1"></i> Clock</h1>
               
 
 
@@ -48,7 +48,7 @@
     
 <header>
     <!--h2>
-    AppWindowManager
+    Clock
     </h2-->
     
 </header>  
@@ -63,13 +63,29 @@
     
     
         
-            <div class="description"><p><p>AppWindowManager manages the life cycle of AppWindow instances.</p>
-<p>It on demand creates a new AppWindow instance,
-resize an existing AppWindow instance,
-destroy a closing AppWindow instance.</p></p></div>
-        
-        
-        
+<dt>
+    <h4 class="name" id="Clock">new Clock<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Creates an object used for refreshing the clock UI element. Handles all
+related timer manipulation (start/stop/cancel).</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
 <dl class="details">
     
         
@@ -98,8 +114,20 @@ destroy a closing AppWindow instance.</p></p></div>
     
 </dl>
 
-        
-        
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
     
     </div>
     
@@ -109,6 +137,104 @@ destroy a closing AppWindow instance.</p></p></div>
     
     
     
+    
+        <h3 class="subsection-title">Members</h3>
+        
+        <dl class="bs-docs-example bs-members">
+            
+<dt>
+    <h4 class="name" id="this.timeoutID"><span class="label label-info">static</span> this.timeoutID<span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>One-shot timer used to refresh the clock at a minute's turn</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="this.timerID"><span class="label label-info">static</span> this.timerID<span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Timer used to refresh the clock every minute</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        </dl>
     
     
     
@@ -117,7 +243,7 @@ destroy a closing AppWindow instance.</p></p></div>
         <dl class="bs-docs-example bs-methods">
             
 <dt>
-    <h4 class="name" id="broadcastMessage"><span class="label label-info">static</span> broadcastMessage<span class="signature">(message, <span class="optional">detail</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="this.start"><span class="label label-info">static</span> this.start<span class="signature">(refresh)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -126,179 +252,10 @@ destroy a closing AppWindow instance.</p></p></div>
     
     <div class="description">
         <p>
-        <p>Broadcast message to all running app window instances</p>
-<p>Used while an event needs to be manipulated by
-all running instances. You should register the event handler
-in the appWindow as well.</p>
-        </p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-bordered table-condensed">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-		<th>Argument</th>
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name">message</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The message name</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name">detail</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    <span class="label">optional</span>&nbsp;
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The detail of the message</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>AppWindowManager.broadcastMessage('earthquake');
-
-AppWindow.prototype._handle__earthquake = function() {
-  // Run on my own!
-};
-
-AppWindow.REGISTERED_EVENTS.push('_earthquake');</code></pre>
-
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="display"><span class="label label-info">static</span> display<span class="signature">(origin)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>
-        <p>Switch to a different app</p>
+        <p>Start the timer used to refresh the clock, will call the specified
+callback at every timer tick to refresh the UI. The callback used to
+refresh the UI will also be called immediately to ensure the UI is
+consistent.</p>
         </p>
     </div>
     
@@ -333,13 +290,13 @@ AppWindow.REGISTERED_EVENTS.push('_earthquake');</code></pre>
 
         <tr>
             
-                <td class="name">origin</td>
+                <td class="name">refresh</td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">function</span>
 
 
             
@@ -349,7 +306,8 @@ AppWindow.REGISTERED_EVENTS.push('_earthquake');</code></pre>
 
             
 
-            <td class="description last"><p>The origin of the new app.</p></td>
+            <td class="description last"><p>Function used to refresh the UI at every timer
+       tick, should accept a date object as its only argument.</p></td>
         </tr>
 
 	
@@ -404,7 +362,7 @@ AppWindow.REGISTERED_EVENTS.push('_earthquake');</code></pre>
         
             
 <dt>
-    <h4 class="name" id="init"><span class="label label-info">static</span> init<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="this.stop"><span class="label label-info">static</span> this.stop<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -413,18 +371,7 @@ AppWindow.REGISTERED_EVENTS.push('_earthquake');</code></pre>
     
     <div class="description">
         <p>
-        <p>The init process from bootstrap to homescreen is opened:
-<a href="http://i.imgur.com/44LBhKM.png" target="_blank">
-  <img src="http://i.imgur.com/44LBhKM.png"></img>
-</a></p>
-<ol>
-<li>Applications is ready. (mozApps are parsed.)</li>
-<li>Bootstrap tells HomescreenLauncher to init.</li>
-<li>Homescreen is ready.</li>
-<li>Bootstrap tells FTULauncher to fetch FTU(First Time Use app) info.</li>
-<li>FTU app is skipped or done.</li>
-<li>AppWindowManager open homescreen app via HomescreenLauncher.</li>
-</ol>
+        <p>Stops the timer used to refresh the clock</p>
         </p>
     </div>
     
@@ -433,406 +380,6 @@ AppWindow.REGISTERED_EVENTS.push('_earthquake');</code></pre>
     
     
     
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="kill"><span class="label label-info">static</span> kill<span class="signature">(origin)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>
-        <p>Kill the running app window by origin</p>
-<p>AppWindow instances are responsible to kill theirselves whenever
-there's something wrong when the app/page is running.
-For example: OOM, crashed, window.close().</p>
-<p>When we need to kill a running instance,
-we call kill on the instance and let the instance to request 'close'
-to AppWindowManager or just destroy itself if it's at background.</p>
-<p><a href="http://i.imgur.com/VrlkUXM.png" target="_blank">
-  <img src="http://i.imgur.com/VrlkUXM.png"></img>
-</a></p>
-        </p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-bordered table-condensed">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name">origin</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The origin of the running app window to be killed</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="launch"><span class="label label-info">static</span> launch<span class="signature">(config)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>
-        <p>Instanciate app window by configuration</p>
-        </p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-bordered table-condensed">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name">config</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#AppConfig">AppConfig</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The configuration of the app window</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="switchApp"><span class="label label-info">static</span> switchApp<span class="signature">(appCurrent, appNext, switching)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>
-        <p>Switch from the current app to the next app.</p>
-        </p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-bordered table-condensed">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name">appCurrent</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="AppWindow.html">AppWindow</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Displayed appWindow instance.</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name">appNext</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="AppWindow.html">AppWindow</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>appWindow instance to be shown.</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name">switching</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Homescreen doesn't involve in the two apps.</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
     
     
     

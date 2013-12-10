@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>FirefoxOS - SystemApp - API documentation : Module: AppWindowManager</title>
+    <title>FirefoxOS - SystemApp - API documentation : Module: OrientationManager</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -39,7 +39,7 @@
           </div>
 
           <div class="span8">
-              <h1 class="page-header">Module: AppWindowManager</h1>
+              <h1 class="page-header">Module: OrientationManager</h1>
               
 
 
@@ -48,7 +48,7 @@
     
 <header>
     <!--h2>
-    AppWindowManager
+    OrientationManager
     </h2-->
     
 </header>  
@@ -63,10 +63,19 @@
     
     
         
-            <div class="description"><p><p>AppWindowManager manages the life cycle of AppWindow instances.</p>
-<p>It on demand creates a new AppWindow instance,
-resize an existing AppWindow instance,
-destroy a closing AppWindow instance.</p></p></div>
+            <div class="description"><p><p>OrientationManager manages the orientation.</p>
+<p>There're some cases we need to reset the orientation of the top window:
+<em> LockScreen is unlocked.
+</em> AttentionScreen is hidden.
+<em> AttentionScreen is closed.
+</em> TrustedUI is closed.
+* SleepMenu is hidden.</p>
+<p>Any of them occurs would trigger OrientationManager to dispatch
+<code>reset-orientation</code> event and AppWindowManager would reset the
+orientation of the active window.</p>
+<p><a href="http://i.imgur.com/KCUgFH6.png" target="_blank">
+  <img src="http://i.imgur.com/KCUgFH6.png"></img>
+</a></p></p></div>
         
         
         
@@ -109,6 +118,108 @@ destroy a closing AppWindow instance.</p></p></div>
     
     
     
+    
+        <h3 class="subsection-title">Members</h3>
+        
+        <dl class="bs-docs-example bs-members">
+            
+<dt>
+    <h4 class="name" id="_isOnRealDevice"><span class="label label-info">private</span> <span class="label label-info">static</span> _isOnRealDevice<span class="type-signature"> :Boolean</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Record if we are on real device or not.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="defaultOrientation"><span class="label label-info">static</span> defaultOrientation<span class="type-signature"> :String</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Default orientation of this device, possible values are:</p>
+<ul>
+<li>portrait-primary</li>
+<li>landscape-primary</li>
+</ul>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        </dl>
     
     
     
@@ -117,7 +228,7 @@ destroy a closing AppWindow instance.</p></p></div>
         <dl class="bs-docs-example bs-methods">
             
 <dt>
-    <h4 class="name" id="broadcastMessage"><span class="label label-info">static</span> broadcastMessage<span class="signature">(message, <span class="optional">detail</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="fetchCurrentOrientation"><span class="label label-info">static</span> fetchCurrentOrientation<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
     
     
 </dt>
@@ -126,10 +237,7 @@ destroy a closing AppWindow instance.</p></p></div>
     
     <div class="description">
         <p>
-        <p>Broadcast message to all running app window instances</p>
-<p>Used while an event needs to be manipulated by
-all running instances. You should register the event handler
-in the appWindow as well.</p>
+        <p>Get current orientation</p>
         </p>
     </div>
     
@@ -139,157 +247,74 @@ in the appWindow as well.</p>
     
     
     
-        <h5>Parameters:</h5>
+    
+    
+<dl class="details">
+    
         
+    
+    
+    
 
-<table class="params table table-bordered table-condensed">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
-		<th>Type</th>
+    
+    
+    
+    
+    
+    
+    
+</dl>
 
-		
-		<th>Argument</th>
-		
+    
+    
 
-		
+    
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            <div class="returns">
 
-	<tbody>
-	
 
-        <tr>
-            
-                <td class="name">message</td>
-            
-
-            <td class="type">
-            
-                
+    
 <span class="param-type">String</span>
 
 
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The message name</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name">detail</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
 
 
-            
-            </td>
+<span class="param-desc">
+    <p>Current orientation, possible values: portrait-primary,
+                 portrait-secondary, landscape-primary,
+                 landscape-secondary</p>
+</span>
 
-            
-                <td class="attributes">
-                
-                    <span class="label">optional</span>&nbsp;
-                
+</div>
 
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The detail of the message</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-    
         
     
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>AppWindowManager.broadcastMessage('earthquake');
-
-AppWindow.prototype._handle__earthquake = function() {
-  // Run on my own!
-};
-
-AppWindow.REGISTERED_EVENTS.push('_earthquake');</code></pre>
-
     
 </dd>
 
         
             
 <dt>
-    <h4 class="name" id="display"><span class="label label-info">static</span> display<span class="signature">(origin)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="fetchDefaultOrientation"><span class="label label-info">static</span> fetchDefaultOrientation<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -298,133 +323,11 @@ AppWindow.REGISTERED_EVENTS.push('_earthquake');</code></pre>
     
     <div class="description">
         <p>
-        <p>Switch to a different app</p>
-        </p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-bordered table-condensed">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name">origin</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The origin of the new app.</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="init"><span class="label label-info">static</span> init<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>
-        <p>The init process from bootstrap to homescreen is opened:
-<a href="http://i.imgur.com/44LBhKM.png" target="_blank">
-  <img src="http://i.imgur.com/44LBhKM.png"></img>
-</a></p>
-<ol>
-<li>Applications is ready. (mozApps are parsed.)</li>
-<li>Bootstrap tells HomescreenLauncher to init.</li>
-<li>Homescreen is ready.</li>
-<li>Bootstrap tells FTULauncher to fetch FTU(First Time Use app) info.</li>
-<li>FTU app is skipped or done.</li>
-<li>AppWindowManager open homescreen app via HomescreenLauncher.</li>
-</ol>
+        <p>Get the default orientation of the device when device booted.
+This is a trick done by locking the orientation at first and
+then get by <code>screen.mozOrientation</code>.</p>
+<p>If we are not on a real device, we will guess the orientation by
+the ratio of width and height of window.</p>
         </p>
     </div>
     
@@ -481,7 +384,7 @@ AppWindow.REGISTERED_EVENTS.push('_earthquake');</code></pre>
         
             
 <dt>
-    <h4 class="name" id="kill"><span class="label label-info">static</span> kill<span class="signature">(origin)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="isDefaultPortrait"><span class="label label-info">static</span> isDefaultPortrait<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -490,16 +393,7 @@ AppWindow.REGISTERED_EVENTS.push('_earthquake');</code></pre>
     
     <div class="description">
         <p>
-        <p>Kill the running app window by origin</p>
-<p>AppWindow instances are responsible to kill theirselves whenever
-there's something wrong when the app/page is running.
-For example: OOM, crashed, window.close().</p>
-<p>When we need to kill a running instance,
-we call kill on the instance and let the instance to request 'close'
-to AppWindowManager or just destroy itself if it's at background.</p>
-<p><a href="http://i.imgur.com/VrlkUXM.png" target="_blank">
-  <img src="http://i.imgur.com/VrlkUXM.png"></img>
-</a></p>
+        <p>Test if our default orientation is portrait.</p>
         </p>
     </div>
     
@@ -508,55 +402,6 @@ to AppWindowManager or just destroy itself if it's at background.</p>
     
     
     
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-bordered table-condensed">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name">origin</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The origin of the running app window to be killed</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
     
     
     
@@ -598,241 +443,141 @@ to AppWindowManager or just destroy itself if it's at background.</p>
     
     
     
+    <h5>Returns:</h5>
     
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="launch"><span class="label label-info">static</span> launch<span class="signature">(config)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>
-        <p>Instanciate app window by configuration</p>
-        </p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-bordered table-condensed">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name">config</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#AppConfig">AppConfig</a></span>
+            <div class="returns">
 
 
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The configuration of the app window</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
     
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="switchApp"><span class="label label-info">static</span> switchApp<span class="signature">(appCurrent, appNext, switching)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>
-        <p>Switch from the current app to the next app.</p>
-        </p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-bordered table-condensed">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name">appCurrent</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="AppWindow.html">AppWindow</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Displayed appWindow instance.</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name">appNext</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="AppWindow.html">AppWindow</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>appWindow instance to be shown.</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name">switching</td>
-            
-
-            <td class="type">
-            
-                
 <span class="param-type">Boolean</span>
 
 
+
+
+<span class="param-desc">
+    <p>If our default orientation is portrait</p>
+</span>
+
+</div>
+
+        
+    
+    
+</dd>
+
+        
             
-            </td>
+<dt>
+    <h4 class="name" id="isOnRealDevice"><span class="label label-info">static</span> isOnRealDevice<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Test if we are on real device by checking the available width.</p>
+        </p>
+    </div>
+    
 
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            <div class="returns">
+
+
+    
+<span class="param-type">Boolean</span>
+
+
+
+
+<span class="param-desc">
+    <p>If we are on real device or not.</p>
+</span>
+
+</div>
+
+        
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Events</h3>
+        
+        <dl class="bs-docs-example bs-events">
             
+<dt>
+    <h4 class="name" id="event:reset-orientation">reset-orientation</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired when the orientation needs to be locked/unlocked again.</p>
+        </p>
+    </div>
+    
 
-            
-
-            <td class="description last"><p>Homescreen doesn't involve in the two apps.</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
+    
+    
+    
+    
     
     
     
@@ -879,10 +624,6 @@ to AppWindowManager or just destroy itself if it's at background.</p>
 </dd>
 
         </dl>
-    
-    
-    
-    
     
 </article>
 

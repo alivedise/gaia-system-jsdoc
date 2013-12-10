@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: orientation_manager.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: orientation_manager.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>'use strict';
+
+(function(window) {
+  /**
+   * OrientationManager manages the orientation.
+   *
+   *
+   * There're some cases we need to reset the orientation of the top window:
+   * * LockScreen is unlocked.
+   * * AttentionScreen is hidden.
+   * * AttentionScreen is closed.
+   * * TrustedUI is closed.
+   * * SleepMenu is hidden.
+   *
+   * Any of them occurs would trigger OrientationManager to dispatch
+   * &lt;code>reset-orientation&lt;/code> event and AppWindowManager would reset the
+   * orientation of the active window.
+   *
+   * @module OrientationManager
+   */
+  window.OrientationManager = {
+    init: function om_init() {
+      this.fetchDefaultOrientation();
+      if (SettingsListener) {
+        SettingsListener.observe('screen.orientation.lock', false,
+          function(value) {
+            this.globalOrientation = value ?
+              this.fetchCurrentOrientation() : null;
+            this.publish('reset-orientation');
+          }.bind(this));
+      }
+
+      window.addEventListener('will-unlock', this);
+      window.addEventListener('attentionscreenhide', this);
+      window.addEventListener('status-active', this);
+      window.addEventListener('sleepmenuhide', this);
+      window.addEventListener('trusteduiclose', this);
+    },
+
+    handleEvent: function om_handleEvent(evt) {
+      switch (evt.type) {
+        case 'attentionscreenhide':
+        case 'status-active':
+        case 'sleepmenuhide':
+        case 'trusteduiclose':
+        case 'will-unlock':
+        /**
+         * Fired when the orientation needs to be locked/unlocked again.
+         * @event module:OrientationManager#reset-orientation
+         */
+          this.publish('reset-orientation');
+          break;
+      }
+    },
+
+    globalOrientation: null,
+
+    /**
+     * Default orientation of this device, possible values are:
+     *
+     * * portrait-primary
+     * * landscape-primary
+     *
+     * @type {String}
+     * @memberOf module:OrientationManager
+     */
+    defaultOrientation: screen.mozOrientation,
+
+    /**
+     * Test if our default orientation is portrait.
+     * @return {Boolean} If our default orientation is portrait
+     * @memberOf module:OrientationManager
+     */
+    isDefaultPortrait: function() {
+      return (this.defaultOrientation === 'portrait-primary');
+    },
+
+    /**
+     * Record if we are on real device or not.
+     * @access private
+     * @type {Boolean}
+     * @memberOf module:OrientationManager
+     */
+    _isOnRealDevice: undefined,
+
+    /**
+     * Test if we are on real device by checking the available width.
+     * @return {Boolean} If we are on real device or not.
+     * @memberOf module:OrientationManager
+     */
+    isOnRealDevice: function sl_isOnRealDevice() {
+      if (typeof(this._isOnRealDevice) !== 'undefined')
+        return this._isOnRealDevice;
+
+      // XXX: A hack to know we're using real device or not
+      // is to detect screen size.
+      // The screen size of b2g running on real device
+      // is the same as the size of system app.
+      if (window.innerWidth === screen.availWidth) {
+        this._isOnRealDevice = true;
+      } else {
+        this._isOnRealDevice = false;
+      }
+
+      return this._isOnRealDevice;
+    },
+
+    /**
+     * Get the default orientation of the device when device booted.
+     * This is a trick done by locking the orientation at first and
+     * then get by &lt;code>screen.mozOrientation&lt;/code>.
+     *
+     * If we are not on a real device, we will guess the orientation by
+     * the ratio of width and height of window.
+     *
+     * @memberOf module:OrientationManager
+     */
+    fetchDefaultOrientation: function sl_fetchDefaultOrientation() {
+      if (!this.isOnRealDevice()) {
+        // Fallback to use width/height to calculate default orientation
+        // if we're running on desktop browser or simulator.
+        this.defaultOrientation = window.innerWidth > window.innerHeight ?
+          'landscape-primary' : 'portrait-primary';
+      } else {
+        screen.mozLockOrientation('default');
+        this.defaultOrientation = screen.mozOrientation;
+      }
+    },
+
+    /**
+     * Get current orientation
+     * @return {String} Current orientation, possible values: portrait-primary,
+     *                  portrait-secondary, landscape-primary,
+     *                  landscape-secondary
+     *
+     * @memberOf module:OrientationManager
+     */
+    fetchCurrentOrientation: function sl_fetchCurrentOrientation() {
+      if (!this.isOnRealDevice()) {
+        // Fallback to use width/height to calculate default orientation
+        // if we're running on desktop browser or simulator.
+        return window.innerWidth > window.innerHeight ?
+          'landscape-primary' : 'portrait-primary';
+      } else {
+        return screen.mozOrientation;
+      }
+    },
+
+    publish: function sl_publish(eventName, detail) {
+      var evt = document.createEvent('CustomEvent');
+      evt.initCustomEvent(eventName, true, false, detail);
+      window.dispatchEvent(evt);
+    }
+  };
+
+  OrientationManager.init();
+}(this));
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-ActivityWindowFactory.html">ActivityWindowFactory</a></li><li><a href="module-AppWindowFactory.html">AppWindowFactory</a></li><li><a href="module-AppWindowManager.html">AppWindowManager</a></li><li><a href="module-HomescreenLauncher.html">HomescreenLauncher</a></li><li><a href="module-LayoutManager.html">LayoutManager</a></li><li><a href="module-OrientationManager.html">OrientationManager</a></li><li><a href="module-System.html">System</a></li><li><a href="module-WrapperFactory.html">WrapperFactory</a></li></ul><h3>Classes</h3><ul><li><a href="ActivityWindow.html">ActivityWindow</a></li><li><a href="AppAuthenticationDialog.html">AppAuthenticationDialog</a></li><li><a href="AppChrome.html">AppChrome</a></li><li><a href="AppModalDialog.html">AppModalDialog</a></li><li><a href="AppTransitionController.html">AppTransitionController</a></li><li><a href="AppWindow.html">AppWindow</a></li><li><a href="BaseUI.html">BaseUI</a></li><li><a href="BrowserFrame.html">BrowserFrame</a></li><li><a href="Clock.html">Clock</a></li><li><a href="HomescreenWindow.html">HomescreenWindow</a></li></ul><h3>Events</h3><ul><li><a href="ActivityWindow.html#event:activitybackground">activitybackground</a></li><li><a href="ActivityWindow.html#event:activityclose">activityclose</a></li><li><a href="ActivityWindow.html#event:activityclosing">activityclosing</a></li><li><a href="ActivityWindow.html#event:activitycreated">activitycreated</a></li><li><a href="ActivityWindow.html#event:activityforeground">activityforeground</a></li><li><a href="ActivityWindow.html#event:activityopen">activityopen</a></li><li><a href="ActivityWindow.html#event:activityopening">activityopening</a></li><li><a href="ActivityWindow.html#event:activityrendered">activityrendered</a></li><li><a href="ActivityWindow.html#event:activityterminated">activityterminated</a></li><li><a href="ActivityWindow.html#event:activitywillrender">activitywillrender</a></li><li><a href="AppWindow.html#event:appclose">appclose</a></li><li><a href="AppWindow.html#event:appclosing">appclosing</a></li><li><a href="AppWindow.html#event:appcreated">appcreated</a></li><li><a href="AppWindow.html#event:appdestroyed">appdestroyed</a></li><li><a href="AppWindow.html#event:appopen">appopen</a></li><li><a href="AppWindow.html#event:appopening">appopening</a></li><li><a href="AppWindow.html#event:apprendered">apprendered</a></li><li><a href="AppWindow.html#event:apprequestclose">apprequestclose</a></li><li><a href="AppWindow.html#event:apprequestopen">apprequestopen</a></li><li><a href="AppWindow.html#event:appresize">appresize</a></li><li><a href="AppWindow.html#event:appterminated">appterminated</a></li><li><a href="AppWindow.html#event:appwilldestroy">appwilldestroy</a></li><li><a href="AppWindow.html#event:appwillrender">appwillrender</a></li><li><a href="AppWindow.html#event:_swipein">_swipein</a></li><li><a href="AppWindow.html#event:_swipeout">_swipeout</a></li><li><a href="AppWindow.html#event:_withkeyboard">_withkeyboard</a></li><li><a href="AppWindow.html#event:_withoutkeyboard">_withoutkeyboard</a></li><li><a href="HomescreenWindow.html#event:homescreenbackground">homescreenbackground</a></li><li><a href="HomescreenWindow.html#event:homescreenclose">homescreenclose</a></li><li><a href="HomescreenWindow.html#event:homescreenclosing">homescreenclosing</a></li><li><a href="HomescreenWindow.html#event:homescreencreated">homescreencreated</a></li><li><a href="HomescreenWindow.html#event:homescreenforeground">homescreenforeground</a></li><li><a href="HomescreenWindow.html#event:homescreenopen">homescreenopen</a></li><li><a href="HomescreenWindow.html#event:homescreenopening">homescreenopening</a></li><li><a href="HomescreenWindow.html#event:homescreenrendered">homescreenrendered</a></li><li><a href="HomescreenWindow.html#event:homescreenterminated">homescreenterminated</a></li><li><a href="HomescreenWindow.html#event:homescreenwillrender">homescreenwillrender</a></li><li><a href="module-LayoutManager.html#event:system-resize">system-resize</a></li><li><a href="module-OrientationManager.html#event:reset-orientation">reset-orientation</a></li></ul><h3>Mixins</h3><ul><li><a href="BrowserMixin.html">BrowserMixin</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DatePicker">DatePicker</a></li><li><a href="global.html#LockScreen">LockScreen</a></li><li><a href="global.html#SpinDatePicker">SpinDatePicker</a></li><li><a href="global.html#SystemDialog">SystemDialog</a></li><li><a href="global.html#SystemScreen">SystemScreen</a></li><li><a href="global.html#ValuePicker">ValuePicker</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Fri Dec 06 2013 14:42:54 GMT+0800 (CST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

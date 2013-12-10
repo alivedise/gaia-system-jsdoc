@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: app_authentication_dialog.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: app_authentication_dialog.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>'use strict';
+
+(function(window) {
+  var _id = 0;
+
+  /**
+   * The authentication dialog of the appWindow.
+   *
+   * @class AppAuthenticationDialog
+   * @param {AppWindow} app The app window instance this dialog belongs to.
+   */
+  window.AppAuthenticationDialog = function AppAuthenticationDialog(app) {
+    this.app = app;
+    this._event = null;
+    this.elements = {};
+    this.containerElement = app.element;
+    this.instanceID = _id++;
+    this._injected = false;
+    this.app.element.addEventListener('mozbrowserusernameandpasswordrequired',
+      this);
+  };
+
+  AppAuthenticationDialog.prototype.__proto__ = window.BaseUI.prototype;
+
+  AppAuthenticationDialog.prototype.CLASS_NAME = 'AuthenticationDialog';
+
+  AppAuthenticationDialog.prototype.EVENT_PREFIX = 'authdialog';
+
+  // Used for element id access.
+  // e.g., 'authentication-dialog-alert-ok'
+  AppAuthenticationDialog.prototype.ELEMENT_PREFIX = 'authentication-dialog-';
+
+  // DOM
+  AppAuthenticationDialog.prototype.elements = null;
+
+  // Store the authentication event.
+  // Note: Only one event one time.
+  AppAuthenticationDialog.prototype._event = null;
+
+  // Get all elements when inited.
+  AppAuthenticationDialog.prototype._fetchElements =
+    function aad__fetchElements() {
+      this.element = document.getElementById(this.CLASS_NAME + this.instanceID);
+
+      var toCamelCase = function toCamelCase(str) {
+        return str.replace(/\-(.)/g, function replacer(str, p1) {
+          return p1.toUpperCase();
+        });
+      };
+
+      this.elementClasses = [
+        'http-authentication', 'http-username-input', 'http-password-input',
+        'http-authentication-message', 'http-authentication-ok',
+        'http-authentication-cancel', 'title'
+      ];
+
+      this.elementClasses.forEach(function createElementRef(name) {
+        this.elements[toCamelCase(name)] =
+          this.element.querySelector('.' + this.ELEMENT_PREFIX + name);
+      }, this);
+    };
+
+  AppAuthenticationDialog.prototype.view = function aad_view() {
+    return '&lt;div class="authentication-dialog" ' +
+            'id="' + this.CLASS_NAME + this.instanceID + '">' +
+            '&lt;div role="dialog" ' +
+            'class="authentication-dialog-http-authentication ' +
+            'generic-dialog" >' +
+            '&lt;div class="authentication-dialog-message-container inner">' +
+              '&lt;h3 class="authentication-dialog-title">&lt;/h3>' +
+              '&lt;p>' +
+                '&lt;span ' +
+                'class="authentication-dialog-http-authentication-message">' +
+                '&lt;/span>' +
+              '&lt;/p>' +
+              '&lt;p>' +
+                '&lt;span data-l10n-id="username">Username&lt;/span>' +
+                '&lt;input class="authentication-dialog-http-username-input" ' +
+                'type="text" />' +
+                '&lt;span data-l10n-id="password">Password&lt;/span>' +
+                '&lt;input class="authentication-dialog-http-password-input" ' +
+                'type="password" />' +
+              '&lt;/p>' +
+            '&lt;/div>' +
+            '&lt;menu data-items="2">' +
+              '&lt;button ' +
+              'class="authentication-dialog-http-authentication-cancel" ' +
+              'data-l10n-id="cancel">Cancel&lt;/button>' +
+              '&lt;button class="authentication-dialog-http-authentication-ok" ' +
+              'data-l10n-id="login" class="affirmative">Login&lt;/button>' +
+            '&lt;/menu>' +
+          '&lt;/div>' +
+        '&lt;/div>';
+  };
+
+  AppAuthenticationDialog.prototype.handleEvent = function(evt) {
+    System.debug(' AAD>> got event: ' + evt.type);
+    evt.preventDefault();
+    this._event = evt;
+    if (!this._injected) {
+      this.render();
+    }
+    this.show();
+    this._injected = true;
+  };
+
+  AppAuthenticationDialog.prototype._registerEvents =
+    function aad__registerEvents() {
+      this.elements['httpAuthenticationOk'].
+        addEventListener('click', this.confirmHandler.bind(this));
+      this.elements['httpAuthenticationCancel'].
+        addEventListener('click', this.cancelHandler.bind(this));
+    };
+
+  AppAuthenticationDialog.prototype._unregisterEvents =
+    function aad__unregisterEvents() {
+      this.app.element.removeEventListener(
+        'mozbrowserusernameandpasswordrequired',
+        this);
+    };
+
+  AppAuthenticationDialog.prototype.show = function aad_show() {
+    var evt = this._event;
+    var elements = this.elements;
+    this.element.classList.add('visible');
+    elements.httpAuthentication.classList.add('visible');
+    System.debug(' AAD>> showing');
+    elements.title.textContent = evt.detail.host;
+    elements.httpAuthenticationMessage.textContent = evt.detail.realm;
+    elements.httpUsernameInput.value = '';
+    elements.httpPasswordInput.value = '';
+  };
+
+  AppAuthenticationDialog.prototype.hide = function aad_hide() {
+    this.elements.httpUsernameInput.blur();
+    this.elements.httpPasswordInput.blur();
+    this.elements.httpAuthentication.classList.remove('visible');
+    this.element.classList.remove('visible');
+    System.debug(' AAD>> hided');
+  };
+
+  AppAuthenticationDialog.prototype.confirmHandler =
+    function aad_confirmHandler() {
+      var elements = this.elements;
+      var evt = this._event;
+      this.hide();
+      evt.detail.authenticate(elements.httpUsernameInput.value,
+        elements.httpPasswordInput.value);
+      this._event = null;
+    };
+
+  AppAuthenticationDialog.prototype.cancelHandler =
+    function aad_cancelHandler() {
+      var evt = this._event;
+      var elements = this.elements;
+      this.hide();
+      evt.detail.cancel();
+      this._event = null;
+    };
+}(this));
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-ActivityWindowFactory.html">ActivityWindowFactory</a></li><li><a href="module-AppWindowFactory.html">AppWindowFactory</a></li><li><a href="module-AppWindowManager.html">AppWindowManager</a></li><li><a href="module-HomescreenLauncher.html">HomescreenLauncher</a></li><li><a href="module-LayoutManager.html">LayoutManager</a></li><li><a href="module-OrientationManager.html">OrientationManager</a></li><li><a href="module-System.html">System</a></li><li><a href="module-WrapperFactory.html">WrapperFactory</a></li></ul><h3>Classes</h3><ul><li><a href="ActivityWindow.html">ActivityWindow</a></li><li><a href="AppAuthenticationDialog.html">AppAuthenticationDialog</a></li><li><a href="AppChrome.html">AppChrome</a></li><li><a href="AppModalDialog.html">AppModalDialog</a></li><li><a href="AppTransitionController.html">AppTransitionController</a></li><li><a href="AppWindow.html">AppWindow</a></li><li><a href="BaseUI.html">BaseUI</a></li><li><a href="BrowserFrame.html">BrowserFrame</a></li><li><a href="Clock.html">Clock</a></li><li><a href="HomescreenWindow.html">HomescreenWindow</a></li></ul><h3>Events</h3><ul><li><a href="ActivityWindow.html#event:activitybackground">activitybackground</a></li><li><a href="ActivityWindow.html#event:activityclose">activityclose</a></li><li><a href="ActivityWindow.html#event:activityclosing">activityclosing</a></li><li><a href="ActivityWindow.html#event:activitycreated">activitycreated</a></li><li><a href="ActivityWindow.html#event:activityforeground">activityforeground</a></li><li><a href="ActivityWindow.html#event:activityopen">activityopen</a></li><li><a href="ActivityWindow.html#event:activityopening">activityopening</a></li><li><a href="ActivityWindow.html#event:activityrendered">activityrendered</a></li><li><a href="ActivityWindow.html#event:activityterminated">activityterminated</a></li><li><a href="ActivityWindow.html#event:activitywillrender">activitywillrender</a></li><li><a href="AppWindow.html#event:appclose">appclose</a></li><li><a href="AppWindow.html#event:appclosing">appclosing</a></li><li><a href="AppWindow.html#event:appcreated">appcreated</a></li><li><a href="AppWindow.html#event:appdestroyed">appdestroyed</a></li><li><a href="AppWindow.html#event:appopen">appopen</a></li><li><a href="AppWindow.html#event:appopening">appopening</a></li><li><a href="AppWindow.html#event:apprendered">apprendered</a></li><li><a href="AppWindow.html#event:apprequestclose">apprequestclose</a></li><li><a href="AppWindow.html#event:apprequestopen">apprequestopen</a></li><li><a href="AppWindow.html#event:appresize">appresize</a></li><li><a href="AppWindow.html#event:appterminated">appterminated</a></li><li><a href="AppWindow.html#event:appwilldestroy">appwilldestroy</a></li><li><a href="AppWindow.html#event:appwillrender">appwillrender</a></li><li><a href="AppWindow.html#event:_swipein">_swipein</a></li><li><a href="AppWindow.html#event:_swipeout">_swipeout</a></li><li><a href="AppWindow.html#event:_withkeyboard">_withkeyboard</a></li><li><a href="AppWindow.html#event:_withoutkeyboard">_withoutkeyboard</a></li><li><a href="HomescreenWindow.html#event:homescreenbackground">homescreenbackground</a></li><li><a href="HomescreenWindow.html#event:homescreenclose">homescreenclose</a></li><li><a href="HomescreenWindow.html#event:homescreenclosing">homescreenclosing</a></li><li><a href="HomescreenWindow.html#event:homescreencreated">homescreencreated</a></li><li><a href="HomescreenWindow.html#event:homescreenforeground">homescreenforeground</a></li><li><a href="HomescreenWindow.html#event:homescreenopen">homescreenopen</a></li><li><a href="HomescreenWindow.html#event:homescreenopening">homescreenopening</a></li><li><a href="HomescreenWindow.html#event:homescreenrendered">homescreenrendered</a></li><li><a href="HomescreenWindow.html#event:homescreenterminated">homescreenterminated</a></li><li><a href="HomescreenWindow.html#event:homescreenwillrender">homescreenwillrender</a></li><li><a href="module-LayoutManager.html#event:system-resize">system-resize</a></li><li><a href="module-OrientationManager.html#event:reset-orientation">reset-orientation</a></li></ul><h3>Mixins</h3><ul><li><a href="BrowserMixin.html">BrowserMixin</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DatePicker">DatePicker</a></li><li><a href="global.html#LockScreen">LockScreen</a></li><li><a href="global.html#SpinDatePicker">SpinDatePicker</a></li><li><a href="global.html#SystemDialog">SystemDialog</a></li><li><a href="global.html#SystemScreen">SystemScreen</a></li><li><a href="global.html#ValuePicker">ValuePicker</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Fri Dec 06 2013 14:42:54 GMT+0800 (CST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
