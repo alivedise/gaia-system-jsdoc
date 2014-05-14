@@ -1,0 +1,5036 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>FirefoxOS - SystemApp - API documentation : <i class="icon-shield" style="color:#0186d1"></i> AttentionWindow</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link href="styles/bootstrap.css" rel="stylesheet">
+    <link href="styles/docs.css" rel="stylesheet">
+    <link href="styles/bootstrap-custom.css" rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <header class="header navbar navbar-inverse">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="brand" href="#"><strong>FirefoxOS SystemApp</strong> API documentation</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+          <div class="span4">
+              <h2><a href="index.html">Index</a></h2><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Modules</li><li><a href="module-ActivityWindowFactory.html">ActivityWindowFactory</a></li>
+<li><a href="module-AppWindowFactory.html">AppWindowFactory</a></li>
+<li><a href="module-AppWindowManager.html">AppWindowManager</a></li>
+<li><a href="module-HomescreenLauncher.html">HomescreenLauncher</a></li>
+<li><a href="module-LayoutManager.html">LayoutManager</a></li>
+<li><a href="module-OrientationManager.html">OrientationManager</a></li>
+<li><a href="module-System.html">System</a></li>
+<li><a href="module-WrapperFactory.html">WrapperFactory</a></li></ul></div><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Classes</li><li><a href="ActivityWindow.html"><i class="icon-shield" style="color: #0186d1"></i> ActivityWindow</a></li><li><a href="AppAuthenticationDialog.html"><i class="icon-shield" style="color: #0186d1"></i> AppAuthenticationDialog</a></li><li><a href="AppChrome.html"><i class="icon-shield" style="color: #0186d1"></i> AppChrome</a></li><li><a href="AppModalDialog.html"><i class="icon-shield" style="color: #0186d1"></i> AppModalDialog</a></li><li><a href="AppTransitionController.html"><i class="icon-shield" style="color: #0186d1"></i> AppTransitionController</a></li><li><a href="AppWindow.html"><i class="icon-shield" style="color: #0186d1"></i> AppWindow</a></li><li><a href="AttentionWindow.html"><i class="icon-shield" style="color: #0186d1"></i> AttentionWindow</a></li><li><a href="BaseUI.html"><i class="icon-shield" style="color: #0186d1"></i> BaseUI</a></li><li><a href="BrowserConfigHelper.html"><i class="icon-shield" style="color: #0186d1"></i> BrowserConfigHelper</a></li><li><a href="BrowserFrame.html"><i class="icon-shield" style="color: #0186d1"></i> BrowserFrame</a></li><li><a href="Clock.html"><i class="icon-shield" style="color: #0186d1"></i> Clock</a></li><li><a href="HomescreenWindow.html"><i class="icon-shield" style="color: #0186d1"></i> HomescreenWindow</a></li><li><a href="LockScreenConnInfoManager.html"><i class="icon-shield" style="color: #0186d1"></i> LockScreenConnInfoManager</a></li></ul></div><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Public Events</li><li><a href="ActivityWindow.html#event:activitybackground"><i class="icon-bell-alt" style="color: yellow"></i> activitybackground <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityclose"><i class="icon-bell-alt" style="color: yellow"></i> activityclose <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityclosing"><i class="icon-bell-alt" style="color: yellow"></i> activityclosing <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activitycreated"><i class="icon-bell-alt" style="color: yellow"></i> activitycreated <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityforeground"><i class="icon-bell-alt" style="color: yellow"></i> activityforeground <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityopen"><i class="icon-bell-alt" style="color: yellow"></i> activityopen <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityopening"><i class="icon-bell-alt" style="color: yellow"></i> activityopening <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityrendered"><i class="icon-bell-alt" style="color: yellow"></i> activityrendered <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activityterminated"><i class="icon-bell-alt" style="color: yellow"></i> activityterminated <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="ActivityWindow.html#event:activitywillrender"><i class="icon-bell-alt" style="color: yellow"></i> activitywillrender <span class="label label-inverse pull-right">ActivityWindow</span></a></li><li><a href="AppWindow.html#event:appclose"><i class="icon-bell-alt" style="color: yellow"></i> appclose <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appclosing"><i class="icon-bell-alt" style="color: yellow"></i> appclosing <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appcreated"><i class="icon-bell-alt" style="color: yellow"></i> appcreated <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appdestroyed"><i class="icon-bell-alt" style="color: yellow"></i> appdestroyed <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appopen"><i class="icon-bell-alt" style="color: yellow"></i> appopen <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appopening"><i class="icon-bell-alt" style="color: yellow"></i> appopening <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:apprendered"><i class="icon-bell-alt" style="color: yellow"></i> apprendered <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:apprequestclose"><i class="icon-bell-alt" style="color: yellow"></i> apprequestclose <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:apprequestopen"><i class="icon-bell-alt" style="color: yellow"></i> apprequestopen <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appresize"><i class="icon-bell-alt" style="color: yellow"></i> appresize <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appterminated"><i class="icon-bell-alt" style="color: yellow"></i> appterminated <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appwilldestroy"><i class="icon-bell-alt" style="color: yellow"></i> appwilldestroy <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:appwillrender"><i class="icon-bell-alt" style="color: yellow"></i> appwillrender <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AttentionWindow.html#event:attentionclosed"><i class="icon-bell-alt" style="color: yellow"></i> attentionclosed <span class="label label-inverse pull-right">AttentionWindow</span></a></li><li><a href="AttentionWindow.html#event:attentionclosing"><i class="icon-bell-alt" style="color: yellow"></i> attentionclosing <span class="label label-inverse pull-right">AttentionWindow</span></a></li><li><a href="AttentionWindow.html#event:attentioncreated"><i class="icon-bell-alt" style="color: yellow"></i> attentioncreated <span class="label label-inverse pull-right">AttentionWindow</span></a></li><li><a href="AttentionWindow.html#event:attentionopened"><i class="icon-bell-alt" style="color: yellow"></i> attentionopened <span class="label label-inverse pull-right">AttentionWindow</span></a></li><li><a href="AttentionWindow.html#event:attentionopening"><i class="icon-bell-alt" style="color: yellow"></i> attentionopening <span class="label label-inverse pull-right">AttentionWindow</span></a></li><li><a href="AttentionWindow.html#event:attentionrendered"><i class="icon-bell-alt" style="color: yellow"></i> attentionrendered <span class="label label-inverse pull-right">AttentionWindow</span></a></li><li><a href="AttentionWindow.html#event:attentionterminated"><i class="icon-bell-alt" style="color: yellow"></i> attentionterminated <span class="label label-inverse pull-right">AttentionWindow</span></a></li><li><a href="AttentionWindow.html#event:attentionwillrender"><i class="icon-bell-alt" style="color: yellow"></i> attentionwillrender <span class="label label-inverse pull-right">AttentionWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenbackground"><i class="icon-bell-alt" style="color: yellow"></i> homescreenbackground <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenclose"><i class="icon-bell-alt" style="color: yellow"></i> homescreenclose <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenclosing"><i class="icon-bell-alt" style="color: yellow"></i> homescreenclosing <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreencreated"><i class="icon-bell-alt" style="color: yellow"></i> homescreencreated <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenforeground"><i class="icon-bell-alt" style="color: yellow"></i> homescreenforeground <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenopen"><i class="icon-bell-alt" style="color: yellow"></i> homescreenopen <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenopening"><i class="icon-bell-alt" style="color: yellow"></i> homescreenopening <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenrendered"><i class="icon-bell-alt" style="color: yellow"></i> homescreenrendered <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenterminated"><i class="icon-bell-alt" style="color: yellow"></i> homescreenterminated <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="HomescreenWindow.html#event:homescreenwillrender"><i class="icon-bell-alt" style="color: yellow"></i> homescreenwillrender <span class="label label-inverse pull-right">HomescreenWindow</span></a></li><li><a href="module-LayoutManager.html#event:system-resize"><i class="icon-bell-alt" style="color: yellow"></i> system-resize <span class="label label-inverse pull-right">module:LayoutManager</span></a></li><li><a href="module-OrientationManager.html#event:reset-orientation"><i class="icon-bell-alt" style="color: yellow"></i> reset-orientation <span class="label label-inverse pull-right">module:OrientationManager</span></a></li><li><a href="SIMSlot.html#event:simslot-created"><i class="icon-bell-alt" style="color: yellow"></i> simslot-created <span class="label label-inverse pull-right">SIMSlot</span></a></li></ul></div><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Private Events</li><li><a href="AppWindow.html#event:_swipein"><i class="icon-bell-alt" style="color: yellow"></i> _swipein <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:_swipeout"><i class="icon-bell-alt" style="color: yellow"></i> _swipeout <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:_withkeyboard"><i class="icon-bell-alt" style="color: yellow"></i> _withkeyboard <span class="label label-inverse pull-right">AppWindow</span></a></li><li><a href="AppWindow.html#event:_withoutkeyboard"><i class="icon-bell-alt" style="color: yellow"></i> _withoutkeyboard <span class="label label-inverse pull-right">AppWindow</span></a></li></ul></div><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Mixins</li><li><a href="BrowserMixin.html"><i class="icon-beaker"></i> BrowserMixin</a></li></ul></div><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Global</li><li><a href="global.html#DatePicker"><i class="icon-globe" style="color: black;"></i> DatePicker</a></li><li><a href="global.html#DownloadNotification"><i class="icon-globe" style="color: black;"></i> DownloadNotification</a></li><li><a href="global.html#LockScreen"><i class="icon-globe" style="color: black;"></i> LockScreen</a></li><li><a href="global.html#OperatorVariant"><i class="icon-globe" style="color: black;"></i> OperatorVariant</a></li><li><a href="global.html#parse"><i class="icon-globe" style="color: black;"></i> parse</a></li><li><a href="global.html#parseBluetoothSSP"><i class="icon-globe" style="color: black;"></i> parseBluetoothSSP</a></li><li><a href="global.html#searchForBluetoothAC"><i class="icon-globe" style="color: black;"></i> searchForBluetoothAC</a></li><li><a href="global.html#SpinDatePicker"><i class="icon-globe" style="color: black;"></i> SpinDatePicker</a></li><li><a href="global.html#SystemDialog"><i class="icon-globe" style="color: black;"></i> SystemDialog</a></li><li><a href="global.html#SystemScreen"><i class="icon-globe" style="color: black;"></i> SystemScreen</a></li><li><a href="global.html#Title"><i class="icon-globe" style="color: black;"></i> Title</a></li><li><a href="global.html#ValuePicker"><i class="icon-globe" style="color: black;"></i> ValuePicker</a></li></ul></div>
+          </div>
+
+          <div class="span8">
+              <h1 class="page-header"><i class="icon-shield" style="color:#0186d1"></i> AttentionWindow</h1>
+              
+
+
+
+<section>
+    
+<header>
+    <!--h2>
+    AttentionWindow
+    </h2-->
+    
+</header>  
+
+<article>
+    <div class="container-overview hero-unit">
+    
+
+            
+        <ul class="breadcrumb">
+            <li>Extends</li>
+            <li><a href="AppWindow.html" class="btn btn-primary">AppWindow</a></li>
+        </ul>
+    
+
+    
+    
+    
+        
+<dt>
+    <h4 class="name" id="AttentionWindow">new AttentionWindow<span class="signature">(config)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>AttentionWindow is a special opened window with specific
+permission: 'attention'. It would show in front of any
+existing app windows to get users' attention.</p>
+<h5>Flow chart</h5>
+<p><a href="http://i.imgur.com/4O1Frs3.png" target="_blank">
+<img src="http://i.imgur.com/4O1Frs3.png"></img>
+</a></p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">config</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The configuration object of this attention.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var attention = new AttentionWindow({
+  url: 'http://gallery.gaiamobile.org:8080/pick.html',
+  manifestURL: 'http://gallery.gaiamobile.org:8080/manifest.webapp',
+  iframe: iframe
+});</code></pre>
+
+    
+</dd>
+
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Members</h3>
+        
+        <dl class="bs-docs-example bs-members">
+            
+<dt>
+    <h4 class="name" id="_screenshotBlob">_screenshotBlob<span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>A temp variable to store current screenshot blob.
+We should store the blob and create objectURL
+once we need to display the image,
+and revoke right away after we finish rendering the image.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#_screenshotBlob">AppWindow#_screenshotBlob</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_screenshotOverlayState">_screenshotOverlayState<span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Represent the current screenshoting state,
+i.e. what is currently visible. Possible value:
+'frame': the actual app iframe
+'screenshot': the screenshot overlay,
+              serve as a placeholder for visible but not active apps.
+'none': nothing is currently visible.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#_screenshotOverlayState">AppWindow#_screenshotOverlayState</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_visibilityState">_visibilityState<span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Represent the current pagee visibility state,
+i.e. what is currently visible. Possible value:
+'foreground': setVisible(true)
+'background': setVisible(false)</p>
+<p>Default value is foreground.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#_visibilityState">AppWindow#_visibilityState</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="eventPrefix">eventPrefix<span class="type-signature"> :String</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Event prefix presents the object type
+when publishing an event from the element.
+Always 'app' for now.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#eventPrefix">AppWindow#eventPrefix</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="rotatingDegree">rotatingDegree<span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>The rotating degree of current frame.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#rotatingDegree">AppWindow#rotatingDegree</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="SPLASH_ICON_SIZE_NOT_TINY">SPLASH_ICON_SIZE_NOT_TINY<span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>The preferred CSS size of the icon used for cold launch splash for
+other devices.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#SPLASH_ICON_SIZE_NOT_TINY">AppWindow#SPLASH_ICON_SIZE_NOT_TINY</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="SPLASH_ICON_SIZE_TINY">SPLASH_ICON_SIZE_TINY<span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>The preferred CSS size of the icon used for cold launch splash for phones.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#SPLASH_ICON_SIZE_TINY">AppWindow#SPLASH_ICON_SIZE_TINY</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl class="bs-docs-example bs-methods">
+            
+<dt>
+    <h4 class="name" id="_changeState">_changeState<span class="signature">(type, state)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Modify an attribute on this.element</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">type</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>State type.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name">state</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>State name.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#_changeState">AppWindow#_changeState</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_hideFrame">_hideFrame<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>_hideFrame will check |this._screenshotOverlayState|
+and then turn off the frame visibility.
+So this shouldn't be invoked by others directly.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#_hideFrame">AppWindow#_hideFrame</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_hideScreenshotOverlay">_hideScreenshotOverlay<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Check if current visibility state is screenshot or not,
+to hide the screenshot overlay.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#_hideScreenshotOverlay">AppWindow#_hideScreenshotOverlay</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_render">_render<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Render the mozbrowser iframe and some overlays.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#_render">AppWindow#_render</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_showFrame">_showFrame<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>_showFrame will check |this._screenshotOverlayState|
+and then turn on the frame visibility.
+So this shouldn't be invoked by others directly.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#_showFrame">AppWindow#_showFrame</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_showScreenshotOverlay">_showScreenshotOverlay<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Show screenshot overlay and hide the iframe.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#_showScreenshotOverlay">AppWindow#_showScreenshotOverlay</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="close">close<span class="signature">(animation)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Close the window; the detail is done in appTransitionController.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">animation</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The animation class name.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#close">AppWindow#close</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="destroy">destroy<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Destroy the instance.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#destroy">AppWindow#destroy</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    <h5>Fires:</h5>
+    <ul>
+        <li><a href="AppWindow.html#event:appdestroyed">AppWindow#event:appdestroyed</a></li>
+    </ul>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="fadeIn">fadeIn<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>fade in the window from black.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#fadeIn">AppWindow#fadeIn</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="fadeOut">fadeOut<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>fade out to window to black.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#fadeOut">AppWindow#fadeOut</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="generateID">generateID<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Generate instanceID of this instance.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#generateID">AppWindow#generateID</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="handleEvent">handleEvent<span class="signature">(evt)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>General event handler interface.
+Child classes shouldn't change this.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">evt</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">DOMEvent</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The event.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#handleEvent">AppWindow#handleEvent</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="installSubComponents">installSubComponents<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Install sub components belong to this window instance.
+The necessary components are based on AppWindow.SUB_COMPONENTS,
+now they are AppModalDialog/AppAuthenticationDialog.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#installSubComponents">AppWindow#installSubComponents</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>// Implement a new dialog
+var myDialog = function myDialog(app) {
+};
+
+var appWindow = new AppWindow();
+AppWindow.prototype.SUB_COMPONENTS.push(myDialog);
+
+app.installSubComponents();</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="isActive">isActive<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>An appWindow is active means:
+1. Going to be opened.
+2. Already opened.</p>
+<p>Note: The element has active class unless it's at closed state.
+But a closing instance is not recognized as active.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#isActive">AppWindow#isActive</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            <div class="returns">
+
+
+    
+<span class="param-type">Boolean</span>
+
+
+
+
+<span class="param-desc">
+    <p>The instance is active or not.</p>
+</span>
+
+</div>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="isDead">isDead<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>An appWindow is dead if somebody requested it to be killed.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#isDead">AppWindow#isDead</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            <div class="returns">
+
+
+    
+<span class="param-type">Boolean</span>
+
+
+
+
+<span class="param-desc">
+    <p>The instance is dead or not.</p>
+</span>
+
+</div>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="isFullScreen">isFullScreen<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Detect whether this is a full screen app by its manifest.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#isFullScreen">AppWindow#isFullScreen</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            <div class="returns">
+
+
+    
+<span class="param-type">Boolean</span>
+
+
+
+
+<span class="param-desc">
+    <p>We're a fullscreen app or not.</p>
+</span>
+
+</div>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="isTransitioning">isTransitioning<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>TODO: Integrate swipe transition.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#isTransitioning">AppWindow#isTransitioning</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            <div class="returns">
+
+
+    
+<span class="param-type">Boolean</span>
+
+
+
+
+<span class="param-desc">
+    <p>The instance is transitioning or not.</p>
+</span>
+
+</div>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="kill">kill<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Kill an instance.</p>
+<ol>
+<li>If this instance has any living activity window as callee,
+all of the activity window callee would be killed.</li>
+<li>If this instance is active, it would request to close.</li>
+</ol>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#kill">AppWindow#kill</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    <h5>Fires:</h5>
+    <ul>
+        <li><a href="AppWindow.html#event:appterminated">AppWindow#event:appterminated</a></li>
+    </ul>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="killable">killable<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>If the app has an opened attention window,
+we should not kill it.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#killable">AppWindow#killable</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            <div class="returns">
+
+
+    
+<span class="param-type">Boolean</span>
+
+
+
+
+<span class="param-desc">
+    <p>The app is killable or not.</p>
+</span>
+
+</div>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="modifyURLatBackground">modifyURLatBackground<span class="signature">(url)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Change URL only when we're at background.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">url</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>URL.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#modifyURLatBackground">AppWindow#modifyURLatBackground</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="open">open<span class="signature">(animation)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Open the window; the detail is done in appTransitionController.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">animation</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The animation class name.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#open">AppWindow#open</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="publish">publish<span class="signature">(event, detail)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Publish an event.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">event</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Event name, without object type prefix.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name">detail</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Parameters in JSON format.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#publish">AppWindow#publish</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="ready">ready<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Do resize and/or ensure repaint before opening the app.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">callback</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Callback when app is ready to be opened.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#ready">AppWindow#ready</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="reConfig">reConfig<span class="signature">(configuration)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Generate all configurations we need.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">configuration</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Initial configuration object
+ Includes manifestURL, manifest, url, origin, name.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#reConfig">AppWindow#reConfig</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="requestClose">requestClose<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>The app window is requesting to be closed.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#requestClose">AppWindow#requestClose</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    <h5>Fires:</h5>
+    <ul>
+        <li><a href="AppWindow.html#event:apprequestclose">AppWindow#event:apprequestclose</a></li>
+    </ul>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="requestOpen">requestOpen<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>The app window is requesting to be opened.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#requestOpen">AppWindow#requestOpen</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    <h5>Fires:</h5>
+    <ul>
+        <li><a href="AppWindow.html#event:apprequestopen">AppWindow#event:apprequestopen</a></li>
+    </ul>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="requestScreenshotURL">requestScreenshotURL<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Request a screenshot ObjectURL temporarily.
+The image would be discarded after 200ms or the revoke callback
+is invoked.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#requestScreenshotURL">AppWindow#requestScreenshotURL</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="resize">resize<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Set the size of the app's iframe to match the size of the screen.
+We have to call this on resize events (which happen when the
+phone orientation is changed). And also when an app is launched
+and each time an app is brought to the front, since the
+orientation could have changed since it was last displayed</p>
+<p>An appWindow instance only resizes if it's active.
+Since we already pre-config the size in window.css,
+if an app is launched by system message we don't need to resize
+it.</p>
+<p><img src="http://i.imgur.com/bUMm4VM.png" alt="AppWindow resize flow chart"></p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#resize">AppWindow#resize</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setFrameBackground">setFrameBackground<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Set splash as our inital background.
+If the content is loaded then just skip.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#setFrameBackground">AppWindow#setFrameBackground</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setOrientation">setOrientation<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Lock or unlock orientation for this app.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#setOrientation">AppWindow#setOrientation</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setVisible">setVisible<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>In order to prevent flashing of unpainted frame/screenshot overlay
+during switching from one to another,
+many event listener &amp; callbacks are employed.</p>
+<ol>
+<li><p>Switching from 'frame' to 'screenshot' state:
+_showScreenshotOverlay() is called
+get screenshot from frame
+when getting the screenshot,
+show the screenshot overlay and hide the frame</p>
+</li>
+<li><p>Switching from 'screenshot' to 'frame' state:
+_showFrame() is called
+register next paint listener, and set the frame to visible
+finally, when next painted, hide the screenshot</p>
+</li>
+<li><p>Switching from 'none' to 'frame' state:
+_showFrame() is called</p>
+</li>
+<li><p>Switching from 'frame' to 'none' state:
+_hideFrame() is called</p>
+</li>
+<li><p>Switching from 'none' to 'screenshot' state:
+get screenshot from frame
+when getting the screenshot, show the screenshot overlay</p>
+</li>
+<li><p>Switching from 'screenshot' to 'none' state:
+_hideScreenshotOverlay is called</p>
+</li>
+</ol>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#setVisible">AppWindow#setVisible</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="tryWaitForFullRepaint">tryWaitForFullRepaint<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Wait for a full repaint of the mozbrowser iframe.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#tryWaitForFullRepaint">AppWindow#tryWaitForFullRepaint</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="updateName">updateName<span class="signature">(name)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Update the name of this window.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">name</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The new name.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#updateName">AppWindow#updateName</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Events</h3>
+        
+        <dl class="bs-docs-example bs-events">
+            
+<dt>
+    <h4 class="name" id="event:appclose">appclose</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired when the app's closing animation is ended.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#event:appclose">AppWindow#event:appclose</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:appclosing">appclosing</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired when the app is doing closing animation.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#event:appclosing">AppWindow#event:appclosing</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:appcreated">appcreated</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>This is fired when the app window is instantiated.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#event:appcreated">AppWindow#event:appcreated</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:appdestroyed">appdestroyed</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired after the instance id destroyed.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#event:appdestroyed">AppWindow#event:appdestroyed</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:appopen">appopen</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired when the app's opening animation is ended.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#event:appopen">AppWindow#event:appopen</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:appopening">appopening</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired when the app is doing opening animation.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#event:appopening">AppWindow#event:appopening</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:apprendered">apprendered</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired after the app window element is appended to the DOM tree.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#event:apprendered">AppWindow#event:apprendered</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:apprequestclose">apprequestclose</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired once we'd like to be closed.
+The one who makes decision to call close() would be AppWindowManager.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#event:apprequestclose">AppWindow#event:apprequestclose</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:apprequestopen">apprequestopen</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired once we'd like to be opened.
+The one who makes decision to call open() would be AppWindowManager.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#event:apprequestopen">AppWindow#event:apprequestopen</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:appresize">appresize</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired when the app is resized.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#event:appresize">AppWindow#event:appresize</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:appterminated">appterminated</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired when the instance is terminated.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#event:appterminated">AppWindow#event:appterminated</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:appwilldestroy">appwilldestroy</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired before the instance id destroyed.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#event:appwilldestroy">AppWindow#event:appwilldestroy</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:appwillrender">appwillrender</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired before this element is appended to the DOM tree.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dd class="inherited-from"><ul class="dummy breadcrumb"><li>Inherited From:</li><li>
+        <a href="AppWindow.html#event:appwillrender">AppWindow#event:appwillrender</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:attentionclosed">attentionclosed</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired when the attention window is closed.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:attentionclosing">attentionclosing</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired when the attention window is cloing.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:attentioncreated">attentioncreated</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired when the attention window is created.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:attentionopened">attentionopened</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired when the attention window is opened.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:attentionopening">attentionopening</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired when the attention window is opening.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:attentionrendered">attentionrendered</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired when the attention window is rendered to the DOM tree.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:attentionterminated">attentionterminated</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired when the attention window is removed.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:attentionwillrender">attentionwillrender</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired before the attention window is rendered.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        </dl>
+    
+</article>
+
+</section>  
+
+
+
+
+          </div>
+      </div>
+
+        <br clear="both">
+
+      <footer>
+        Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Tue Jan 14 2014 11:26:05 GMT+0800 (CST)
+        <br>
+      </footer>
+      <script> prettyPrint(); </script>
+    </div>
+  </body>
+</html>
